@@ -1,0 +1,65 @@
+# Settings for the Double Heston surrogate (dh2/pinn). Every number used by the training and validation scripts is here.
+# Spec: dh2/pinn/pde.py (PDE), dh2/pinn/model.py (u = u_BS + g NN), results/pinn/README.md (what it achieves and what did not work).
+
+seeds: [0, 1, 2]                  # final hybrid / data-only models are trained once per seed
+device: mps                       # chosen by measurement (results/pinn/tables/precision_check.csv); cpu fallback: float64, <= 2 threads
+threads: 2
+
+domain:                           # built from the DEVELOPMENT period only (days before 2022-01-01) of data/results/walk_dh_main.pkl
+  margin: 1.25                    # multiplicative margin on positive parameters; +-0.05 on correlations; clipped to the calibrator's bounds
+  holdout_frac: 0.2               # last 20% of development days (by date) never used by the training sampler: real held-out parameters
+  x_max: 0.30
+  tau_min_days: 1                 # tau from 1 day
+  tau_max: 0.60
+  v_range: [0.0016, 0.36]
+  vega_floor: 2.0e-6              # normalised price per volatility point (the calibrator's VEGA_FLOOR, Rs 0.05, on a ~25,000 strike)
+  p_min: 4.0e-5                   # normalised OTM price below which IV errors are not reported (Rs 1 on a ~25,000 index, the data filter)
+  p_emp: 0.5                      # share of sampled parameter sets that are jittered development-day sets (rest: log-uniform in the box)
+
+net:
+  width: 256
+  depth: 5
+  act: silu                       # tanh was far worse in the development probes (results/pinn/tables/design_probes.csv)
+  g: vegat                        # gate on the network output; 'sqrt' = the spec's g = sqrt(tau). See README: the vega gate won the probes.
+  out_scale: 0.05
+
+data:
+  n_x_per: 8                      # strikes per (parameter, state, tau) combination
+  n_train: 1000000
+  n_val: 24000                    # in-distribution validation samples used during training (model selection)
+  seed_train: 1000
+  seed_val: 2000
+
+train:
+  batch_data: 2048                # small batches + many steps beat big batches at equal wall time (probes)
+  batch_pde: 1024
+  batch_bc: 512
+  steps: 30000                    # Adam steps for the full runs
+  lr: 4.0e-3
+  lr_end: 2.0e-5
+  lambda_data: 1.0
+  lambda_pde: 0.1                 # hybrid; lambda_pde = 1 and Wang et al. adaptive weights were both worse in the probes
+  lambda_bc: 1.0
+  pde_every: 4                    # the PDE term costs ~10x a data term, so it is evaluated on every 4th step
+  adaptive_weights: false         # Wang, Teng & Perdikaris (2021): tried, worse (0.283 vs 0.220 mean IV error at 8k steps)
+  adapt_every: 200
+  adapt_alpha: 0.9
+  rar: false                      # residual-based adaptive resampling (Wu et al. 2023): tried, no gain (0.224 vs 0.220)
+  rar_every: 500
+  rar_pool: 100000
+  rar_cand: 20000
+  pde_floor: 1.0e-4               # vega floor (normalised price per vol point) when scaling the PDE residual into volatility points
+  lbfgs_iters: 0                  # L-BFGS after Adam: 0.49 -> 0.43 mean IV error in 3.5 minutes on a 12k-step model, not worth the heat
+  eval_every: 1000
+
+ablation:
+  data_sizes: [1000, 10000, 100000, 1000000]   # 1e6 = the main runs
+  data_eff_steps: {1000: 3000, 10000: 6000, 100000: 12000, 1000000: 30000}
+  physics_steps: 15000            # physics-only: every step is a PDE step (~25 ms), so fewer steps
+  spec_gate_run: true             # data-only network with the spec's g = sqrt(tau), same steps
+
+validate:
+  n_box: 1500                     # held-out parameter sets drawn from the box (never seen)
+  speed_repeats: 20
+  fd_greeks_points: 40
+  pde_check_points: 40

@@ -1,0 +1,4 @@
+comparison,max_abs,p99_abs,median_abs
+project pricer vs own COS N=2048 L=12,1.7757347639535404e-07,3.8378921151660376e-08,8.265297463377203e-12
+project pricer vs own COS N=4096 L=16,5.508803663234474e-09,8.321984293346785e-10,1.2292250550771655e-13
+project pricer vs dh2/cos.py (independent COS by the pricer-validation package),1.8481105534817743e-11,7.803744256698602e-12,2.3869795029440866e-15

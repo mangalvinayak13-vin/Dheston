@@ -1,0 +1,3 @@
+set,quotes,tau > 0.6 y (outside box),|x| > 0.30,exact OTM price below Rs-1 equivalent (not scored),scored quotes
+held-out development days (real),74811,1741,0,7605,65465
+"test period, every 10th day (diagnostic)",53046,1293,0,5071,46682

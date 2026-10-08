@@ -1,0 +1,12 @@
+item,test days outside the box,share of test days
+kappa1 (eta order; dk = kappa2 - kappa1),0,0.0
+theta1 (eta order; dk = kappa2 - kappa1),0,0.0
+sigma1 (eta order; dk = kappa2 - kappa1),0,0.0
+rho1 (eta order; dk = kappa2 - kappa1),0,0.0
+dk (eta order; dk = kappa2 - kappa1),0,0.0
+theta2 (eta order; dk = kappa2 - kappa1),0,0.0
+sigma2 (eta order; dk = kappa2 - kappa1),0,0.0
+rho2 (eta order; dk = kappa2 - kappa1),22,0.018739352640545145
+v1 (state),0,0.0
+v2 (state),0,0.0
+ANY of the above (day flagged),22,0.018739352640545145

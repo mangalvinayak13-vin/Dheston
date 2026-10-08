@@ -1,0 +1,16 @@
+what,device,quotes,expiries,median_ms,ms_per_quote
+"exact pricer, one chain","cpu (1 thread, numpy)",283,8,10.87912499497179,0.03844213779141975
+"surrogate, one chain, prices",cpu,283,8,1.0905624949373305,0.0038535777206266096
+"surrogate, one chain, prices + Black IV",cpu,283,8,2.0470205054152757,0.0072332880050009745
+"surrogate, one chain, prices",mps,283,8,3.287041516159661,0.01161498768961011
+"surrogate, one chain, prices + Black IV",mps,283,8,4.114250492420979,0.01453798760572784
+"exact pricer, 16 parameter sets x chain","cpu (1 thread, numpy)",4528,8,221.53441698173992,0.04892544544649733
+"surrogate, 16 parameter sets x chain",cpu,4528,8,10.401500010630116,0.0022971510624183117
+"surrogate, 16 parameter sets x chain",mps,4528,8,7.687750010518357,0.0016978246489660683
+"exact pricer, 128 parameter sets x chain","cpu (1 thread, numpy)",36224,8,1555.519166024169,0.04294167309033152
+"surrogate, 128 parameter sets x chain",cpu,36224,8,75.12845800374635,0.0020739967425945876
+"surrogate, 128 parameter sets x chain",mps,36224,8,19.587957998737693,0.0005407453069439513
+"surrogate, 1024 parameter sets x chain",cpu,289792,8,581.068083003629,0.0020051212007358003
+"surrogate, 1024 parameter sets x chain",mps,289792,8,190.99025000468828,0.0006590597739229802
+"surrogate Greeks (delta, gamma, dC/dv1, dC/dv2), one chain",cpu,283,8,21.812812497955747,0.07707707596450794
+"exact Greeks by finite differences (9 chain evaluations), one chain","cpu (1 thread, numpy)",283,8,119.55541698262095,0.4224573038255157

@@ -1,0 +1,92 @@
+{
+  "day": "2026-10-01",
+  "n_quotes": 659,
+  "n_expiries": 9,
+  "maturities_days": [
+    5,
+    12,
+    18,
+    26,
+    33,
+    53,
+    89,
+    180,
+    453
+  ],
+  "params_source": "outputs/parameters_dhj_main.csv for that day",
+  "threads": "1 (OMP/OPENBLAS/VECLIB limited to 1), single process",
+  "cpu": "Apple M-series laptop (other jobs running concurrently: timings are indicative)",
+  "dh": {
+    "project_pricer_dh2.models.price": {
+      "seconds_best": 0.01690412501920946,
+      "seconds_median": 0.01816733297891915,
+      "microseconds_per_option_best": 25.651176053428618
+    },
+    "cos_default_width_checked": {
+      "seconds_best": 0.10300262499367818,
+      "seconds_median": 0.10374833398964256,
+      "microseconds_per_option_best": 156.30140363228858
+    },
+    "cos_fixed_L14_no_width_check": {
+      "seconds_best": 0.034154708991991356,
+      "seconds_median": 0.03686666701105423,
+      "microseconds_per_option_best": 51.8280864825362
+    },
+    "lewis_adaptive_quad": {
+      "seconds_best": 3.954719625005964,
+      "seconds_median": 3.954719625005964,
+      "microseconds_per_option_best": 6001.091995456698
+    },
+    "cos_time_ratio_project_over_cos": 0.16411353613800575,
+    "lewis_time_ratio_over_cos": 38.39435767048351
+  },
+  "dhj": {
+    "project_pricer_dh2.models.price": {
+      "seconds_best": 0.019367790984688327,
+      "seconds_median": 0.024306332983542234,
+      "microseconds_per_option_best": 29.389667655065747
+    },
+    "cos_default_width_checked": {
+      "seconds_best": 0.15168070900836028,
+      "seconds_median": 0.174774916988099,
+      "microseconds_per_option_best": 230.16799546033425
+    },
+    "cos_fixed_L14_no_width_check": {
+      "seconds_best": 0.04821012500906363,
+      "seconds_median": 0.05483533299411647,
+      "microseconds_per_option_best": 73.1564871154228
+    },
+    "lewis_adaptive_quad": {
+      "seconds_best": 5.803667541011237,
+      "seconds_median": 5.803667541011237,
+      "microseconds_per_option_best": 8806.779273158174
+    },
+    "cos_time_ratio_project_over_cos": 0.12768789855551652,
+    "lewis_time_ratio_over_cos": 38.26239723530929
+  },
+  "cos_terms_per_expiry": [
+    512,
+    512,
+    512,
+    1024,
+    1024,
+    1024,
+    2048,
+    2048,
+    2048
+  ],
+  "bulk_cos_price_many": {
+    "parameter_sets": 2000,
+    "strikes_each": 8,
+    "seconds_best": 3.9078148750122637,
+    "microseconds_per_option": 244.23842968826648,
+    "note": "every set has its own parameters and maturity; one process; the PINN data generator can call this directly"
+  },
+  "bulk_normalized_price_independent_triples": {
+    "triples": 8000,
+    "seconds_best": 8.144685625011334,
+    "microseconds_per_triple": 1018.0857031264168,
+    "note": "every triple (x, tau, params) distinct: no sharing of the characteristic function"
+  },
+  "wall_seconds_for_whole_validation_script": 566.8103041648865
+}

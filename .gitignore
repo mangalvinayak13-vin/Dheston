@@ -7,6 +7,7 @@ data/results/*.pkl
 logs/
 # fit caches of the experiments, rebuilt by the exp_*.py scripts; resume caches of the VIX download
 results/_cache/
+results/pinn_calib/_cache/
 # PINN checkpoints: only the two shipped models are kept; the seed/ablation checkpoints are rebuilt by dh2/pinn/experiments.py
 results/pinn/checkpoints/*.pt
 !results/pinn/checkpoints/final.pt

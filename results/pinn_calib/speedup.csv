@@ -1,0 +1,9 @@
+quantity,estimate,ci95_lo,ci95_hi
+speedup in total wall time (sum over days exact / sum accelerated),8.024758146096225,7.4301175113927185,8.67207697711702
+"speedup in total CPU time (process time, includes torch threads)",7.338033597807222,6.800320610457892,7.917261660693385
+mean of the per-day wall-time speedups,8.183241711796416,7.549737832058394,8.863951147612
+median of the per-day wall-time speedups,6.733876676019834,6.324558953008435,7.552082444959215
+ratio of exact-pricer function evaluations (sum exact / sum accelerated),11.635389123132995,10.730435144068826,12.615358861301079
+share of days on which the accelerated fit was faster,1.0,,
+minimum per-day speedup,4.042991666094838,,
+maximum per-day speedup,23.48332739863765,,

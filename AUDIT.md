@@ -42,7 +42,7 @@ Checked item by item against the brief's list. "Evidence" points to a saved resu
 | Optimizer | 2.0: multi-start + bounded `least_squares` (soft-L1), warm start | `dh2/calib.py` |
 | Factor swap | 2.0: kappa2 = kappa1 + dk, dk >= 0.2, so the factors cannot swap | `dh2/calib.py` |
 | Units | variance decimals, vol in vol points; consistent | tests |
-| **No jumps** | **Largest single cause.** Same-day misfit ~1.7 vol points without jumps, ~0.35-0.6 with (2025-26) | `COMPARISON` section 3 |
+| **No jumps** | **Largest single cause.** Same-day misfit ~1.7 vol points without jumps (independent daily fits, 2025-26), ~0.35-0.6 with; the shared-parameter diffusion walk-forward averages 2.68 same-day over 2022-26 (stored `rmse_in`, 3.35 in 2022 to 1.96 in 2026) | `COMPARISON` section 3 |
 | **Independent daily refits** | 1.0: 99.1% of surfaces had several equally good parameter sets, 91.6% a parameter near a bound; carried forward, it loses to yesterday's smile (2.06 vs 1.20 vol points, 2025-26) | `v1_results/`, `diagnose.py` |
 | **No benchmark** | 1.0 never had to beat "yesterday's smile"; the website's fixed defaults price a NIFTY call at Rs 600.40 against a market Rs 370.15 | `COMPARISON` row 6 |
 

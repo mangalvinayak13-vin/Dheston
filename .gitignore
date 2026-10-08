@@ -5,6 +5,9 @@ data/cache/
 data/results/*.pkl
 # keep the small summaries: data/results/*.json
 logs/
+# fit caches of the experiments, rebuilt by the exp_*.py scripts; resume caches of the VIX download
+results/_cache/
+data/vix/_nse_*
 __pycache__/
 .pytest_cache/
 *.pyc

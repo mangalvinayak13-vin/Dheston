@@ -1,0 +1,38 @@
+{
+ "asof": "2026-10-06",
+ "model": "Double Heston 2.0, diffusion (no jumps), walk-forward calibration on NIFTY 50",
+ "params": {
+  "v0_1": 0.008136339494949523,
+  "kappa1": 1.1579558945330461,
+  "theta1": 0.015071101646473292,
+  "xi1": 0.0941808282400378,
+  "rho1": -0.9799293123894761,
+  "v0_2": 0.011022402661676997,
+  "kappa2": 4.509289950468905,
+  "theta2": 0.011776954045682403,
+  "xi2": 1.9999999999993738,
+  "rho2": -0.3415396519921335
+ },
+ "same_day_iv_rmse_vol_points": 1.2683099159137732,
+ "website_bounds_would_change": {},
+ "jump_model_for_information": {
+  "asof": "2026-10-06",
+  "params": {
+   "v0_1": 0.007940451035061434,
+   "kappa1": 0.050082045173427577,
+   "theta1": 0.14104260081666456,
+   "xi1": 0.10950480143300655,
+   "rho1": -0.6020937802639226,
+   "v0_2": 0.00936168730633893,
+   "kappa2": 4.251910099727791,
+   "theta2": 0.006737556912534773,
+   "xi2": 1.2845590691149023,
+   "rho2": -0.3821761671918606
+  },
+  "lam_per_year": 0.0626783521248384,
+  "mu_j": -0.08051983951255173,
+  "delta_j": 0.20611033972354936,
+  "same_day_iv_rmse_vol_points": 0.3446195464111595
+ },
+ "note": "The website prices with the pricer without jumps; the jump model needs a backend change to be priced there. Individual parameters are weakly identified: the prices they produce are what is validated, not each number."
+}

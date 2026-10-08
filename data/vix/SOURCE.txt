@@ -1,0 +1,6 @@
+source: NSE daily index-close archive
+rows: 2470
+first: 2016-10-03
+last: 2026-10-06
+fetched: 2026-10-08T12:22:03
+earlier sources that failed: none

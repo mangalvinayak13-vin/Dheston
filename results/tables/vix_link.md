@@ -1,0 +1,10 @@
+**Model-implied 30-day volatility against India VIX**
+
+| Series | Period | Days | Correlation of levels | Correlation of daily changes | Mean gap, model minus VIX (pts) | RMSE of gap (pts) |
+|---|---|---|---|---|---|---|
+| jump model, 30-day implied vol | 2016-2026 | 2,430 | 0.989 | 0.879 | +0.44 | 1.07 |
+| jump model, 30-day implied vol | 2022-2026 test | 1,174 | 0.984 | 0.948 | +0.63 | 0.93 |
+| diffusion Double Heston, 30-day implied vol | 2016-2026 | 2,430 | 0.989 | 0.874 | -0.00 | 0.97 |
+| diffusion Double Heston, 30-day implied vol | 2022-2026 test | 1,174 | 0.984 | 0.949 | +0.13 | 0.72 |
+| surface ATM 30-day IV | 2016-2026 | 2,415 | 0.985 | 0.831 | -1.24 | 1.63 |
+| surface ATM 30-day IV | 2022-2026 test | 1,174 | 0.979 | 0.887 | -0.98 | 1.25 |

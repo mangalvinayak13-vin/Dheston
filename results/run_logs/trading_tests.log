@@ -1,0 +1,143 @@
+
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/python3 trade_test.py --model dhj --tag main --top 5
+11,931 candidate trades (6,176 dev, 5,755 test), 2387 days; top 5 contracts a day by volume
+
+== forecast_edge / plain: threshold 1.0 vol points (chosen on 2016-2021)
+   cost/side  trades  model wins/100    [95% range]  random  always buy  always sell  model avg win  avg loss  expectancy % prem  profit factor
+          0%    1370            43.9 [ 41.3, 46.6]    50.0        36.4         63.6          65.42    -39.89               5.28           1.29
+          1%    1370            43.0 [ 40.4, 45.6]    48.8        35.5         62.0          64.25    -40.92               3.26           1.18
+          2%    1370            41.4 [ 38.8, 44.0]    47.4        34.2         60.6          64.11    -41.50               1.24           1.09
+          5%    1370            38.3 [ 35.8, 40.9]    44.1        31.8         56.5          61.16    -44.57              -4.81           0.85
+
+== forecast_edge / hedged: threshold 1.0 vol points (chosen on 2016-2021)
+   cost/side  trades  model wins/100    [95% range]  random  always buy  always sell  model avg win  avg loss  expectancy % prem  profit factor
+          0%    1370            43.5 [ 40.9, 46.1]    50.0        35.3         64.7          32.29    -14.64               5.28           1.70
+          1%    1370            41.1 [ 38.5, 43.7]    46.8        32.6         60.9          31.93    -16.01               3.26           1.39
+          2%    1370            39.0 [ 36.4, 41.6]    44.0        30.1         57.9          31.45    -17.46               1.24           1.15
+          5%    1370            32.0 [ 29.6, 34.5]    35.4        23.5         47.4          31.31    -21.56              -4.82           0.68
+
+== rich_cheap_edge / plain: threshold 0.25 vol points (chosen on 2016-2021)
+   cost/side  trades  model wins/100    [95% range]  random  always buy  always sell  model avg win  avg loss  expectancy % prem  profit factor
+          0%    4168            44.9 [ 43.4, 46.4]    50.0        36.2         63.8          52.25    -37.63               3.29           1.13
+          1%    4168            43.7 [ 42.2, 45.2]    48.8        35.1         62.5          51.32    -38.60               1.31           1.03
+          2%    4168            42.0 [ 40.5, 43.5]    47.2        33.5         60.8          51.07    -39.20              -0.67           0.94
+          5%    4168            38.1 [ 36.7, 39.6]    43.4        29.9         56.9          49.11    -41.99              -6.61           0.72
+
+== rich_cheap_edge / hedged: threshold 1.0 vol points (chosen on 2016-2021)
+   cost/side  trades  model wins/100    [95% range]  random  always buy  always sell  model avg win  avg loss  expectancy % prem  profit factor
+          0%    1313            44.5 [ 41.8, 47.2]    50.0        35.6         64.4          32.62    -14.47               6.16           1.81
+          1%    1313            42.0 [ 39.4, 44.7]    46.8        33.0         60.6          32.22    -15.88               4.14           1.47
+          2%    1313            39.9 [ 37.3, 42.6]    44.0        30.5         57.5          31.69    -17.38               2.12           1.21
+          5%    1313            32.7 [ 30.2, 35.3]    35.0        23.8         46.3          31.58    -21.56              -3.93           0.71
+
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/python3 trade_test.py --model dhj --tag main --top 5 --lag 1
+9,836 candidate trades (5,311 dev, 4,525 test), 1975 days; top 5 contracts a day by volume
+
+== forecast_edge / plain: threshold 1.0 vol points (chosen on 2016-2021)
+   cost/side  trades  model wins/100    [95% range]  random  always buy  always sell  model avg win  avg loss  expectancy % prem  profit factor
+          0%     845            44.6 [ 41.3, 48.0]    49.9        32.9         67.0          67.90    -43.78               9.10           1.25
+          1%     845            43.6 [ 40.2, 46.9]    48.8        32.3         65.3          66.80    -44.77               7.06           1.15
+          2%     845            41.9 [ 38.6, 45.2]    47.5        30.7         64.3          66.68    -45.34               5.01           1.06
+          5%     845            39.1 [ 35.8, 42.4]    44.6        28.3         60.8          63.12    -48.82              -1.12           0.83
+
+== forecast_edge / hedged: threshold 0.0 vol points (chosen on 2016-2021)
+   cost/side  trades  model wins/100    [95% range]  random  always buy  always sell  model avg win  avg loss  expectancy % prem  profit factor
+          0%    4525            44.5 [ 43.0, 45.9]    50.0        34.1         65.9          17.73    -14.17               1.58           1.00
+          1%    4525            41.2 [ 39.7, 42.6]    46.5        31.0         62.1          17.05    -15.40              -0.41           0.77
+          2%    4525            37.9 [ 36.5, 39.3]    42.9        28.6         57.2          16.52    -16.70              -2.39           0.60
+          5%    4525            28.9 [ 27.6, 30.2]    32.2        22.3         42.1          15.83    -20.90              -8.34           0.31
+
+== rich_cheap_edge / plain: threshold 1.0 vol points (chosen on 2016-2021)
+   cost/side  trades  model wins/100    [95% range]  random  always buy  always sell  model avg win  avg loss  expectancy % prem  profit factor
+          0%     838            44.4 [ 41.1, 47.8]    49.9        32.5         67.4          66.50    -44.80               8.49           1.19
+          1%     838            43.3 [ 40.0, 46.7]    48.8        31.9         65.8          65.42    -45.81               6.45           1.09
+          2%     838            41.6 [ 38.4, 45.0]    47.5        30.2         64.8          65.31    -46.39               4.41           1.00
+          5%     838            39.0 [ 35.8, 42.4]    44.6        28.0         61.2          61.43    -50.12              -1.71           0.78
+
+== rich_cheap_edge / hedged: threshold 0.0 vol points (chosen on 2016-2021)
+   cost/side  trades  model wins/100    [95% range]  random  always buy  always sell  model avg win  avg loss  expectancy % prem  profit factor
+          0%    4525            45.0 [ 43.5, 46.4]    50.0        34.1         65.9          17.57    -14.27               1.65           1.01
+          1%    4525            41.6 [ 40.2, 43.1]    46.5        31.0         62.1          16.88    -15.49              -0.34           0.78
+          2%    4525            38.3 [ 36.9, 39.7]    42.9        28.6         57.2          16.36    -16.76              -2.32           0.61
+          5%    4525            29.0 [ 27.7, 30.4]    32.2        22.3         42.1          15.74    -20.92              -8.27           0.31
+
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/python3 trade_robust.py trades_dhj_main.pkl trades_dhj_main_lag1.pkl
+
+######## trades_dhj_main.pkl: 5,755 test trades on 1151 days
+
+== forecast_edge / plain (threshold 1.0): 1370 trades, 79% buys
+   cost/side  wins/100   [95% range]  blind same mix  buys win  sells win  Rs/trade      [95% range]  median  trimmed  best 5  total Rs by year
+        0.0%      43.9 [ 40.7, 47.4]            42.1      37.6       68.1      6.38 [  1.35, 12.95]   -5.35     3.54     42%  {2022: 1295, 2023: 851, 2024: -19, 2025: 4523, 2026: 2097}
+        0.5%      43.4 [ 40.2, 46.9]            41.5      37.2       67.0      5.34 [  0.31, 11.92]   -5.85     2.55     50%  {2022: 934, 2023: 737, 2024: -388, 2025: 4208, 2026: 1826}
+        1.0%      43.0 [ 39.7, 46.5]            41.0      36.9       66.3      4.30 [ -0.69, 10.85]   -6.53     1.55     61%  {2022: 572, 2023: 624, 2024: -757, 2025: 3894, 2026: 1555}
+        2.0%      41.4 [ 38.2, 44.8]            39.7      35.4       64.2      2.21 [ -2.76,  8.65]   -7.68    -0.43    118%  {2022: -152, 2023: 397, 2024: -1495, 2025: 3265, 2026: 1014}
+
+== forecast_edge / hedged (threshold 1.0): 1370 trades, 79% buys
+   cost/side  wins/100   [95% range]  blind same mix  buys win  sells win  Rs/trade      [95% range]  median  trimmed  best 5  total Rs by year
+        0.0%      43.5 [ 38.8, 48.2]            41.4      36.6       69.8      5.78 [  1.83, 10.03]   -2.97     3.87     22%  {2022: 2366, 2023: 160, 2024: 584, 2025: 2484, 2026: 2325}
+        0.5%      42.1 [ 37.4, 46.7]            39.7      35.3       68.1      4.74 [  0.79,  9.00]   -4.01     2.87     27%  {2022: 2004, 2023: 46, 2024: 216, 2025: 2169, 2026: 2054}
+        1.0%      41.1 [ 36.4, 45.7]            38.5      34.3       67.0      3.69 [ -0.24,  7.93]   -4.85     1.86     34%  {2022: 1642, 2023: -67, 2024: -153, 2025: 1855, 2026: 1783}
+        2.0%      39.0 [ 34.5, 43.4]            35.9      32.1       65.3      1.61 [ -2.31,  5.80]   -6.62    -0.14     76%  {2022: 918, 2023: -294, 2024: -891, 2025: 1226, 2026: 1242}
+
+== rich_cheap_edge / plain (threshold 0.25): 4168 trades, 74% buys
+   cost/side  wins/100   [95% range]  blind same mix  buys win  sells win  Rs/trade      [95% range]  median  trimmed  best 5  total Rs by year
+        0.0%      44.9 [ 43.1, 46.7]            43.4      37.2       66.7      2.69 [  0.22,  5.45]   -4.80     1.10     34%  {2022: 2452, 2023: -243, 2024: 1685, 2025: 3051, 2026: 4287}
+        0.5%      44.2 [ 42.4, 46.1]            42.7      36.6       65.7      1.70 [ -0.76,  4.44]   -5.49     0.15     53%  {2022: 1445, 2023: -816, 2024: 721, 2025: 2198, 2026: 3544}
+        1.0%      43.7 [ 41.8, 45.6]            42.2      36.1       65.4      0.71 [ -1.75,  3.44]   -6.09    -0.80    125%  {2022: 437, 2023: -1388, 2024: -244, 2025: 1346, 2026: 2801}
+        2.0%      42.0 [ 40.1, 43.9]            40.6      34.4       63.6     -1.28 [ -3.73,  1.43]   -7.34    -2.71    nan%  {2022: -1577, 2023: -2533, 2024: -2172, 2025: -360, 2026: 1315}
+
+== rich_cheap_edge / hedged (threshold 1.0): 1313 trades, 78% buys
+   cost/side  wins/100   [95% range]  blind same mix  buys win  sells win  Rs/trade      [95% range]  median  trimmed  best 5  total Rs by year
+        0.0%      44.5 [ 39.8, 49.0]            41.9      37.3       70.1      6.48 [  2.33, 11.21]   -2.49     4.34     21%  {2022: 2587, 2023: 296, 2024: 323, 2025: 2657, 2026: 2640}
+        0.5%      43.0 [ 38.2, 47.6]            40.2      35.9       68.4      5.41 [  1.25, 10.10]   -3.41     3.31     25%  {2022: 2228, 2023: 187, 2024: -32, 2025: 2351, 2026: 2366}
+        1.0%      42.0 [ 37.2, 46.4]            39.0      34.9       67.4      4.34 [  0.19,  8.98]   -4.26     2.29     30%  {2022: 1870, 2023: 79, 2024: -387, 2025: 2046, 2026: 2091}
+        2.0%      39.9 [ 35.2, 44.3]            36.5      32.8       65.3      2.20 [ -1.94,  6.83]   -6.08     0.23     58%  {2022: 1153, 2023: -137, 2024: -1097, 2025: 1434, 2026: 1542}
+
+######## trades_dhj_main_lag1.pkl: 4,525 test trades on 905 days
+
+== forecast_edge / plain (threshold 1.0): 845 trades, 73% buys
+   cost/side  wins/100   [95% range]  blind same mix  buys win  sells win  Rs/trade      [95% range]  median  trimmed  best 5  total Rs by year
+        0.0%      44.6 [ 40.4, 49.1]            42.1      34.7       71.5      6.04 [ -2.26, 14.34]   -2.90     6.12     46%  {2022: -86, 2023: -199, 2024: 824, 2025: 2897, 2026: 1672}
+        0.5%      44.4 [ 40.2, 48.8]            41.8      34.5       71.1      4.93 [ -3.35, 13.19]   -3.44     5.08     56%  {2022: -355, 2023: -262, 2024: 572, 2025: 2696, 2026: 1516}
+        1.0%      43.6 [ 39.4, 47.9]            41.2      34.2       68.9      3.82 [ -4.44, 12.04]   -3.76     4.03     72%  {2022: -625, 2023: -325, 2024: 320, 2025: 2494, 2026: 1360}
+        2.0%      41.9 [ 37.7, 46.2]            39.7      32.3       68.0      1.59 [ -6.61,  9.84]   -4.50     1.93    171%  {2022: -1163, 2023: -452, 2024: -184, 2025: 2091, 2026: 1048}
+
+== forecast_edge / hedged (threshold 0.0): 4525 trades, 67% buys
+   cost/side  wins/100   [95% range]  blind same mix  buys win  sells win  Rs/trade      [95% range]  median  trimmed  best 5  total Rs by year
+        0.0%      44.5 [ 41.9, 47.0]            44.5      34.1       65.9      0.02 [ -1.25,  1.32]   -2.28    -0.29   1323%  {2022: -1485, 2023: -1180, 2024: -725, 2025: 842, 2026: 2647}
+        0.5%      42.8 [ 40.2, 45.3]            42.8      32.4       64.4     -1.01 [ -2.28,  0.28]   -2.96    -1.30    nan%  {2022: -2702, 2023: -1863, 2024: -1802, 2025: -99, 2026: 1894}
+        1.0%      41.2 [ 38.7, 43.7]            41.1      30.8       62.6     -2.04 [ -3.31, -0.76]   -3.79    -2.30    nan%  {2022: -3919, 2023: -2545, 2024: -2880, 2025: -1040, 2026: 1141}
+        2.0%      37.9 [ 35.5, 40.3]            37.9      28.4       57.6     -4.11 [ -5.38, -2.83]   -5.26    -4.31    nan%  {2022: -6352, 2023: -3910, 2024: -5035, 2025: -2921, 2026: -364}
+
+== rich_cheap_edge / plain (threshold 1.0): 838 trades, 73% buys
+   cost/side  wins/100   [95% range]  blind same mix  buys win  sells win  Rs/trade      [95% range]  median  trimmed  best 5  total Rs by year
+        0.0%      44.4 [ 40.1, 48.6]            42.0      34.2       71.6      4.61 [ -4.02, 13.28]   -3.45     4.66     61%  {2022: -788, 2023: -272, 2024: 389, 2025: 2879, 2026: 1657}
+        0.5%      44.2 [ 39.9, 48.4]            41.7      34.0       71.2      3.49 [ -5.14, 12.12]   -3.68     3.61     80%  {2022: -1055, 2023: -334, 2024: 140, 2025: 2677, 2026: 1497}
+        1.0%      43.3 [ 39.1, 47.6]            41.1      33.7       69.0      2.37 [ -6.20, 10.95]   -4.29     2.55    117%  {2022: -1322, 2023: -396, 2024: -108, 2025: 2475, 2026: 1338}
+        2.0%      41.6 [ 37.3, 46.0]            39.6      31.7       68.1      0.13 [ -8.39,  8.70]   -5.12     0.45   2103%  {2022: -1855, 2023: -519, 2024: -606, 2025: 2071, 2026: 1018}
+
+== rich_cheap_edge / hedged (threshold 0.0): 4525 trades, 66% buys
+   cost/side  wins/100   [95% range]  blind same mix  buys win  sells win  Rs/trade      [95% range]  median  trimmed  best 5  total Rs by year
+        0.0%      45.0 [ 42.3, 47.4]            44.9      34.1       65.9      0.05 [ -1.21,  1.38]   -2.13    -0.28    634%  {2022: -1642, 2023: -998, 2024: -846, 2025: 975, 2026: 2716}
+        0.5%      43.3 [ 40.8, 45.8]            43.2      32.4       64.5     -0.99 [ -2.22,  0.35]   -2.78    -1.28    nan%  {2022: -2859, 2023: -1681, 2024: -1924, 2025: 35, 2026: 1963}
+        1.0%      41.6 [ 39.1, 44.0]            41.6      30.8       62.6     -2.02 [ -3.25, -0.70]   -3.60    -2.29    nan%  {2022: -4075, 2023: -2363, 2024: -3001, 2025: -906, 2026: 1211}
+        2.0%      38.3 [ 35.9, 40.6]            38.3      28.3       57.5     -4.08 [ -5.31, -2.78]   -5.11    -4.30    nan%  {2022: -6509, 2023: -3728, 2024: -5156, 2025: -2788, 2026: -295}
+
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/python3 trade_matched.py
+4,525 test trades present in both (79% of the same-day trades); lost to 'must also trade two days later': 1,230
+
+forecast_edge / plain (edge >= 1.0 vol pts): 845 matched trades
+   cost 0%: enter at signal close: 45.8 wins/100, +5.84 Rs/trade | one day later: 44.6 wins/100, +6.04 Rs/trade | lost -0.20 [-10.25, +9.42]
+   cost 1%: enter at signal close: 44.7 wins/100, +3.60 Rs/trade | one day later: 43.6 wins/100, +3.82 Rs/trade | lost -0.22 [-10.21, +10.15]
+
+forecast_edge / hedged (edge >= 1.0 vol pts): 845 matched trades
+   cost 0%: enter at signal close: 47.8 wins/100, +6.54 Rs/trade | one day later: 40.9 wins/100, +1.55 Rs/trade | lost +4.99 [-2.14, +11.92]
+   cost 1%: enter at signal close: 45.4 wins/100, +4.30 Rs/trade | one day later: 38.1 wins/100, -0.67 Rs/trade | lost +4.97 [-1.58, +12.46]
+
+rich_cheap_edge / plain (edge >= 0.25 vol pts): 3159 matched trades
+   cost 0%: enter at signal close: 45.8 wins/100, +2.59 Rs/trade | one day later: 43.3 wins/100, +0.95 Rs/trade | lost +1.64 [-2.87, +6.07]
+   cost 1%: enter at signal close: 44.6 wins/100, +0.51 Rs/trade | one day later: 42.2 wins/100, -1.09 Rs/trade | lost +1.60 [-2.58, +6.11]
+
+rich_cheap_edge / hedged (edge >= 1.0 vol pts): 838 matched trades
+   cost 0%: enter at signal close: 48.2 wins/100, +7.23 Rs/trade | one day later: 40.6 wins/100, +1.21 Rs/trade | lost +6.03 [-0.99, +13.45]
+   cost 1%: enter at signal close: 45.8 wins/100, +4.96 Rs/trade | one day later: 37.7 wins/100, -1.04 Rs/trade | lost +6.00 [-1.22, +13.51]

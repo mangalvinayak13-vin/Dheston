@@ -1,0 +1,22 @@
+\begin{table}[ht]
+\centering
+\small
+\caption{Paired tests on the daily next-day error, test period (all quotes)}
+\begin{tabular}{llrrrrrl}
+\toprule
+A & B & A minus B (vol points) & Days A better & Wilcoxon p (Holm) & Diebold-Mariano stat & DM p (Holm) & Verdict \\
+\midrule
+jump model + misfit & diffusion DH + misfit & -0.343 & 77\% & $<$1e-10 & -21.96 & $<$1e-10 & A better (significant, Holm 5\%) \\
+jump model + misfit & Heston + misfit & -0.383 & 78\% & $<$1e-10 & -24.86 & $<$1e-10 & A better (significant, Holm 5\%) \\
+jump model + misfit & time-scaled smile & -0.202 & 90\% & $<$1e-10 & -19.03 & $<$1e-10 & A better (significant, Holm 5\%) \\
+jump model + misfit & yesterday's smile & -0.434 & 78\% & $<$1e-10 & -25.59 & $<$1e-10 & A better (significant, Holm 5\%) \\
+diffusion DH + misfit & Heston + misfit & -0.040 & 77\% & $<$1e-10 & -20.27 & $<$1e-10 & A better (significant, Holm 5\%) \\
+diffusion DH + misfit & time-scaled smile & +0.141 & 41\% & $<$1e-10 & +14.40 & $<$1e-10 & B better (significant, Holm 5\%) \\
+diffusion DH + misfit & yesterday's smile & -0.091 & 79\% & $<$1e-10 & -32.79 & $<$1e-10 & A better (significant, Holm 5\%) \\
+Heston + misfit & time-scaled smile & +0.181 & 34\% & $<$1e-10 & +18.87 & $<$1e-10 & B better (significant, Holm 5\%) \\
+Heston + misfit & yesterday's smile & -0.051 & 78\% & $<$1e-10 & -22.78 & $<$1e-10 & A better (significant, Holm 5\%) \\
+time-scaled smile & yesterday's smile & -0.232 & 70\% & $<$1e-10 & -22.34 & $<$1e-10 & A better (significant, Holm 5\%) \\
+\bottomrule
+\end{tabular}
+\par\smallskip{\footnotesize 1173 test days; Holm adjustment over the 10 pairs; DM with Newey-West variance and the Harvey-Leybourne-Newbold correction.}
+\end{table}

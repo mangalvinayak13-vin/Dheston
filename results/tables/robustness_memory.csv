@@ -1,0 +1,7 @@
+Quantity,Value
+"jump model + misfit, test error over saved reruns (min)",1.0330782716165916
+"jump model + misfit, test error over saved reruns (max)",1.0355474636274125
+"pure jump model, test error over saved reruns (min)",1.1850259040561542
+"pure jump model, test error over saved reruns (max)",1.4364690907420974
+pattern memory on the jump forecast: paired difference,-0.004327270172124579
+pattern memory on the time-scaled smile: paired difference,-0.02890977046948618

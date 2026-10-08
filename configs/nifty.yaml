@@ -1,0 +1,160 @@
+# Double Heston 2.0, NIFTY 50: every setting of the one-command pipeline, in one place.
+#
+#   python -m dh2.run_all --config configs/nifty.yaml            # everything the cached data allows (stages with outputs are skipped)
+#   python -m dh2.run_all --config configs/nifty.yaml --quick    # demo-scale run, about 10 minutes, writes only to results_quick/
+#   python -m dh2.run_all --config configs/nifty.yaml --list     # every stage, its outputs, whether it is cached, its estimated cost
+#
+# Paths are relative to the repository root. The values below are the ones the SHIPPED results were produced with; tests/test_run_all.py checks
+# that the walk-forward settings, the bounds and the split here equal the defaults and constants in the code, so this file cannot drift.
+
+project:
+  name: Double Heston 2.0 (NIFTY 50)
+  underlying: NIFTY 50 index options, NSE end-of-day F&O files
+  unit_of_error: implied-volatility points (1.0 = one percentage point of volatility)
+
+paths:
+  raw_data: data/nse_index                       # one csv per trading day (never downloaded unless missing)
+  surface_cache: data/cache/surfaces.pkl         # built once from raw_data by dh2.data.load_all
+  walk_results: data/results                     # walk_<model>_<tag>.pkl, hyb_<model>_<tag>.pkl, trade_*.json (cached, hours to rebuild)
+  vix_csv: data/vix/india_vix.csv
+  parameter_table: outputs/parameters_dhj_main.csv
+  today_json: today.json                         # UI adapter output
+  results: results
+  results_quick: results_quick                   # --quick writes ONLY here
+  tables: results/tables
+  figures: results/figures
+  run_logs: results/run_logs
+  pinn_config: configs/pinn.yaml                 # every PINN setting and seed (the pipeline only validates the shipped checkpoints)
+  pinn_checkpoints: results/pinn/checkpoints
+
+data:
+  first_day: 2016-10-03
+  last_day: 2026-10-06
+  expected_files: 2470
+  min_raw_files: 2400                            # fewer files than this = "raw files missing": only then do the resumable downloaders run
+  filters:                                       # dh2/data.py constants (documentation; checked against the code by the tests)
+    min_days_to_expiry: 3
+    min_price_rupees: 1.0
+    max_abs_log_moneyness: 0.22
+    parity_strikes: 6
+
+split:                                           # fixed before any result was seen; settings are chosen on development only
+  development: {start: 2016-01-01, end: 2021-12-31}
+  test: {start: 2022-01-01, end: null}           # open ended: 2022-01-01 to the last day
+
+walk_forward:                                    # run_walk.py settings of the shipped "main" runs
+  tag: main
+  models: [dh, dhj, heston]                      # headline runs: diffusion Double Heston, jump model, single Heston
+  window: 40                                     # trailing days over which the slow (structural) parameters are fitted
+  refit: 10                                      # the structural parameters are refitted every 10 days
+  burn: 40                                       # burn-in days fitted before each chunk but not recorded
+  per_expiry: 10                                 # quotes per expiry used by the window fit
+  nfev_cold: 60
+  nfev_warm: 12
+  prior: 0.0
+  chunks: 12                                     # results depend on the chunking (burn-in, seeds), not on the number of workers
+  seed_base: 7                                   # chunk j uses seed 7 + j (run_walk.py)
+  bounds:                                        # dh2/calib.py::BOUNDS, (lo, hi) per model, internal parameter order (kappa2 = kappa1 + dk)
+    bs:
+      lo: [0.02]
+      hi: [1.0]
+    heston:
+      lo: [0.002, 0.1, 0.002, 0.02, -0.98]
+      hi: [0.30, 10.0, 0.25, 2.0, 0.98]
+    dh:
+      lo: [0.002, 0.05, 0.002, 0.02, -0.98, 0.002, 0.2, 0.002, 0.02, -0.98]
+      hi: [0.30, 4.0, 0.25, 1.5, 0.98, 0.30, 15.0, 0.25, 2.0, 0.98]
+    dhj:                                         # dh plus (lam, mu_j, delta_j)
+      lo: [0.002, 0.05, 0.002, 0.02, -0.98, 0.002, 0.2, 0.002, 0.02, -0.98, 0.0, -0.25, 0.005]
+      hi: [0.30, 4.0, 0.25, 1.5, 0.98, 0.30, 15.0, 0.25, 2.0, 0.98, 8.0, 0.10, 0.25]
+
+forecasts:
+  variants: [smile, carry, revert, lev, carry_res, lev_res, smile_lev]    # hybrids.py
+  benchmarks: [smile, smile_scaled]              # the two model-free forecasts every model must beat
+  headline_runs: [dhj_main, dh_main, heston_main]
+  report_variants: [carry, carry_res]            # pure model forecast; forecast + yesterday's misfit
+
+evaluation:
+  paired_sample:                                 # the sample every expensive per-day experiment uses (results/svi, attribution, ...)
+    rule: every_nth_test_trading_day
+    every_nth: 10
+    expected_days: 118
+  bootstrap: {block: 20, n: 2000, seed: 0}       # moving-block bootstrap of tournament.boot
+  smile_figure_days:                             # the 3 days of the market-vs-model smile figure: fixed by this rule, not by how well the models fit
+    rule: "paired-sample days ranked by the market's own 30-day at-the-money volatility; the days at these percentiles"
+    percentiles: [10, 50, 90]
+
+trading:                                         # trade_test.py / trade_robust.py / trade_matched.py on the jump model
+  model: dhj
+  tag: main
+  top: 5
+  lags: [0, 1]
+
+pinn:
+  settings: configs/pinn.yaml
+  shipped_checkpoints:                           # results/pinn/checkpoints/<name>.pt (final = dat_s2 data-only; final_greeks = hyb_s2 hybrid)
+    - dat_s0
+    - dat_s1
+    - dat_s2
+    - hyb_s0
+    - hyb_s1
+    - hyb_s2
+    - phy_s0
+    - spec_dat_s0
+    - de_dat_1000
+    - de_dat_10000
+    - de_dat_100000
+    - de_hyb_1000
+    - de_hyb_10000
+    - de_hyb_100000
+    - final
+    - final_greeks
+  validation_stages: [sets, metrics, greeks, arb, speed, pde, domain, figures]
+  retrain: false                                 # true only through --retrain-pinn; trains the MISSING checkpoints (about 48 GPU minutes in all)
+
+pinn_calibration:                                # exp_pinn_calib.py design | test | report (frozen design in results/pinn_calib/frozen_config.json)
+  design_days_rule: every 25th development day
+  test_days: paired_sample
+
+ablations:                                       # optional stage "ablation_runs": the robustness reruns of the jump model (about 14 walk-forwards)
+  - {tag: w20, args: [--window, "20"]}
+  - {tag: w80, args: [--window, "80"]}
+  - {tag: w120, args: [--window, "120"]}
+  - {tag: r5, args: [--refit, "5"]}
+  - {tag: r20, args: [--refit, "20"]}
+  - {tag: p5, args: [--prior, "5"]}
+  - {tag: p10, args: [--prior, "10"]}
+  - {tag: p20, args: [--prior, "20"]}
+  - {tag: mp10, args: [--memory-prior, "10"]}
+  - {tag: mp30, args: [--memory-prior, "30"]}
+  - {tag: mq05, args: [--memory-prior, "10", --mem-q, "0.05", --mem-L, "5"]}
+
+execution:
+  workers: 2                                     # worker processes for every stage that can use them
+  max_workers: 2                                 # --workers can lower but not exceed this
+  workers_c2: 3                                  # the shipped C2 scripts (exp_*.py) fix 3 workers in c2_common.py; they are not edited
+  confirm_over_minutes: 30                       # a stage estimated above this (or needing the network) asks for confirmation (--yes to skip)
+  quiet_subprocess: true                         # stage output goes to results/run_logs/<stage>.log; the tail is shown on failure
+
+figures:
+  dpi: 300
+  size_inches: [13.333, 7.5]                     # 16:9
+  formats: [png, pdf]
+
+quick:                                           # --quick: a demo-scale run on a short stretch of real data, outputs in results_quick/ only
+  start: 2025-01-02
+  end: 2025-04-30
+  models: [heston, dh, dhj]
+  window: 20                                     # full run: 40
+  refit: 5                                       # full run: 10
+  burn: 10                                       # full run: 40
+  per_expiry: 10                                 # full run: 10
+  nfev_cold: 60                                  # full run: 60
+  nfev_warm: 12                                  # full run: 12
+  chunks: 2
+  seed_base: 7
+  bootstrap: {block: 5, n: 1000, seed: 0}
+  pricer_days: 3                                 # real days for the COS / project-pricer cross-check
+  pinn_days: 3                                   # real days for the PINN surrogate validation (shipped checkpoints)
+  svi_days: 4                                    # real days for the mini SVI
+  target_minutes: 15

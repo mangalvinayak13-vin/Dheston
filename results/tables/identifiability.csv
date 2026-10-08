@@ -1,0 +1,8 @@
+Quantity,Double Heston,Double Heston + jumps
+parameters,10,13
+median condition number (columns normalised),76,529
+median effective rank,9,11
+share of parameters within 2% of a bound,41%,39%
+median standard error / bound width,0.213,0.124
+mean distinct near-optimal parameter sets (16 starts),1.27,1.50
+days with 2+ distinct near-optimal sets,16%,30%

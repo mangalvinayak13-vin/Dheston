@@ -1,0 +1,9 @@
+Task,Median time (ms)
+"exact pricer, one chain [cpu (1 thread, numpy)]",10.87912499497179
+"surrogate, one chain, prices [cpu]",1.0905624949373305
+"surrogate, one chain, prices [mps]",3.287041516159661
+"exact pricer, 128 parameter sets x chain [cpu (1 thread, numpy)]",1555.519166024169
+"surrogate, 128 parameter sets x chain [cpu]",75.12845800374635
+"surrogate, 128 parameter sets x chain [mps]",19.587957998737693
+"exact Greeks by finite differences (9 chain evaluations), one chain [cpu (1 thread, numpy)]",119.55541698262095
+"surrogate Greeks (delta, gamma, dC/dv1, dC/dv2), one chain [cpu]",21.812812497955747

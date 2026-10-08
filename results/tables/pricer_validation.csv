@@ -1,0 +1,10 @@
+Points,Model,Comparison,n,Max price error (Rs),Max relative price error,Max IV error (vol pts),Mean IV error (vol pts)
+real chains (calibrated parameters of sampled days),diffusion,project pricer vs COS,18071,4.12781e-05,9.63764e-07,1.45274e-06,3.90173e-09
+real chains (calibrated parameters of sampled days),diffusion,Lewis vs COS,18071,2.17053e-08,1.03181e-09,7.56559e-10,2.08325e-12
+real chains (calibrated parameters of sampled days),jumps,project pricer vs COS,18071,4.17754e-05,6.79399e-08,6.02911e-07,1.44115e-09
+real chains (calibrated parameters of sampled days),jumps,Lewis vs COS,18071,4.01201e-09,9.70878e-11,3.14904e-10,4.66042e-12
+"synthetic grid (calibrated-parameter sets, maturities, strikes)",diffusion,project pricer vs COS,8736,0.00755717,2.02182e-05,0.000104271,3.28694e-07
+"synthetic grid (calibrated-parameter sets, maturities, strikes)",diffusion,Lewis vs COS,8736,7.76117e-09,1.25895e-09,1.51162e-09,1.04995e-11
+"synthetic grid (calibrated-parameter sets, maturities, strikes)",jumps,project pricer vs COS,8736,0.00760734,1.04546e-05,0.000100982,2.20433e-07
+"synthetic grid (calibrated-parameter sets, maturities, strikes)",jumps,Lewis vs COS,8736,3.50822e-09,1.11174e-09,8.85905e-09,4.57344e-11
+Monte Carlo (antithetic QE paths),diffusion,"Monte Carlo vs COS (max |z|, mean |z|)",70,,,1.97704,0.595594

@@ -1,0 +1,15 @@
+
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/python3 final_table.py dhj_main dh_main heston_main
+2429 common days (1256 dev, 1173 test)
+
+run                      variant        dev    test   test difference vs smile_scaled (negative = better)
+smile (no model)                      1.876   1.468
+smile_scaled (no model)               1.624   1.236
+dhj_main                 carry        1.734   1.201   -0.035 [-0.095, +0.028]
+dhj_main                 carry_res    1.317   1.034   -0.202 [-0.227, -0.181]
+dh_main                  carry        3.409   2.792   +1.557 [+1.419, +1.694]
+dh_main                  carry_res    1.736   1.377   +0.141 [+0.119, +0.164]
+heston_main              carry        4.028   3.532   +2.296 [+2.127, +2.480]
+heston_main              carry_res    1.776   1.416   +0.181 [+0.160, +0.203]
+
+best carry_res on the DEVELOPMENT years: dhj_main (1.317)

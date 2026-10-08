@@ -1,0 +1,9 @@
+Test,Model,Held-out IV RMSE,lo,hi,Median
+random hold-out of quotes (interpolation),Black-Scholes,5.78684547624201,5.4694026037402645,6.122576135081984,5.713676287227402
+random hold-out of quotes (interpolation),Heston,3.2446026627139086,2.980282256729093,3.5229370391838306,2.8398812332476204
+random hold-out of quotes (interpolation),Double Heston,2.4859184454808188,2.2419335998755834,2.742659193009356,2.0754243798624428
+random hold-out of quotes (interpolation),Double Heston + jumps,0.7051410550740312,0.6386290318338468,0.7798975683741035,0.5972815475090694
+"fit short expiries, score longer ones (extrapolation in maturity)",Black-Scholes,2.6738491848446393,2.526041696624559,2.8425117968622686,2.480463953452382
+"fit short expiries, score longer ones (extrapolation in maturity)",Heston,1.3683322198784489,1.209889132841376,1.5718698256286283,1.1393427433504617
+"fit short expiries, score longer ones (extrapolation in maturity)",Double Heston,2.0215353457617167,1.8036458144876368,2.2681087610258657,1.698778672368492
+"fit short expiries, score longer ones (extrapolation in maturity)",Double Heston + jumps,1.410205908543958,1.2394424793272725,1.61896571512351,1.1060278765048346

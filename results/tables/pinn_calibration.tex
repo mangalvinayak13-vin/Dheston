@@ -1,0 +1,16 @@
+\begin{table}[ht]
+\centering
+\small
+\caption{PINN-accelerated calibration of the diffusion model (paired days, exact pricer scores every fit)}
+\begin{tabular}{lrrrr}
+\toprule
+Method & Same-day IV RMSE & 95\% interval & Mean log(cost / exact cost) & Days within 1\% of exact cost \\
+\midrule
+exact (Phase-3 recipe, 4 starts) & 2.555 & [2.312, 2.812] & +0.000 & 100\% \\
+accelerated (surrogate global + exact polish) & 2.560 & [2.318, 2.819] & +0.008 & 82\% \\
+surrogate-only (no polish) & 2.554 & [2.311, 2.813] & +0.166 & 7\% \\
+exact polish from Phase-3 starts (control) & 2.837 & [2.567, 3.132] & +0.085 & 25\% \\
+\bottomrule
+\end{tabular}
+\par\smallskip{\footnotesize 118 days. Wall-time speed-up 8.0x [7.4, 8.7]; exact-pricer calls 11.6x fewer; paired RMSE difference accelerated minus exact +0.0054 [-0.0091, +0.0205].}
+\end{table}

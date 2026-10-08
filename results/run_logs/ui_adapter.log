@@ -1,0 +1,7 @@
+
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/python3 -m dh2.ui_adapter --tag main
+{
+ "asof": "2026-10-06",
+ "same_day_iv_rmse_vol_points": 1.2683099159137732,
+ "website_bounds_would_change": {}
+}

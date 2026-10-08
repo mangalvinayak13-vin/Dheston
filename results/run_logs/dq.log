@@ -1,0 +1,17 @@
+
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/python3 -m dh2.dq --workers 2
+check against cache: {'checked': 2470, 'mismatched_days': (0, []), 'surface_days_not_in_cache': (0, []), 'surfaces_in_cache': 2470, 'surfaces_replicated': 2470}
+    year  files  days_with_surface  nifty_options   traded   final
+0   2016     61                 61         126678    13308    5765
+1   2017    248                248         527414    55774   22321
+2   2018    246                246         566450    62844   27574
+3   2019    244                244         770090    80807   34181
+4   2020    250                250         731639   119926   47269
+5   2021    247                247         510565   157140   73855
+6   2022    248                248         562041   209037  104355
+7   2023    245                245         339069   177522   90902
+8   2024    246                246         394150   214263  109531
+9   2025    248                248         394283   231973  117533
+10  2026    187                187         331626   194534  103027
+11   ALL   2470               2470        5254005  1517128  736313
+wrote /Users/vinayakmangal/Everything related to my projects/Dheston/results/dq

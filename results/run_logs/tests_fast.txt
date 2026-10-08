@@ -1,0 +1,22 @@
+
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/python3 -m pytest tests -m not slow -q -p no:cacheprovider --color=no
+........................................................................ [ 42%]
+........x...........x................................................... [ 85%]
+.........................                                                [100%]
+=============================== warnings summary ===============================
+tests/test_pricer_cross.py: 12 warnings
+  /Users/vinayakmangal/Everything related to my projects/Dheston/tests/test_pricer_cross.py:279: RuntimeWarning: divide by zero encountered in divide
+    rel = (np.abs(proj - c) / c)[sel]
+
+tests/test_pricer_cross.py: 12 warnings
+  /Users/vinayakmangal/Everything related to my projects/Dheston/tests/test_pricer_cross.py:279: RuntimeWarning: invalid value encountered in divide
+    rel = (np.abs(proj - c) / c)[sel]
+
+tests/test_pricer_cross.py::test_black_scholes_limit_vol_of_vol_to_zero
+  /Users/vinayakmangal/Everything related to my projects/Dheston/dh2/lewis.py:83: IntegrationWarning: The occurrence of roundoff error is detected, which prevents 
+    the requested tolerance from being achieved.  The error may be 
+    underestimated.
+    val, err = quad(f, lo, hi, epsabs=epsabs, epsrel=epsrel, limit=limit)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+167 passed, 14 deselected, 2 xfailed, 25 warnings in 16.44s

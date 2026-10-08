@@ -1,0 +1,21 @@
+# Environment the shipped results were produced and verified in (read from `pip list`, 8 Oct 2026).
+#
+#   Python 3.13.14 (python.org framework build), macOS (Apple M-series, 10 cores: 4 fast + 6 efficiency, 16 GB).
+#   torch uses the Apple GPU (MPS) for the PINN training and falls back to CPU; the inference used by the pipeline (validation, calibration,
+#   --quick) runs on the CPU. No GPU is needed to run `python -m dh2.run_all --quick`.
+#   Not needed (the code avoids them): QuantLib, py_vollib, statsmodels, pyarrow, jinja2 (LaTeX tables are written by dh2/report.py).
+#   Network: only the NSE file downloaders (dh2.fetch_nse*, fetch_vix.py) use it, and only when the raw files are missing.
+#
+#   python3 -m venv .venv && . .venv/bin/activate && pip install -r requirements.txt
+numpy==2.5.3
+scipy==1.18.1
+pandas==3.0.6
+torch==2.14.0
+matplotlib==3.11.2
+pillow==12.3.0          # matplotlib dependency; also writes the PDF copies of the raster figures
+scikit-learn==1.9.1
+joblib==1.6.0
+PyYAML==6.0.3
+pytest==9.1.1
+requests==2.34.2
+mpmath==1.3.0

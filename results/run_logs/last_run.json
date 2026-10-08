@@ -1,0 +1,212 @@
+{
+ "finished": "2026-10-09T00:02:16",
+ "quick": false,
+ "force": true,
+ "workers": 2,
+ "wall_seconds": 5.641319751739502,
+ "stages": [
+  {
+   "name": "data_check",
+   "status": "skipped",
+   "seconds": 0.0,
+   "estimated_minutes": 0.5,
+   "detail": "cached (all outputs exist)"
+  },
+  {
+   "name": "walk_dh",
+   "status": "skipped",
+   "seconds": 0.0,
+   "estimated_minutes": 150,
+   "detail": "cached (all outputs exist)"
+  },
+  {
+   "name": "forecasts_dh",
+   "status": "skipped",
+   "seconds": 0.0,
+   "estimated_minutes": 5,
+   "detail": "cached (all outputs exist)"
+  },
+  {
+   "name": "walk_dhj",
+   "status": "skipped",
+   "seconds": 0.0,
+   "estimated_minutes": 150,
+   "detail": "cached (all outputs exist)"
+  },
+  {
+   "name": "forecasts_dhj",
+   "status": "skipped",
+   "seconds": 0.0,
+   "estimated_minutes": 5,
+   "detail": "cached (all outputs exist)"
+  },
+  {
+   "name": "walk_heston",
+   "status": "skipped",
+   "seconds": 0.0,
+   "estimated_minutes": 150,
+   "detail": "cached (all outputs exist)"
+  },
+  {
+   "name": "forecasts_heston",
+   "status": "skipped",
+   "seconds": 0.0,
+   "estimated_minutes": 5,
+   "detail": "cached (all outputs exist)"
+  },
+  {
+   "name": "benchmark_table",
+   "status": "skipped",
+   "seconds": 0.0,
+   "estimated_minutes": 0.2,
+   "detail": "cached (all outputs exist)"
+  },
+  {
+   "name": "trading_tests",
+   "status": "skipped",
+   "seconds": 0.0,
+   "estimated_minutes": 3,
+   "detail": "cached (all outputs exist)"
+  },
+  {
+   "name": "pricer_validation",
+   "status": "skipped",
+   "seconds": 0.0,
+   "estimated_minutes": 16,
+   "detail": "cached (all outputs exist)"
+  },
+  {
+   "name": "pinn_checkpoints",
+   "status": "skipped",
+   "seconds": 0.0,
+   "estimated_minutes": 48,
+   "detail": "cached (all outputs exist)"
+  },
+  {
+   "name": "pinn_validation",
+   "status": "skipped",
+   "seconds": 0.0,
+   "estimated_minutes": 4,
+   "detail": "cached (all outputs exist)"
+  },
+  {
+   "name": "dq",
+   "status": "skipped",
+   "seconds": 0.0,
+   "estimated_minutes": 1,
+   "detail": "cached (all outputs exist)"
+  },
+  {
+   "name": "noarb",
+   "status": "skipped",
+   "seconds": 0.0,
+   "estimated_minutes": 0.2,
+   "detail": "cached (all outputs exist)"
+  },
+  {
+   "name": "vix_data",
+   "status": "skipped",
+   "seconds": 0.0,
+   "estimated_minutes": 2,
+   "detail": "cached (all outputs exist)"
+  },
+  {
+   "name": "vix",
+   "status": "skipped",
+   "seconds": 0.0,
+   "estimated_minutes": 0.2,
+   "detail": "cached (all outputs exist)"
+  },
+  {
+   "name": "svi",
+   "status": "skipped",
+   "seconds": 0.0,
+   "estimated_minutes": 1,
+   "detail": "cached (all outputs exist)"
+  },
+  {
+   "name": "stats",
+   "status": "skipped",
+   "seconds": 0.0,
+   "estimated_minutes": 0.2,
+   "detail": "cached (all outputs exist)"
+  },
+  {
+   "name": "daily_fits",
+   "status": "skipped",
+   "seconds": 0.0,
+   "estimated_minutes": 20,
+   "detail": "cached (all outputs exist)"
+  },
+  {
+   "name": "attribution",
+   "status": "skipped",
+   "seconds": 0.0,
+   "estimated_minutes": 100,
+   "detail": "cached (all outputs exist)"
+  },
+  {
+   "name": "crosssection",
+   "status": "skipped",
+   "seconds": 0.0,
+   "estimated_minutes": 280,
+   "detail": "cached (all outputs exist)"
+  },
+  {
+   "name": "buckets",
+   "status": "skipped",
+   "seconds": 0.0,
+   "estimated_minutes": 10,
+   "detail": "cached (all outputs exist)"
+  },
+  {
+   "name": "identifiability",
+   "status": "skipped",
+   "seconds": 0.0,
+   "estimated_minutes": 90,
+   "detail": "cached (all outputs exist)"
+  },
+  {
+   "name": "pinn_calib_design",
+   "status": "skipped",
+   "seconds": 0.0,
+   "estimated_minutes": 30,
+   "detail": "cached (all outputs exist)"
+  },
+  {
+   "name": "pinn_calib_test",
+   "status": "skipped",
+   "seconds": 0.0,
+   "estimated_minutes": 15,
+   "detail": "cached (all outputs exist)"
+  },
+  {
+   "name": "pinn_calib_report",
+   "status": "skipped",
+   "seconds": 0.0,
+   "estimated_minutes": 0.2,
+   "detail": "cached (all outputs exist)"
+  },
+  {
+   "name": "ui_adapter",
+   "status": "skipped",
+   "seconds": 0.0,
+   "estimated_minutes": 0.2,
+   "detail": "cached (all outputs exist)"
+  },
+  {
+   "name": "metrics_tables",
+   "status": "skipped",
+   "seconds": 0.0,
+   "estimated_minutes": 0.2,
+   "detail": "cached (all outputs exist)"
+  },
+  {
+   "name": "figures",
+   "status": "ran",
+   "seconds": 5.641295909881592,
+   "estimated_minutes": 0.2,
+   "detail": ""
+  }
+ ]
+}

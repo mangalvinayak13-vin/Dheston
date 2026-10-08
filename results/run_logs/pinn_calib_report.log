@@ -1,0 +1,32 @@
+
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/python3 exp_pinn_calib.py report
+{
+ "rmse_mean": {
+  "exact": 2.554702707577834,
+  "accel": 2.5600716143205897,
+  "surrogate_only": 2.5540948315996066,
+  "exact_polish_from_phase3_starts": 2.837040701746425,
+  "accel_without_rerank": 2.5446698576512286
+ },
+ "speedup_wall_total": {
+  "est": 8.024758146096225,
+  "lo": 7.4301175113927185,
+  "hi": 8.67207697711702
+ },
+ "call_ratio": {
+  "est": 11.635389123132995,
+  "lo": 10.730435144068826,
+  "hi": 12.615358861301079
+ },
+ "worse_days": {
+  "n_worse": 30,
+  "n_better": 11,
+  "n": 118,
+  "worse_rmse_by_more_than_0.1": 7,
+  "worse_rmse_by_more_than_0.5": 1,
+  "max_rmse_excess": 0.5200387200540955,
+  "max_cost_ratio": 1.1089690243367656,
+  "min_cost_ratio": 0.9326884342866036
+ },
+ "box_exact_inside_share": 0.8389830508474576
+}

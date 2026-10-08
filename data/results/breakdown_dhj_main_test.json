@@ -1,0 +1,86 @@
+{
+  "expiry length": {
+    "3-7 days": {
+      "quotes": 49659,
+      "smile_scaled": 1.9367558136360932,
+      "dhj carry": 1.926733051543182,
+      "dhj carry_res": 1.687499984222834
+    },
+    "8-14": {
+      "quotes": 103446,
+      "smile_scaled": 1.5877549659620518,
+      "dhj carry": 1.6419688941799346,
+      "dhj carry_res": 1.441520877472538
+    },
+    "15-35": {
+      "quotes": 193555,
+      "smile_scaled": 1.337469943454753,
+      "dhj carry": 1.3972330896492966,
+      "dhj carry_res": 1.2937848550975515
+    },
+    "36-100": {
+      "quotes": 138306,
+      "smile_scaled": 0.8950949519101044,
+      "dhj carry": 1.0437263767099154,
+      "dhj carry_res": 0.8879062268192704
+    },
+    "100+ days": {
+      "quotes": 26975,
+      "smile_scaled": 0.5402239114654477,
+      "dhj carry": 0.8310529563914176,
+      "dhj carry_res": 0.4886560983275386
+    }
+  },
+  "moneyness |ln K/F|": {
+    "|m| < 2%": {
+      "quotes": 115289,
+      "smile_scaled": 1.42760702271634,
+      "dhj carry": 1.5280344718200007,
+      "dhj carry_res": 1.4352149054461942
+    },
+    "2-5%": {
+      "quotes": 152632,
+      "smile_scaled": 1.402709057972995,
+      "dhj carry": 1.5596924471726228,
+      "dhj carry_res": 1.4248792600921503
+    },
+    "5-10%": {
+      "quotes": 180338,
+      "smile_scaled": 1.5259596461035783,
+      "dhj carry": 1.4805657400180878,
+      "dhj carry_res": 1.2923436843695915
+    },
+    "10-22%": {
+      "quotes": 76700,
+      "smile_scaled": 2.51728429972005,
+      "dhj carry": 1.600040382199743,
+      "dhj carry_res": 1.264891953139723
+    }
+  },
+  "side / regime": {
+    "calls": {
+      "quotes": 239866,
+      "smile_scaled": 1.7023986497181445,
+      "dhj carry": 1.5016258878983462,
+      "dhj carry_res": 1.3288511914357184
+    },
+    "puts": {
+      "quotes": 285093,
+      "smile_scaled": 1.6176906035151715,
+      "dhj carry": 1.5571764122765472,
+      "dhj carry_res": 1.38605356449153
+    },
+    "calm days": {
+      "quotes": 321908,
+      "smile_scaled": 1.325035222310835,
+      "dhj carry": 1.1052458255697375,
+      "dhj carry_res": 1.0029475836871238
+    },
+    "stressed days": {
+      "quotes": 203051,
+      "smile_scaled": 2.0771296332137696,
+      "dhj carry": 2.0326386450351546,
+      "dhj carry_res": 1.7856847533796603
+    }
+  }
+}

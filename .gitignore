@@ -1,0 +1,10 @@
+# raw downloads and caches are rebuilt by dh2.fetch_nse / dh2.fetch_nse_old / load_all (about 0.5 GB)
+data/nse_index/
+data/cache/
+# large result pickles (walks, forecast variants, trade lists) are rebuilt by run_walk.py / hybrids.py / trade_test.py
+data/results/*.pkl
+# keep the small summaries: data/results/*.json
+logs/
+__pycache__/
+.pytest_cache/
+*.pyc

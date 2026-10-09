@@ -379,6 +379,12 @@ def collect_forecast(m: Metrics, cfg):
         m.derived("forecast_by_year.years_total", int(len(diff)), "years", [fy], "number of rows (calendar years with forecasts)")
         m.derived("forecast_by_year.years_jump_misfit_beats_time_scaled_smile", int((diff < 0).sum()), "years", [fy],
                   f"count of years with column {mc!r} < column {bs!r}")
+        is_test_year = by["year"].to_numpy(int) >= _split_date(cfg).year
+        for tag, mask in (("test", is_test_year), ("dev", ~is_test_year)):
+            m.derived(f"forecast_by_year.{tag}_years_total", int(mask.sum()), "years", [fy],
+                      f"number of rows with year {'>=' if tag == 'test' else '<'} the first test year (split.test.start in the config)")
+            m.derived(f"forecast_by_year.{tag}_years_jump_misfit_beats_time_scaled_smile", int(((diff < 0) & mask).sum()), "years", [fy],
+                      f"count of those years with column {mc!r} < column {bs!r}")
     # robustness over every saved run
     fr = f"{T}/robustness_runs.csv"
     rb = m.table(fr)
@@ -401,6 +407,64 @@ def collect_forecast(m: Metrics, cfg):
             m.jcell(f"memory.{tag}.{nm}", mem, [base] + path, unit)
         m.jcell(f"memory.{tag}.ci95_lo", mem, [base, "test", "ci95", 0], "vol points")
         m.jcell(f"memory.{tag}.ci95_hi", mem, [base, "test", "ci95", 1], "vol points")
+
+
+BC = "results/benchmark_check"
+BC_PARTS = (("all", "all quotes"), ("inside", "inside yesterday's quoted range"), ("outside", "outside it"))
+BC_CMP = {"model_vs_edge": "jump_plus_misfit minus edge_value_benchmark", "model_vs_linear": "jump_plus_misfit minus linear_wing_benchmark",
+          "linear_vs_edge": "linear_wing_benchmark minus edge_value_benchmark"}
+VARIANT_LABEL = {"smile": "yesterday's smile (no model)", "carry": "model, today's state", "revert": "model + its one-day mean reversion",
+                 "lev": "model + mean reversion + leverage update", "carry_res": "model + yesterday's misfit",
+                 "lev_res": "model + leverage update + yesterday's misfit", "smile_lev": "yesterday's smile + model-implied change"}
+RUN_LABEL = {"dhj_main": "jump model", "dh_main": "diffusion Double Heston", "heston_main": "single Heston"}
+
+
+def collect_benchmark_check(m: Metrics, cfg):
+    """results/benchmark_check (exp_wing_benchmark.py): the edge-value and the linear-wing benchmark against the jump model + misfit, inside and outside yesterday's quoted range."""
+    f, d = f"{BC}/summary.csv", f"{BC}/per_day.csv"
+    for q, _ in BC_PARTS:
+        for k, comp in BC_CMP.items():
+            w = {"quotes": q, "comparison": comp}
+            cols = [("days", "days"), ("mean_a", "vol points"), ("mean_b", "vol points"), ("mean_difference", "vol points"), ("ci95_lo", "vol points"), ("ci95_hi", "vol points"),
+                    ("model_ahead_on_share_of_days", "share")]
+            if not (q == "inside" and k == "linear_vs_edge"):       # inside the range the two benchmarks are identical by construction: no test is possible
+                cols.append(("wilcoxon_p", "p-value"))
+            for col, unit in cols:
+                m.cell(f"benchmark_check.{q}.{k}.{col}", f, col, unit, w)
+    dd = m.table(d)
+    for col in ("n_inside", "n_outside"):
+        if col not in dd.columns:
+            raise MissingSource(f"{d}: no column {col!r}")
+    ni, no = int(dd["n_inside"].sum()), int(dd["n_outside"].sum())
+    m.derived("benchmark_check.n_quotes_inside", ni, "quotes", [d], "sum of column 'n_inside' over the test days")
+    m.derived("benchmark_check.n_quotes_outside", no, "quotes", [d], "sum of column 'n_outside' over the test days")
+    m.derived("benchmark_check.n_quotes_total", ni + no, "quotes", [d], "sum of columns 'n_inside' and 'n_outside' over the test days")
+    m.derived("benchmark_check.share_quotes_inside", ni / (ni + no), "share", [d], "sum of 'n_inside' / (sum of 'n_inside' + sum of 'n_outside')")
+    m.derived("benchmark_check.share_quotes_outside", no / (ni + no), "share", [d], "sum of 'n_outside' / (sum of 'n_inside' + sum of 'n_outside')")
+    m.derived("benchmark_check.mean_quotes_per_day_inside", float(dd["n_inside"].mean()), "quotes", [d], "mean over days of column 'n_inside'")
+    m.derived("benchmark_check.mean_quotes_per_day_outside", float(dd["n_outside"].mean()), "quotes", [d], "mean over days of column 'n_outside'")
+    m.derived("benchmark_check.share_of_edge_gap_closed_by_linear_wings",
+              m.v("benchmark_check.all.linear_vs_edge.mean_difference") / m.v("benchmark_check.all.model_vs_edge.mean_difference"), "share", [f],
+              "mean_difference of (linear-wing minus edge-value benchmark) / mean_difference of (jump + misfit minus edge-value benchmark), all quotes")
+
+
+def collect_variants(m: Metrics, cfg):
+    """results/tables/forecast_variants.csv (exp_variants_table.py): the seven forecast variants of hybrids.py on the test period."""
+    f = f"{T}/forecast_variants.csv"
+    base_cols = [("dev_mean", "vol points"), ("test_mean", "vol points"), ("test_mean_ci_lo", "vol points"), ("test_mean_ci_hi", "vol points"),
+                 ("diff_vs_time_scaled_smile", "vol points"), ("diff_scaled_ci_lo", "vol points"), ("diff_scaled_ci_hi", "vol points")]
+    vs_base = [("dev_diff_vs_baseline", "vol points"), ("diff_vs_baseline", "vol points"), ("diff_baseline_ci_lo", "vol points"), ("diff_baseline_ci_hi", "vol points"),
+               ("share_test_days_better_than_baseline", "share")]
+    for run in cfg["forecasts"]["headline_runs"]:
+        for v in cfg["forecasts"]["variants"]:
+            w = {"run": run, "variant": v}
+            for col, unit in base_cols:
+                m.cell(f"variants.{run}.{v}.{col}", f, col, unit, w)
+            base = m.rows(f, w)["baseline"].iloc[0]
+            if isinstance(base, str) and base:
+                m.cell(f"variants.{run}.{v}.baseline", f, "baseline", "name", w)
+                for col, unit in vs_base:
+                    m.cell(f"variants.{run}.{v}.{col}", f, col, unit, w)
 
 
 STATS_PAIRS = [("jump model + misfit", "diffusion DH + misfit"), ("jump model + misfit", "Heston + misfit"), ("jump model + misfit", "time-scaled smile"),
@@ -678,6 +742,8 @@ def build_metrics(cfg: dict, root: Path = ROOT) -> Metrics:
     m = Metrics(root)
     collect_data(m, cfg)
     collect_forecast(m, cfg)
+    collect_benchmark_check(m, cfg)
+    collect_variants(m, cfg)
     collect_stats(m, cfg)
     collect_pricer(m, cfg)
     collect_pinn(m, cfg)
@@ -782,7 +848,8 @@ def _ci(lo, hi, d=3, signed=False):
 
 
 TABLE_NAMES = ["forecast_models", "significance_tests", "pricer_validation", "pinn_accuracy", "pinn_speed", "pinn_calibration", "waterfall", "crosssection",
-               "identifiability", "vix_link", "svi_reference", "data_quality_funnel", "noarb_sensitivity", "trading_summary", "robustness_memory"]
+               "identifiability", "vix_link", "svi_reference", "data_quality_funnel", "noarb_sensitivity", "trading_summary", "robustness_memory",
+               "benchmark_check", "forecast_variants_summary"]
 
 
 def build_tables(m: Metrics, cfg: dict) -> list[Table]:
@@ -977,6 +1044,43 @@ def build_tables(m: Metrics, cfg: dict) -> list[Table]:
     tabs.append(Table("robustness_memory", "Robustness of the final forecast and the pattern-memory effect (vol points)", pd.DataFrame(rows), {"Value": "{:.3f}"},
                       [f"Reruns: {v('robustness.final_forecast.n_runs')} jump-model runs (windows, refit schedules, priors, memory priors, bounds). Memory intervals: jump forecast {_ci(v('memory.jump_misfit.ci95_lo'), v('memory.jump_misfit.ci95_hi'), 3, True)}, time-scaled smile "
                        f"{_ci(v('memory.smile_scaled.ci95_lo'), v('memory.smile_scaled.ci95_hi'), 3, True)}."]))
+    # 16 the benchmark check: two model-free benchmarks, inside and outside yesterday's quoted range
+    rows = []
+    for q, ql in BC_PARTS:
+        k = f"benchmark_check.{q}"
+        share = 1.0 if q == "all" else v(f"benchmark_check.share_quotes_{q}")
+        rows.append({"Quotes": ql, "Share of quotes": share, "Edge-value benchmark": v(f"{k}.model_vs_edge.mean_b"), "Linear-wing benchmark": v(f"{k}.model_vs_linear.mean_b"),
+                     "Jump model + misfit": v(f"{k}.model_vs_edge.mean_a"),
+                     "Model minus edge-value benchmark": v(f"{k}.model_vs_edge.mean_difference"), "Edge lo": v(f"{k}.model_vs_edge.ci95_lo"), "Edge hi": v(f"{k}.model_vs_edge.ci95_hi"),
+                     "Model minus linear-wing benchmark": v(f"{k}.model_vs_linear.mean_difference"), "Linear lo": v(f"{k}.model_vs_linear.ci95_lo"), "Linear hi": v(f"{k}.model_vs_linear.ci95_hi"),
+                     "Days model ahead of linear-wing benchmark": v(f"{k}.model_vs_linear.model_ahead_on_share_of_days")})
+    tabs.append(Table("benchmark_check", "Is the lead a wing effect? Next-day error (vol points) of two model-free benchmarks and the jump model + misfit, test period", pd.DataFrame(rows),
+                      {"Share of quotes": "{:.1%}", "Edge-value benchmark": "{:.3f}", "Linear-wing benchmark": "{:.3f}", "Jump model + misfit": "{:.3f}",
+                       "Model minus edge-value benchmark": "{:+.3f}", "Model minus linear-wing benchmark": "{:+.3f}", "Days model ahead of linear-wing benchmark": "{:.0%}"},
+                      [f"{v('benchmark_check.all.model_vs_edge.days')} test days, {v('benchmark_check.n_quotes_total'):,} quotes. Edge-value benchmark = the time-scaled smile (repeats its edge value beyond yesterday's "
+                       "quoted range); linear-wing benchmark = the same, but continuing the line through yesterday's 3 outermost quotes (floored at 2 vol points). Inside the range the two benchmarks are identical. "
+                       "The linear-wing benchmark was added after the independent verification; only this one variant was tried (results/benchmark_check/README.md)."],
+                      ci=[("95% interval (vs edge-value)", "Edge lo", "Edge hi", 3, True), ("95% interval (vs linear-wing)", "Linear lo", "Linear hi", 3, True)]))
+
+    # 17 the forecast variants of hybrids.py
+    rows = []
+    heads = cfg["forecasts"]["headline_runs"]
+    for run in heads:
+        for var in cfg["forecasts"]["variants"]:
+            if var == "smile" and run != heads[0]:
+                continue                                        # yesterday's smile does not depend on the model
+            k = f"variants.{run}.{var}"
+            has = f"{k}.baseline" in m.items
+            rows.append({"Model": RUN_LABEL.get(run, run), "Forecast": VARIANT_LABEL[var], "Dev": v(f"{k}.dev_mean"), "Test": v(f"{k}.test_mean"),
+                         "Compared with": VARIANT_LABEL[v(f"{k}.baseline")] if has else "",
+                         "Test minus that forecast": v(f"{k}.diff_vs_baseline") if has else np.nan, "Diff lo": v(f"{k}.diff_baseline_ci_lo") if has else np.nan,
+                         "Diff hi": v(f"{k}.diff_baseline_ci_hi") if has else np.nan,
+                         "Days better": v(f"{k}.share_test_days_better_than_baseline") if has else np.nan})
+    tabs.append(Table("forecast_variants_summary", "The forecast variants of hybrids.py on the test period (mean next-day error, vol points); the jump model is the headline model", pd.DataFrame(rows),
+                      {"Dev": "{:.3f}", "Test": "{:.3f}", "Test minus that forecast": "{:+.3f}", "Days better": "{:.0%}"},
+                      ["Negative difference = the forecast in the row is better than the one it is compared with. Source: results/tables/forecast_variants.csv (exp_variants_table.py); the full table "
+                       "with the difference to the time-scaled smile is results/tables/forecast_variants.md."],
+                      ci=[("95% interval of the difference", "Diff lo", "Diff hi", 3, True)]))
     if [t.name for t in tabs] != TABLE_NAMES:
         raise RuntimeError(f"build_tables produced {[t.name for t in tabs]}, TABLE_NAMES says {TABLE_NAMES}")
     return tabs
@@ -1000,7 +1104,12 @@ def render_report(m: Metrics, cfg: dict, tables: list[Table], figures_dir: str =
          f"On the {v('forecast.smile.n_test_days')} test days the jump model plus yesterday's misfit has a mean next-day error of {v(mk + '.test_mean'):.3f} vol points; the best model-free "
          f"benchmark ({nb}) has {v('forecast.' + v('forecast.best_benchmark') + '.test_mean'):.3f}. The paired difference is {v(mk + '.diff_vs_best_benchmark'):+.3f} "
          f"{_ci(v(mk + '.diff_ci_lo'), v(mk + '.diff_ci_hi'), 3, True)} (95% block bootstrap). The model beats the time-scaled smile in "
-         f"{v('forecast_by_year.years_jump_misfit_beats_time_scaled_smile')} of {v('forecast_by_year.years_total')} calendar years.", "",
+         f"{v('forecast_by_year.test_years_jump_misfit_beats_time_scaled_smile')} of {v('forecast_by_year.test_years_total')} test years "
+         f"(and {v('forecast_by_year.dev_years_jump_misfit_beats_time_scaled_smile')} of {v('forecast_by_year.dev_years_total')} development years, where the settings were chosen; "
+         "2016 and 2026 are partial years). That benchmark repeats its edge value for strikes yesterday did not quote; against a benchmark that continues the wings linearly the paired difference is "
+         f"{v('benchmark_check.all.model_vs_linear.mean_difference'):+.3f} {_ci(v('benchmark_check.all.model_vs_linear.ci95_lo'), v('benchmark_check.all.model_vs_linear.ci95_hi'), 3, True)}, "
+         f"and inside the range yesterday quoted ({v('benchmark_check.share_quotes_inside'):.1%} of quotes) the time-scaled smile is slightly better "
+         f"({v('benchmark_check.inside.model_vs_edge.mean_difference'):+.3f} {_ci(v('benchmark_check.inside.model_vs_edge.ci95_lo'), v('benchmark_check.inside.model_vs_edge.ci95_hi'), 3, True)}; section 12).", "",
          to_markdown(T_["forecast_models"]), figs(["bars", "by_year", "summary"]), "",
          "## 2. Is the difference real? Paired tests", "", to_markdown(T_["significance_tests"]), "",
          "## 3. From the 1.0 recipe to 2.0", "",
@@ -1024,6 +1133,27 @@ def render_report(m: Metrics, cfg: dict, tables: list[Table], figures_dir: str =
          "## 9. Data quality and no-arbitrage", "", to_markdown(T_["data_quality_funnel"]), to_markdown(T_["noarb_sensitivity"]), "",
          "## 10. Trading test", "", to_markdown(T_["trading_summary"]), "",
          "## 11. Robustness and pattern memory", "", to_markdown(T_["robustness_memory"]), "",
+         "## 12. Is the lead a wing effect? Two model-free benchmarks", "",
+         "The time-scaled smile repeats its edge value for a strike outside the range yesterday quoted. The linear-wing benchmark below continues the line through yesterday's 3 outermost quotes instead "
+         "(added after the independent verification; only this one variant was tried; an SVI continuation is untested). "
+         f"Against the edge-value benchmark the jump model + misfit leads by {v('benchmark_check.all.model_vs_edge.mean_difference'):+.3f}; against the linear-wing benchmark by "
+         f"{v('benchmark_check.all.model_vs_linear.mean_difference'):+.3f} {_ci(v('benchmark_check.all.model_vs_linear.ci95_lo'), v('benchmark_check.all.model_vs_linear.ci95_hi'), 3, True)} "
+         f"(ahead on {v('benchmark_check.all.model_vs_linear.model_ahead_on_share_of_days'):.0%} of days); the linear wings close "
+         f"{v('benchmark_check.share_of_edge_gap_closed_by_linear_wings'):.0%} of the edge-value gap. Inside yesterday's quoted range ({v('benchmark_check.share_quotes_inside'):.1%} of quotes) the benchmark is "
+         f"slightly better than the model ({v('benchmark_check.inside.model_vs_linear.mean_difference'):+.3f}); outside it ({v('benchmark_check.share_quotes_outside'):.1%}) the model wins "
+         f"({v('benchmark_check.outside.model_vs_linear.mean_b'):.3f} for the linear-wing benchmark and {v('benchmark_check.outside.model_vs_edge.mean_b'):.3f} for the edge-value benchmark against "
+         f"{v('benchmark_check.outside.model_vs_edge.mean_a'):.3f}).", "",
+         to_markdown(T_["benchmark_check"]), figs(["wing"]), "",
+         "## 13. Forecast variants: what the model's own dynamics add", "",
+         "hybrids.py stores seven forecasts per model; the main tables show two (model with today's state, and plus yesterday's misfit). For the jump model, the model's own one-day mean reversion changes the "
+         f"error by {v('variants.dhj_main.revert.diff_vs_baseline'):+.3f} {_ci(v('variants.dhj_main.revert.diff_baseline_ci_lo'), v('variants.dhj_main.revert.diff_baseline_ci_hi'), 3, True)}, "
+         f"the leverage update by {v('variants.dhj_main.lev.diff_vs_baseline'):+.3f}, leverage plus misfit is {v('variants.dhj_main.lev_res.diff_vs_baseline'):+.3f} worse than the misfit alone, and "
+         f"yesterday's smile plus the model-implied change is {v('variants.dhj_main.smile_lev.diff_vs_baseline'):+.3f} worse than yesterday's smile. The forecasting value of the model is its "
+         "state plus yesterday's misfit; for the jump model its own dynamics add nothing. For single Heston the variants are slightly better "
+         f"(mean reversion {v('variants.heston_main.revert.diff_vs_baseline'):+.3f}, leverage {v('variants.heston_main.lev.diff_vs_baseline'):+.3f}, leverage plus misfit "
+         f"{v('variants.heston_main.lev_res.diff_vs_baseline'):+.3f} against the misfit alone, an interval that includes zero); for the diffusion model mean reversion changes the error by "
+         f"{v('variants.dh_main.revert.diff_vs_baseline'):+.3f} and the leverage update makes it worse ({v('variants.dh_main.lev.diff_vs_baseline'):+.3f}).", "",
+         to_markdown(T_["forecast_variants_summary"]), "",
          "## How to reproduce", "",
          "`python -m dh2.run_all --config configs/nifty.yaml` rebuilds every table, figure and number from the cached data (stages whose outputs exist are skipped; "
          "`--list` shows the cost of each); `--quick` is the demo-scale run in `results_quick/`. See `results/PIPELINE.md`.", ""]

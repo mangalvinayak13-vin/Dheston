@@ -14,7 +14,7 @@ Units: errors are in **volatility points** (one percentage point of implied vola
 ### Slide 1. The question and the answer in one picture
 **Figure:** `results/figures/01_summary_panel.png`
 - The question: can the Double Heston option model fit NIFTY 50 option prices and forecast tomorrow's implied-volatility surface better than "tomorrow equals yesterday"?
-- The answer: with jumps and yesterday's leftover error, 1.034 vol points against 1.236 for the best no-model benchmark; paired difference -0.202 [-0.227, -0.181] over 1,173 test days [results/tables/forecast_scores.csv].
+- The answer: with jumps and yesterday's leftover error, 1.034 vol points against 1.236 for the time-scaled smile (the better of two simple no-model benchmarks); paired difference -0.202 [-0.227, -0.181] over 1,173 test days [results/tables/forecast_scores.csv]. **Say the qualifier on this slide:** that benchmark repeats its edge value at strikes yesterday did not quote; against a benchmark that continues the wings linearly the lead is -0.045 [-0.061, -0.032], and inside yesterday's quoted range (93.5% of quotes) the benchmark is slightly better. The model's lead is about strikes yesterday did not quote (slide 6, backup B19) [results/benchmark_check/summary.csv].
 - The map of the talk: data, pricer check, forecast test, what fixed the old recipe, a neural-network speed-up, and what did not work.
 
 ### Slide 2. The data
@@ -25,7 +25,7 @@ Units: errors are in **volatility points** (one percentage point of implied vola
 
 ### Slide 3. Is the pricing formula right? (the exact pricer)
 **Figure:** `results/figures/17_pricer_validation.png`
-- Checked against three independent pricers (COS, Lewis, Monte Carlo): the project pricer is within 1.5e-6 vol points on 18,071 real-chain points; Lewis and COS agree to 1.3e-9 relative; Monte Carlo agrees at all 70 points (largest |z| 1.98) [results/pricer_validation/README.md; results/tables/pricer_validation.md].
+- Checked against three independent pricers (COS, Lewis, Monte Carlo): the project pricer is within 1.5e-6 vol points on the real-chain points priced at Rs 0.05 or more (16,492 of 18,071 diffusion points; all 18,071 jump points; options below that price cannot be inverted reliably); Lewis and COS agree to 1.3e-9 relative; Monte Carlo agrees at all 70 points (largest |z| 1.98) [results/pricer_validation/README.md; results/tables/pricer_validation.md].
 - One documented corner case: 1-year options with extreme March-April 2020 parameters, up to 1.0e-4 vol points; cause found (integration spacing 0.5 aliases a very wide distribution).
 - Why it matters: everything else (calibration, neural-network training data) rests on this formula.
 
@@ -46,28 +46,30 @@ Units: errors are in **volatility points** (one percentage point of implied vola
 - Walk-forward: fit on days up to t, predict day t+1, score. Benchmarks: yesterday's smile (1.468) and the time-scaled smile (1.236) [results/tables/forecast_scores.csv].
 - Jump model + misfit 1.034 [95% 0.915, 1.171]; the jump model alone 1.201 is only a tie (difference -0.035 [-0.095, +0.028]).
 - Wilcoxon and Diebold-Mariano, Holm-adjusted: the jump model + misfit beats the time-scaled smile on 90% of days, p below 1e-10 [results/stats/tests_test_period.md].
+- Honest qualifier (new finding, added after an independent check): against a second benchmark with linearly continued wings the difference is -0.045 [-0.061, -0.032], ahead on 71% of days; inside the strike range yesterday quoted (93.5% of quotes) the benchmark is slightly better (+0.012 [+0.009, +0.016] for the model); outside it (6.5%) the model wins, 1.100 against 1.511 (linear wings) and 2.288 (edge value). Only one wing variant was tried; stronger ones such as an SVI continuation are untested [results/benchmark_check/summary.csv; figure `34_benchmark_inside_outside`].
+- The model's own dynamics add nothing: mean reversion -0.002 [-0.006, +0.001]; leverage, leverage + misfit and smile + model change are worse (+0.090, +0.102, +0.084). Its value is the calibrated state plus yesterday's misfit [results/tables/forecast_variants.md].
 
 ### Slide 7. Is it consistent through time?
 **Figure:** `results/figures/02_error_by_year.png`
-- The jump model + misfit beats the time-scaled smile in all 11 calendar years (2016 and 2026 are partial) [results/tables/forecast_by_year.csv].
+- The jump model + misfit beats the time-scaled smile in all 5 test years (and in all 6 development years, where the settings were chosen; 2016 and 2026 are partial) [results/tables/forecast_by_year.csv].
 - Every method's error peaks in 2020 (time-scaled smile 3.015, jump + misfit 2.695).
-- Robustness: 15 reruns with different windows, refit schedules, priors and bounds give 1.033 to 1.036 for the final forecast [results/tables/robustness_runs.csv].
+- Insensitivity to settings: 15 jump-model runs (the headline run plus 14 reruns, one of them the known-buggy frozen-refit run) give 1.033 to 1.036 for the final forecast while the pure model ranges 1.185 to 1.436; this fits decision 11 and is not an overfitting test [results/tables/robustness_runs.csv].
 
 ### Slide 8. Two honest negatives about the forecast
 **Table:** `results/tables/significance_tests.md`
 - The diffusion Double Heston loses to the time-scaled smile: 1.377 against 1.236 with the misfit (+0.141), 2.792 without; the Wilcoxon and Diebold-Mariano tests favour the benchmark [results/tables/forecast_scores.csv; results/stats/tests_test_period.md].
-- Near the money (absolute ln(K/F) at most 0.04) the benchmark is slightly better than the jump model: 1.071 against 1.088, significant (Diebold-Mariano +9.41); the model's advantage is in the wings and at short expiries [results/stats/tests_test_period.md].
+- Near the money (absolute ln(K/F) at most 0.04) the benchmark is slightly better than the jump model: 1.071 against 1.088, significant (Diebold-Mariano +9.41); the model's advantage is at strikes yesterday did not quote and at short expiries [results/stats/tests_test_period.md].
 - Cross-sectional test: in the maturity-extrapolation test the diffusion Double Heston (2.02) is worse than plain Heston (1.37) [results/crosssection/summary.csv].
 
 ### Slide 9. What fixed the old recipe (the waterfall)
 **Figure:** `results/figures/04_waterfall_dh1_to_dh2.png`
-- Next-day error 5.03 to 1.10 on 118 sampled test days, one change at a time [results/attribution/waterfall.csv].
+- Next-day error 5.03 to 1.10 on 118 sampled test days, one change at a time [results/attribution/waterfall.csv]. Scope: this scores every quote of the clean surface, including 3-19 day expiries and far wings; on 1.0's own metric (held-out third, 20-800 day expiries) the rebuilt 1.0 recipe scores 2.27 on the same days (so not "1.0's error to 2.0's error" on 1.0's terms) [results/attribution/README.md].
 - What helped: IV-space objective -1.05, global multi-start with the kappa ordering -1.04, Merton jumps -1.66, yesterday's misfit -0.155. What did not: the structure/state walk-forward step made the diffusion model slightly worse (+0.08, p = 0.003); independent jump fits (1.142) beat the walk-forward jump model (1.254). The shared-slow-parameter claim is withdrawn [DECISIONS.md decision 11].
 - DH1 is a documented rebuild of a lost script: close in aggregate (2.53 against 2.37) but not an exact reproduction [results/attribution/README.md].
 
 ### Slide 10. The parameters are not identified
 **Figure:** `results/figures/19_identifiability.png`
-- On every one of 118 days at least one parameter sits on a bound; the median standard error is 21% of the allowed range (diffusion model) [results/identifiability/summary.csv].
+- On every one of 118 days at least one parameter sits on a bound; the median standard error is 21% of the allowed range (diffusion model; the jump model's pooled median is 15%, 12% as a median of daily medians) [results/identifiability/summary.csv; results/VERIFICATION.md M4].
 - Different parameters give the same prices: on 51 of 118 days the exact and accelerated fits have the same cost (within 1%) with parameters differing by more than 5% of their range [results/pinn_calib/README.md].
 - Take-away for the audience: interpret fitted surfaces, not individual parameters.
 
@@ -79,20 +81,20 @@ Units: errors are in **volatility points** (one percentage point of implied vola
 
 ### Slide 12. The neural-network copy of the pricer (PINN ablation)
 **Figure:** `results/figures/20_pinn_ablation.png`
-- Compared with the exact pricer on 65,465 real held-out quotes: data-only network 0.049 vol points, hybrid (data + physics) 0.077, physics-only 1.307 [results/pinn/tables/ablation_summary.csv].
+- Compared with the exact pricer on 65,465 real held-out quotes: data-only network 0.049 vol points, hybrid (data + physics) 0.077, physics-only 1.307 [results/pinn/tables/ablation_summary.csv]. These are 3-seed means; the shipped files are seed 2 (0.052 and 0.064), and the headline leaves out quotes whose exact price is below about Rs 1 (7,605) and those beyond 0.6 years (1,741); below Rs 0.01 the error is large (mean 4.7, verifier's re-measurement) [results/pinn/tables/heldout_metrics_all_runs.csv; results/pinn/tables/quote_counts.csv; results/VERIFICATION.md F3].
 - The plain network beats the PINN on price; the hybrid is better on gamma (median error 1.8-2.4% against 2.5-6.0%), PDE residual and butterfly convexity [results/pinn/README.md]. The PDE was verified against exact prices before training.
 - Valid only inside its training box and for the diffusion model only.
 
 ### Slide 13. PINN-accelerated calibration
 **Figure:** `results/figures/30_pinn_calibration_time.png`
-- 8.0x [7.4, 8.7] less wall time (5.85 s to 0.73 s a day) and 11.6x fewer exact-pricer calls, with the same same-day error (2.560 against 2.555) [results/pinn_calib/headline.json; results/pinn_calib/accuracy_by_method.csv].
-- The cost: objective 0.8% higher on average (worst day 10.9%); the surrogate alone ends 18% above and only 7% of days within 1% of exact cost, so the exact polish is essential; weaker on the 16% of days whose exact optimum is outside the box.
+- 8.0x [7.4, 8.7] less wall time (5.85 s for the four-start exact fit to 0.73 s a day; one exact start with the same polish takes 0.40 s but is 0.28 vol points worse) and 11.6x fewer exact-pricer calls, with the same same-day error (2.560 against 2.555) [results/pinn_calib/headline.json; results/pinn_calib/accuracy_by_method.csv].
+- The cost: objective 0.8% higher on average (worst day 10.9%); the surrogate alone ends 18% above and only 7% of days within 1% of exact cost, so the exact polish is essential; weaker on the 16% of days whose exact optimum is outside the box; the global stage leaves out the 9.6% of fit quotes beyond 0.6 years on 92% of days [results/pinn_calib/README.md].
 - Measured fact to keep: the exact pricer is already 38 microseconds a quote, so the gain is real but modest; for 128 parameter sets at once the surrogate is 21x (CPU) and 79x (GPU) faster [results/pinn/tables/speed.csv].
 
 ### Slide 14. Trading test and limits
 **Table:** `results/tables/trading_summary.md`
-- 41 to 45 of 100 trades profit; wins are bigger than losses; entered at the signal day's close the average is positive (for example +6.48 rupees per trade [+2.33, +11.21], hedged rich/cheap, no cost) [results/tables/trading_summary.md].
-- Entered one day later, the two hedged versions lose most of their profit and none of the averages is distinguishable from zero: the edge is not shown to survive a one-day delay [COMPARISON_1.0_vs_2.0.md]. Backtest on closing prints, not advice.
+- 41.1 to 45.0 of 100 trades profit in `trading_summary.md` (40.6 to 48.2 across the matched table); do not compare with a coin flip: the relevant control is the blind same-mix column (38.5 to 44.9), and always selling wins 61 to 65 of 100 [results/VERIFICATION.md L7]. Wins are bigger than losses; entered at the signal day's close all four versions have a positive average whose range stays above zero with no cost (for example +6.48 rupees per trade [+2.33, +11.21], hedged rich/cheap) [results/tables/trading_summary.md].
+- Entered one day later (matched table), the two hedged versions lose most of their profit and none of the matched averages is distinguishable from zero; in `trading_summary.md` the 4,525-trade hedged rows at 1% cost are significantly negative (-2.04 [-3.31, -0.76]): the edge is not shown to survive a one-day delay [COMPARISON_1.0_vs_2.0.md]. Backtest on closing prints, not advice.
 - Close with the limits: closing prints not quotes; individual parameters not identified; shortest expiries weak; PINN covers the diffusion model only; future work: wider and longer-trained surrogate, a jump term for the PINN, untangle the structure/state design, real bid/ask for trading [RESULTS.md sections 13-14].
 
 ---
@@ -100,16 +102,16 @@ Units: errors are in **volatility points** (one percentage point of implied vola
 ## The story in 1 minute
 
 "I fitted a two-factor stochastic-volatility model, Double Heston, with jumps, to ten years of NIFTY option prices and asked whether it can forecast tomorrow's volatility surface better than 'tomorrow looks like today'. Over 1,173 test days it does: 1.034 volatility points against 1.236
-for the best simple benchmark, and it wins in every calendar year. The gain is concentrated in the wings and at short expiries; near the money the simple benchmark is slightly better, and the version without jumps loses to the benchmark. I checked the pricing formula against three independent methods,
+for the time-scaled smile, and it wins in every test year. But I checked where that gain comes from, and it is honest to say it plainly: the benchmark repeats its edge value at strikes yesterday did not quote; against a second benchmark that continues the wings linearly the lead shrinks from 0.202 to 0.045, and inside the strikes yesterday quoted, which is 93.5% of all quotes, the simple benchmark is slightly better. The model's lead is about strikes yesterday did not quote; I tried only one improved benchmark, a stronger one such as an SVI continuation is untested, and the model's own dynamics, mean reversion and leverage, add nothing. The version without jumps loses to the benchmark. I checked the pricing formula against three independent methods,
 and I found what fixed the old research recipe: a volatility-based objective, a global search and jumps; the 'shared slow parameters' idea I started with did not help, so I dropped that claim. I also built a neural-network copy of the pricer that makes calibration eight times faster with the same error, but it is only valid
 for the diffusion model, and the plain network turned out better than the physics-informed one. The individual parameters are not identified, so I interpret fitted surfaces, not parameters, and the trading test is not shown to be an edge."
 
 ## The story in 5 minutes
 
 1. **Question and data (45 s).** NIFTY 50 options, 2,470 trading days, 736,313 clean quotes; implied volatility; a development period (2016-2021) where all settings were chosen and a test period (2022-2026) where I only report [results/dq/README.md; DECISIONS.md decision 1].
-2. **The pricer (30 s).** A Fourier pricer, checked against COS, Lewis and Monte Carlo: at most 1.5e-6 vol points on real chains, one documented corner case [results/pricer_validation/README.md].
-3. **The test (60 s).** Walk-forward: calibrate on days up to t, forecast day t+1. Benchmarks: yesterday's smile 1.468, time-scaled smile 1.236. Jump model + yesterday's misfit 1.034, difference -0.202 [-0.227, -0.181], better in 11 of 11 years, significant on Wilcoxon and Diebold-Mariano [results/tables/forecast_scores.csv; results/stats/tests_test_period.md].
-4. **The honest parts of the result (45 s).** The diffusion model alone loses to the benchmark; near the money the benchmark wins slightly (1.071 against 1.088); in the maturity-extrapolation test plain Heston beats the diffusion Double Heston (1.37 against 2.02) [results/stats/tests_test_period.md; results/crosssection/summary.csv].
+2. **The pricer (30 s).** A Fourier pricer, checked against COS, Lewis and Monte Carlo: at most 1.5e-6 vol points on real chains for options worth at least Rs 0.05, one documented corner case [results/pricer_validation/README.md].
+3. **The test (60 s).** Walk-forward: calibrate on days up to t, forecast day t+1. Benchmarks: yesterday's smile 1.468, time-scaled smile 1.236. Jump model + yesterday's misfit 1.034, difference -0.202 [-0.227, -0.181], better in all 5 test years, significant on Wilcoxon and Diebold-Mariano; then the qualifier: against the linear-wing benchmark -0.045 [-0.061, -0.032], and inside yesterday's quoted strike range the benchmark is slightly better (+0.012 for the model), so the lead is about strikes yesterday did not quote [results/tables/forecast_scores.csv; results/stats/tests_test_period.md; results/benchmark_check/summary.csv].
+4. **The honest parts of the result (45 s).** The diffusion model alone loses to the benchmark; near the money the benchmark wins slightly (1.071 against 1.088); the model's own dynamics (mean reversion, leverage) add nothing (-0.002 [-0.006, +0.001] for mean reversion) [results/tables/forecast_variants.md]; in the maturity-extrapolation test plain Heston beats the diffusion Double Heston (1.37 against 2.02) [results/stats/tests_test_period.md; results/crosssection/summary.csv].
 5. **What fixed the old recipe (45 s).** Waterfall 5.03 to 1.10: objective in volatility space, global multi-start with ordering, jumps, misfit. The structure/state design made the diffusion model slightly worse; claim withdrawn. The old recipe (DH1) is a rebuild [results/attribution/waterfall.csv; results/attribution/README.md].
 6. **The parameters (20 s).** Not identified: every day has a parameter on a bound; interpret surfaces [results/identifiability/summary.csv].
 7. **The neural copy (60 s).** A PINN surrogate of the diffusion pricer: the plain network is more accurate on price (0.049 against 0.077), the hybrid is better on gamma, residual and convexity; physics-only fails (1.3). Accelerated calibration: 8.0x faster, same error, 0.8% higher cost, exact polish essential, weaker outside the box [results/pinn/tables/ablation_summary.csv; results/pinn_calib/headline.json].
@@ -134,15 +136,17 @@ for the diffusion model, and the plain network turned out better than the physic
 | B11. Parameters and time behaviour | `results/figures/31_pinn_calibration_parameters.png`, `32_pinn_calibration_rmse_over_time.png`, `33_pinn_calibration_design.png` | weak identifiability from a second angle; the worst days; the design choice |
 | B12. VIX details | `results/figures/13_vix_scatter_levels.png`, `14_vix_scatter_changes.png`, `15_vix_lead_lag.png`, `16_vix_gap_and_rolling_correlation.png` | how tight and how stable the VIX link is |
 | B13. No-arbitrage sensitivity | table `results/tables/noarb_sensitivity.md` | "your data has arbitrage violations": 64.1% of quotes at one tick, 12.0% with slack; the advantage stays between -0.166 and -0.224 [results/dq/NOARB.md] |
-| B14. Robustness | tables `results/tables/robustness_runs.csv`, `results/tables/robustness_memory.md` | tuning sensitivity: 1.033 to 1.036 across 15 reruns; pattern memory -0.004 (not significant) |
+| B14. Robustness | tables `results/tables/robustness_runs.csv`, `results/tables/robustness_memory.md` | insensitivity to settings: 1.033 to 1.036 across 15 runs (the headline run plus 14 reruns, including the buggy frozen-refit run); not an overfitting test; pattern memory -0.004 (not significant) |
 | B15. Identifiability table | `results/tables/identifiability.md` | condition numbers and distinct parameter sets |
 | B16. Pricer table | `results/tables/pricer_validation.md` | the full error table |
-| B17. Matched one-day-later trades | `results/tables/trading_summary.md` plus the matched table in `COMPARISON_1.0_vs_2.0.md` | the trading delay test (hedged versions: +6.54 to +1.55 and +7.23 to +1.21 rupees per trade) |
+| B17. Matched one-day-later trades | `results/tables/trading_summary.md` plus the matched table in `COMPARISON_1.0_vs_2.0.md` | the trading delay test (hedged versions: +6.54 to +1.55 and +7.23 to +1.21 rupees per trade; matched wins 45.8-48.2 at the signal close, 40.6-44.6 one day later; use the matched table for the one-day-later claim) |
 | B18. VIX table | `results/tables/vix_link.md` | exact statistics |
+| B19. Is your benchmark too weak? (wing check) | `results/figures/34_benchmark_inside_outside.png`, table `results/tables/benchmark_check.md` | "your benchmark just repeats its edge value": edge-value 1.236, linear-wing 1.078, model 1.034 on all quotes (model minus linear-wing -0.045 [-0.061, -0.032], ahead on 71% of days); inside yesterday's range (93.5%) 1.006 / 1.006 / 1.018 (benchmark slightly better); outside (6.5%) 2.288 / 1.511 / 1.100. Added after the verification, one variant, SVI continuation untested [results/benchmark_check/summary.csv] |
+| B20. Forecast variants | `results/tables/forecast_variants.md` | "does the model's own dynamics help?": jump model mean reversion -0.002 [-0.006, +0.001], leverage +0.090, leverage + misfit +0.102, smile + model change +0.084 (worse); single Heston leverage + misfit 1.382 against 1.416 (-0.034 [-0.072, +0.003]) |
 
 ## Tips for delivery
 
 - Put the numbers in the slides from this file only; every one has a source.
 - Say "volatility points" once and define it; after that say "points".
-- Say the negatives yourself: diffusion model loses, near the money the benchmark wins, structure/state split not shown to help, the PINN is not more accurate than the plain network, the accelerated calibration costs 0.8% more, parameters not identified, trading edge not shown.
+- Say the negatives yourself: the lead is -0.045, not -0.202, against a benchmark with linear wings, and inside yesterday's quoted strikes the benchmark is slightly better; the model's own dynamics add nothing; diffusion model loses, near the money the benchmark wins, structure/state split not shown to help, the PINN is not more accurate than the plain network, the accelerated calibration costs 0.8% more, parameters not identified, trading edge not shown.
 - If asked something you cannot trace to a file, say "I did not test that" (for example whether longer PINN training would change the data-only against hybrid ranking, or whether imposing the Feller condition would improve forecasts).

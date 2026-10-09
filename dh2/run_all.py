@@ -5,7 +5,7 @@
     python -m dh2.run_all --config configs/nifty.yaml --list         # every stage: cached or missing, estimated cost, outputs, dependencies
     python -m dh2.run_all --stages benchmark_table,metrics_tables    # selected stages (and any missing dependency)
     python -m dh2.run_all --stages walk_dh --force --yes             # rerun a stage although its outputs exist (hours for a walk-forward)
-    python -m dh2.run_all --retrain-pinn                             # train the PINN checkpoints that are MISSING (the shipped ones are only validated)
+    python -m dh2.run_all --retrain-pinn                             # train the PINN checkpoints that are MISSING (plain runs need only final.pt and final_greeks.pt)
 
 Stages run in dependency order. Each declares its outputs; a stage is skipped when all of them exist unless --force. Existing scripts are never edited: a stage calls
 them as subprocesses (run_walk.py, hybrids.py, trade_*.py, exp_*.py, dh2.dq, dh2.svi, ...) or imports their functions; the log of every subprocess is in
@@ -29,6 +29,7 @@ from pathlib import Path
 from typing import Callable
 
 ROOT = Path(__file__).resolve().parents[1]
+PINN_IN_GIT = ("final", "final_greeks")          # the only PINN checkpoints a clone has (.gitignore); the other 14 are rebuilt with --retrain-pinn
 
 
 class StageError(RuntimeError):
@@ -48,6 +49,7 @@ class Stage:
     optional: bool = False           # only runs when named in --stages
     network: object = False          # True, or a callable(ctx) -> bool
     note: str = ""
+    outputs_retrain: list | None = None   # if set, --retrain-pinn replaces `outputs` by this longer list (see apply_retrain)
 
 
 # ============================================================================================================== config
@@ -258,13 +260,14 @@ def build_full_stages(cfg: dict) -> dict:
 
     ck_names = cfg["pinn"]["shipped_checkpoints"]
     ck = P["pinn_checkpoints"]
+    core = [n for n in PINN_IN_GIT if n in ck_names]               # the two checkpoints that are in git (.gitignore keeps final.pt and final_greeks.pt)
 
     def run_ckpt(c: Ctx):
-        miss = [n for n in ck_names if not exists(c.root, f"{ck}/{n}.pt")]
+        miss = [n for n in (ck_names if c.retrain_pinn else core) if not exists(c.root, f"{ck}/{n}.pt")]
         if not c.retrain_pinn:
-            raise StageError(f"shipped PINN checkpoints missing: {miss} in {ck}. The pipeline only validates the shipped checkpoints; pass --retrain-pinn to train the missing ones "
+            raise StageError(f"shipped PINN checkpoints missing: {miss} in {ck}. A plain run needs only {', '.join(core)}; pass --retrain-pinn to train the missing ones "
                              "(about 48 GPU minutes in all, dh2/pinn/experiments.py)")
-        trainable = [n for n in miss if n not in ("final", "final_greeks")]
+        trainable = [n for n in miss if n not in core]
         if trainable:
             c.py("pinn_checkpoints", "-m", "dh2.pinn.experiments", *trainable, env_extra={"OMP_NUM_THREADS": str(c.workers)})
         import shutil
@@ -272,12 +275,18 @@ def build_full_stages(cfg: dict) -> dict:
             if not exists(c.root, f"{ck}/{dst}.pt") and exists(c.root, f"{ck}/{src}.pt"):
                 shutil.copyfile(c.root / ck / f"{src}.pt", c.root / ck / f"{dst}.pt")
 
-    add("pinn_checkpoints", "PINN checkpoints (shipped; trained only with --retrain-pinn)", [f"{ck}/{n}.pt" for n in ck_names], ["walk_dh"], run_ckpt, 48,
-        "results/pinn/README.md: 48 GPU minutes in all for the final runs (only when --retrain-pinn and a checkpoint is missing)", "pinn")
+    add("pinn_checkpoints", "PINN checkpoints (final.pt and final_greeks.pt are shipped; the other 14 seed / ablation checkpoints are trained only with --retrain-pinn)",
+        [f"{ck}/{n}.pt" for n in core], ["walk_dh"], run_ckpt, 48,
+        "results/pinn/README.md: 48 GPU minutes in all for the final runs (only when --retrain-pinn and a checkpoint is missing)", "pinn",
+        outputs_retrain=[f"{ck}/{n}.pt" for n in ck_names])
 
     pt = f"{R}/pinn/tables"
 
     def run_pinn_val(c: Ctx):
+        miss = [n for n in ck_names if not exists(c.root, f"{ck}/{n}.pt")]
+        if miss:
+            raise StageError(f"pinn_validation needs all {len(ck_names)} checkpoints; missing {miss} in {ck}. Run with --retrain-pinn first (about 48 GPU minutes), "
+                             "or leave this stage cached: its tables are in results/pinn/tables")
         for st in cfg["pinn"]["validation_stages"]:
             c.py("pinn_validation", "-m", "dh2.pinn.validate", st, env_extra={"OMP_NUM_THREADS": str(c.workers)})
 
@@ -306,6 +315,16 @@ def build_full_stages(cfg: dict) -> dict:
         "measured: 55 s with 2 workers (re-run in this session; outputs identical, the .csv.gz only differs in its gzip timestamp)", "C1")
     add("stats", "Paired Wilcoxon and Diebold-Mariano tests on the test period", [f"{R}/stats/tests_test_period.csv", f"{R}/stats/tests_test_period.md"], heads,
         (lambda c: c.py("stats", "-m", "dh2.stats")), 0.2, "measured: 0.7 s (re-run in this session; outputs byte-identical)", "C1")
+
+    # ---------------------------------------------------------------- added after the independent verification (results/VERIFICATION.md, L1 and L2)
+    wb = f"{R}/benchmark_check"
+    add("wing_benchmark", "Is the lead a wing effect? A second model-free benchmark (linear wings) and the split inside / outside yesterday's quoted range (exp_wing_benchmark.py)",
+        [f"{wb}/summary.csv", f"{wb}/per_day.csv"], ["data_check", "forecasts_dhj"], (lambda c: c.py("wing_benchmark", "exp_wing_benchmark.py")), 0.2,
+        "measured: 1.2 s, one process, from the cached surfaces and hyb_dhj_main.pkl (a rerun reproduced summary.csv and per_day.csv byte for byte); allow up to a minute on a cold cache", "evaluation")
+    fv = f"{R}/tables"
+    add("forecast_variants", "The seven forecast variants of hybrids.py (mean reversion, leverage, ...) scored on the test period (exp_variants_table.py)",
+        [f"{fv}/forecast_variants.csv", f"{fv}/forecast_variants.md"], heads, (lambda c: c.py("forecast_variants", "exp_variants_table.py")), 0.2,
+        "measured: 2.4 s (reads the three hyb_*_main.pkl files, no refitting)", "evaluation")
 
     # ---------------------------------------------------------------- C2 stages (the scripts fix their own 3 workers in c2_common.py)
     c2 = ex.get("workers_c2", 3)
@@ -343,8 +362,8 @@ def build_full_stages(cfg: dict) -> dict:
         (lambda c: c.py("ui_adapter", "-m", "dh2.ui_adapter", "--tag", tag)), 0.2, "measured: 0.5 s (re-run in this session; today.json byte-identical)", "report")
 
     from .report import TABLE_NAMES
-    upstream = ["benchmark_table", "trading_tests", "pricer_validation", "pinn_validation", "dq", "noarb", "vix", "svi", "stats", "attribution", "crosssection", "identifiability", "buckets",
-                "pinn_calib_report", "ui_adapter"]
+    upstream = ["benchmark_table", "wing_benchmark", "forecast_variants", "trading_tests", "pricer_validation", "pinn_validation", "dq", "noarb", "vix", "svi", "stats", "attribution",
+                "crosssection", "identifiability", "buckets", "pinn_calib_report", "ui_adapter"]
 
     def run_metrics(c: Ctx):
         sys.path.insert(0, str(c.root))
@@ -460,6 +479,15 @@ def validate_graph(stages: dict) -> None:
             if o in seen:
                 raise ValueError(f"output {o} declared by both {seen[o]} and {n}")
             seen[o] = n
+
+
+def apply_retrain(stages: dict, retrain: bool) -> dict:
+    """--retrain-pinn: a stage that lists a longer `outputs_retrain` (the PINN checkpoints) must then produce all of them, so the missing ones count as missing."""
+    if retrain:
+        for s in stages.values():
+            if s.outputs_retrain:
+                s.outputs = list(s.outputs_retrain)
+    return stages
 
 
 def closure(stages: dict, names) -> list:
@@ -644,7 +672,7 @@ def main(argv=None, out=print) -> int:
     args = build_parser().parse_args(argv)
     cfg = load_config(args.config)
     ctx = Ctx(cfg, ROOT, quick=args.quick, force=args.force, retrain_pinn=args.retrain_pinn, workers=args.workers, out=out)
-    stages = build_stages(cfg, args.quick)
+    stages = apply_retrain(build_stages(cfg, args.quick), args.retrain_pinn)
     validate_graph(stages)
     if args.list:
         print_list(stages, ctx, ctx.root, args.quick)

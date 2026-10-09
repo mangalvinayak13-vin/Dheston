@@ -1,7 +1,7 @@
 # Double Heston 2.0, NIFTY 50: every setting of the one-command pipeline, in one place.
 #
 #   python -m dh2.run_all --config configs/nifty.yaml            # everything the cached data allows (stages with outputs are skipped)
-#   python -m dh2.run_all --config configs/nifty.yaml --quick    # demo-scale run, about 10 minutes, writes only to results_quick/
+#   python -m dh2.run_all --config configs/nifty.yaml --quick    # demo-scale run, about 5 minutes (5.3 measured on 2 cores), writes only to results_quick/
 #   python -m dh2.run_all --config configs/nifty.yaml --list     # every stage, its outputs, whether it is cached, its estimated cost
 #
 # Paths are relative to the repository root. The values below are the ones the SHIPPED results were produced with; tests/test_run_all.py checks

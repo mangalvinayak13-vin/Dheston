@@ -1,0 +1,25 @@
+
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/python3 exp_variants_table.py
+2429 common days (1256 dev, 1173 test); time-scaled smile test mean 1.236
+                  model   variant  dev_mean  test_mean  baseline  diff_vs_baseline  diff_baseline_ci_lo  diff_baseline_ci_hi  diff_vs_time_scaled_smile
+             jump model     smile    1.8755     1.4675                         NaN                  NaN                  NaN                     0.2319
+             jump model     carry    1.7338     1.2009                         NaN                  NaN                  NaN                    -0.0348
+             jump model    revert    1.7379     1.1986     carry           -0.0023              -0.0056               0.0013                    -0.0370
+             jump model       lev    1.8033     1.2910     carry            0.0901               0.0365               0.1454                     0.0554
+             jump model carry_res    1.3167     1.0336     carry           -0.1673              -0.2259              -0.1173                    -0.2021
+             jump model   lev_res    1.3820     1.1355 carry_res            0.1020               0.0426               0.1582                    -0.1001
+             jump model smile_lev    1.9277     1.5516     smile            0.0840               0.0318               0.1320                     0.3159
+diffusion Double Heston     smile    1.8755     1.4675                         NaN                  NaN                  NaN                     0.2319
+diffusion Double Heston     carry    3.4087     2.7925                         NaN                  NaN                  NaN                     1.5568
+diffusion Double Heston    revert    3.4021     2.7863     carry           -0.0062              -0.0111              -0.0013                     1.5507
+diffusion Double Heston       lev    3.6597     2.9653     carry            0.1728               0.1144               0.2339                     1.7297
+diffusion Double Heston carry_res    1.7363     1.3766     carry           -1.4159              -1.5340              -1.2984                     0.1409
+diffusion Double Heston   lev_res    2.0864     1.6785 carry_res            0.3020               0.2243               0.3804                     0.4429
+diffusion Double Heston smile_lev    2.2161     1.7580     smile            0.2904               0.2140               0.3681                     0.5223
+          single Heston     smile    1.8755     1.4675                         NaN                  NaN                  NaN                     0.2319
+          single Heston     carry    4.0280     3.5315                         NaN                  NaN                  NaN                     2.2959
+          single Heston    revert    4.0130     3.5151     carry           -0.0165              -0.0221              -0.0104                     2.2794
+          single Heston       lev    4.0242     3.4931     carry           -0.0384              -0.0641              -0.0117                     2.2575
+          single Heston carry_res    1.7757     1.4163     carry           -2.1152              -2.2846              -1.9615                     0.1807
+          single Heston   lev_res    1.7739     1.3819 carry_res           -0.0345              -0.0717               0.0033                     0.1462
+          single Heston smile_lev    1.8767     1.4353     smile           -0.0323              -0.0680               0.0047                     0.1996

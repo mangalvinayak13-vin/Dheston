@@ -1,0 +1,15 @@
+
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/python3 exp_wing_benchmark.py
+/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/scipy/stats/_wilcoxon.py:192: RuntimeWarning: invalid value encountered in scalar divide
+  z = (r_plus - mn) / se
+1173 test days; quotes inside yesterday's range: 93.5%
+ quotes                                       comparison  days  mean_a  mean_b  mean_difference  ci95_lo  ci95_hi  model_ahead_on_share_of_days  wilcoxon_p
+    all      jump_plus_misfit minus edge_value_benchmark  1173  1.0336  1.2356          -0.2021  -0.2270  -0.1814                        0.8960      0.0000
+    all     jump_plus_misfit minus linear_wing_benchmark  1173  1.0336  1.0781          -0.0445  -0.0614  -0.0324                        0.7101      0.0000
+    all linear_wing_benchmark minus edge_value_benchmark  1173  1.0781  1.2356          -0.1576  -0.1820  -0.1350                        0.7485      0.0000
+ inside      jump_plus_misfit minus edge_value_benchmark  1173  1.0180  1.0058           0.0122   0.0088   0.0155                        0.5192      0.0481
+ inside     jump_plus_misfit minus linear_wing_benchmark  1173  1.0180  1.0058           0.0122   0.0088   0.0155                        0.5192      0.0481
+ inside linear_wing_benchmark minus edge_value_benchmark  1173  1.0058  1.0058           0.0000   0.0000   0.0000                        0.0000         NaN
+outside      jump_plus_misfit minus edge_value_benchmark  1173  1.0996  2.2882          -1.1886  -1.2820  -1.1064                        0.8619      0.0000
+outside     jump_plus_misfit minus linear_wing_benchmark  1173  1.0996  1.5107          -0.4111  -0.5031  -0.3378                        0.8116      0.0000
+outside linear_wing_benchmark minus edge_value_benchmark  1173  1.5107  2.2882          -0.7775  -0.8739  -0.6768                        0.7485      0.0000

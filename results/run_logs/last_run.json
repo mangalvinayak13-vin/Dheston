@@ -1,9 +1,9 @@
 {
- "finished": "2026-10-09T00:02:16",
+ "finished": "2026-10-09T12:44:50",
  "quick": false,
  "force": true,
  "workers": 2,
- "wall_seconds": 5.641319751739502,
+ "wall_seconds": 6.338756799697876,
  "stages": [
   {
    "name": "data_check",
@@ -132,6 +132,20 @@
    "detail": "cached (all outputs exist)"
   },
   {
+   "name": "wing_benchmark",
+   "status": "skipped",
+   "seconds": 0.0,
+   "estimated_minutes": 0.2,
+   "detail": "cached (all outputs exist)"
+  },
+  {
+   "name": "forecast_variants",
+   "status": "skipped",
+   "seconds": 0.0,
+   "estimated_minutes": 0.2,
+   "detail": "cached (all outputs exist)"
+  },
+  {
    "name": "daily_fits",
    "status": "skipped",
    "seconds": 0.0,
@@ -196,15 +210,22 @@
   },
   {
    "name": "metrics_tables",
-   "status": "skipped",
-   "seconds": 0.0,
+   "status": "ran",
+   "seconds": 0.3010220527648926,
    "estimated_minutes": 0.2,
-   "detail": "cached (all outputs exist)"
+   "detail": ""
   },
   {
    "name": "figures",
    "status": "ran",
-   "seconds": 5.641295909881592,
+   "seconds": 5.745634078979492,
+   "estimated_minutes": 0.2,
+   "detail": ""
+  },
+  {
+   "name": "report",
+   "status": "ran",
+   "seconds": 0.29204392433166504,
    "estimated_minutes": 0.2,
    "detail": ""
   }

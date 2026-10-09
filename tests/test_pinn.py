@@ -27,6 +27,8 @@ V1, V2 = 0.012, 0.015
 
 @pytest.fixture(scope="module")
 def dom():
+    if not (Path(__file__).resolve().parents[1] / "data" / "results" / "walk_dh_main.pkl").exists():
+        pytest.skip("needs data/results/walk_dh_main.pkl (not stored in git; see results/PIPELINE.md)")
     return D.build_domain()
 
 

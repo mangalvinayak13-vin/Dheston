@@ -120,6 +120,33 @@ def test_the_stages_named_in_the_brief_exist(cfg):
     assert st["walk_dh"].est_min >= cfg["execution"]["confirm_over_minutes"]       # a walk-forward is flagged expensive
 
 
+def test_new_stages_exist_with_dependencies_and_outputs(cfg):
+    st = RA.build_stages(cfg, False)
+    assert st["wing_benchmark"].deps == ["data_check", "forecasts_dhj"]
+    assert "results/benchmark_check/summary.csv" in st["wing_benchmark"].outputs
+    assert set(st["forecast_variants"].deps) == {"forecasts_dh", "forecasts_dhj", "forecasts_heston"}
+    assert "results/tables/forecast_variants.csv" in st["forecast_variants"].outputs
+    assert {"wing_benchmark", "forecast_variants"} <= set(st["metrics_tables"].deps)
+    assert len(st) == 36
+
+
+def test_plain_run_needs_only_the_two_checkpoints_in_git_and_retrain_needs_all_sixteen(cfg, tmp_path):
+    st = RA.build_stages(cfg, False)
+    ck = cfg["paths"]["pinn_checkpoints"]
+    assert st["pinn_checkpoints"].outputs == [f"{ck}/final.pt", f"{ck}/final_greeks.pt"]
+    (tmp_path / ck).mkdir(parents=True)
+    for n in RA.PINN_IN_GIT:                                         # a fresh clone: only the two tracked checkpoints
+        (tmp_path / ck / f"{n}.pt").write_text("x")
+    assert RA.is_cached(st["pinn_checkpoints"], tmp_path)
+    st = RA.apply_retrain(RA.build_stages(cfg, False), True)
+    assert len(st["pinn_checkpoints"].outputs) == 16 and not RA.is_cached(st["pinn_checkpoints"], tmp_path)
+
+
+def test_plain_pytest_is_the_fast_suite():
+    ini = (ROOT / "pytest.ini").read_text()
+    assert 'addopts = -m "not slow"' in ini
+
+
 def test_graph_checks_catch_a_cycle_an_unknown_dependency_and_missing_outputs():
     mk = lambda name, deps=(), outs=("x",): RA.Stage(name, name, list(outs), list(deps), lambda c: None)
     with pytest.raises(ValueError, match="cycle"):
@@ -350,6 +377,25 @@ def test_metrics_from_the_real_results_have_sources_when_present(cfg):
     assert len(m.items) > 500
     assert all(r["source"] and r["key"] and r["kind"] in ("read", "derived") and r["unit"] is not None for r in m.items.values())
     assert abs(m.v("forecast.dhj_main.carry_res.test_mean") - 1.0336) < 5e-4                      # the headline number of the README
+
+
+def test_benchmark_check_and_variants_metrics_when_present(cfg):
+    if not (ROOT / "results" / "benchmark_check" / "summary.csv").exists() or not (ROOT / "results" / "tables" / "forecast_variants.csv").exists():
+        pytest.skip("results not present")
+    m = RP.Metrics(ROOT)
+    RP.collect_benchmark_check(m, cfg)
+    RP.collect_variants(m, cfg)
+    assert abs(m.v("benchmark_check.all.model_vs_edge.mean_difference") + 0.2021) < 5e-4
+    assert abs(m.v("benchmark_check.all.model_vs_linear.mean_difference") + 0.0445) < 5e-4
+    assert m.v("benchmark_check.inside.model_vs_edge.mean_difference") > 0 > m.v("benchmark_check.outside.model_vs_edge.mean_difference")
+    assert abs(m.v("variants.dhj_main.carry_res.test_mean") - 1.0336) < 5e-4
+
+
+def test_collector_refuses_a_missing_benchmark_check(cfg, tmp_path):
+    with pytest.raises(RP.MissingSource):
+        RP.collect_benchmark_check(RP.Metrics(tmp_path), cfg)
+    with pytest.raises(RP.MissingSource):
+        RP.collect_variants(RP.Metrics(tmp_path), cfg)
 
 
 # ------------------------------------------------------------------ tables and the cross-check of final_table.py

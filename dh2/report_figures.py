@@ -4,7 +4,8 @@ Two kinds of figure, both listed in REGISTRY (the single place that knows a figu
 
   new   built here from result files, with the shared large-type style of dh2/plotstyle.py (16:9, opaque light panel so it reads on dark and
         light slide backgrounds): 01 summary panel, 02 error by year, 03 model comparison bars, 05 market-versus-model smiles on three
-        real days, 08 calibrated volatility and jump rate over ten years, 17 pricer validation.
+        real days, 08 calibrated volatility and jump rate over ten years, 17 pricer validation, 34 the two model-free benchmarks inside and outside
+        the strike range that yesterday quoted.
   copy  figures that the other work packages already produced and that are good as they are: copied byte for byte (PNG) and also written
         as PDF (the raster embedded at its 300 dpi), under a numbered name.
 
@@ -112,6 +113,8 @@ REGISTRY: list[Fig] = [
         "exp_pinn_calib.py", "results/pinn_calib/per_day.csv", "copy", "results/pinn_calib/fig5_rmse_difference_over_time.png"),
     Fig("cal6", "33_pinn_calibration_design", "Wall time against objective cost for the design variants and polish budgets on development days, with the chosen design marked.",
         "exp_pinn_calib.py", "results/pinn_calib/design_per_day.csv", "copy", "results/pinn_calib/fig6_design_development_days.png"),
+    Fig("wing", "34_benchmark_inside_outside", "Next-day error of two model-free benchmarks and the jump model with yesterday's misfit, for all quotes and for the quotes inside and outside the strike range "
+        "that yesterday quoted.", "dh2/report_figures.py", "results/benchmark_check/summary.csv (via results/metrics.json)", "new"),
 ]
 FIG = {f.key: f.stem for f in REGISTRY}
 
@@ -511,8 +514,41 @@ def fig_summary(cfg, root, out_dir):
     return save_new(fig, FIG["summary"], out_dir, cfg["figures"]["dpi"], cfg["figures"]["formats"])
 
 
+# ============================================================================================================== 34 benchmark inside / outside yesterday's quoted range
+def fig_wing(cfg, root, out_dir):
+    mv = _mvals(root)
+    v = lambda k: _v(mv, k)
+    PS.setup()
+    fig, ax = _fig(cfg)
+    parts = [("all", "all quotes", None), ("inside", "inside yesterday's\nquoted range", "inside"), ("outside", "outside it", "outside")]
+    bars = [("edge-value benchmark (time-scaled smile)", "model_vs_edge", "mean_b", "#a9a7a1"), ("linear-wing benchmark", "model_vs_linear", "mean_b", PS.INK2),
+            ("jump model + yesterday's misfit", "model_vs_edge", "mean_a", PAL[1])]
+    w = 0.26
+    top = 0.0
+    for j, (lab, cmp_, col, c) in enumerate(bars):
+        vals = [v(f"benchmark_check.{p}.{cmp_}.{col}") for p, _, _ in parts]
+        xs = np.arange(len(parts)) + (j - 1) * (w + 0.02)
+        ax.bar(xs, vals, w, color=c, label=lab, edgecolor="white")
+        for xi, val in zip(xs, vals):
+            ax.text(xi, val + 0.04, f"{val:.3f}", ha="center", va="bottom", fontsize=14, color=PS.INK)
+        top = max(top, max(vals))
+    labels = []
+    for p, lab, sh in parts:
+        share = 1.0 if sh is None else v(f"benchmark_check.share_quotes_{sh}")
+        k = f"benchmark_check.{p}.model_vs_linear"
+        labels.append(f"{lab}\n{share:.1%} of quotes\nmodel minus linear-wing: {v(k + '.mean_difference'):+.3f}")
+    ax.set_xticks(range(len(parts)))
+    ax.set_xticklabels(labels, fontsize=14)
+    ax.set_ylim(0, top * 1.2)
+    ax.set_ylabel("Mean next-day error, test period (vol points)")
+    ax.set_title("Where the model's lead comes from: quotes outside the strike range that yesterday quoted")
+    ax.legend(loc="upper left")
+    ax.grid(axis="x", visible=False)
+    return save_new(fig, FIG["wing"], out_dir, cfg["figures"]["dpi"], cfg["figures"]["formats"])
+
+
 # ============================================================================================================== driver and INDEX.md
-NEW_BUILDERS = {"by_year": fig_by_year, "bars": fig_bars, "smiles": fig_smiles, "paths": fig_paths, "pricer": fig_pricer, "summary": fig_summary}
+NEW_BUILDERS = {"by_year": fig_by_year, "bars": fig_bars, "smiles": fig_smiles, "paths": fig_paths, "pricer": fig_pricer, "summary": fig_summary, "wing": fig_wing}
 
 
 def write_index(out_dir: Path, built: dict[str, list[Path]]) -> Path:

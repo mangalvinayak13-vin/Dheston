@@ -1,0 +1,15 @@
+\begin{table}[ht]
+\centering
+\small
+\caption{Is the lead a wing effect? Next-day error (vol points) of two model-free benchmarks and the jump model + misfit, test period}
+\begin{tabular}{lrrrrrrrrr}
+\toprule
+Quotes & Share of quotes & Edge-value benchmark & Linear-wing benchmark & Jump model + misfit & Model minus edge-value benchmark & 95\% interval (vs edge-value) & Model minus linear-wing benchmark & 95\% interval (vs linear-wing) & Days model ahead of linear-wing benchmark \\
+\midrule
+all quotes & 100.0\% & 1.236 & 1.078 & 1.034 & -0.202 & [-0.227, -0.181] & -0.045 & [-0.061, -0.032] & 71\% \\
+inside yesterday's quoted range & 93.5\% & 1.006 & 1.006 & 1.018 & +0.012 & [+0.009, +0.016] & +0.012 & [+0.009, +0.016] & 52\% \\
+outside it & 6.5\% & 2.288 & 1.511 & 1.100 & -1.189 & [-1.282, -1.106] & -0.411 & [-0.503, -0.338] & 81\% \\
+\bottomrule
+\end{tabular}
+\par\smallskip{\footnotesize 1173 test days, 524,959 quotes. Edge-value benchmark = the time-scaled smile (repeats its edge value beyond yesterday's quoted range); linear-wing benchmark = the same, but continuing the line through yesterday's 3 outermost quotes (floored at 2 vol points). Inside the range the two benchmarks are identical. The linear-wing benchmark was added after the independent verification; only this one variant was tried (results/benchmark\_check/README.md).}
+\end{table}

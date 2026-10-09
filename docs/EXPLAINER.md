@@ -31,7 +31,8 @@ What we did, in order:
 6. Compared the model with India VIX, with a flexible curve-fitting reference (SVI), and with a simple trading test.
 
 The headline: **Double Heston with jumps, plus yesterday's leftover error, forecasts the next day's surface with an average error of 1.034 volatility
-points, against 1.236 for the best no-model benchmark, over 1,173 test days; the difference is -0.202 [-0.227, -0.181]** [results/tables/forecast_scores.csv].
+points, against 1.236 for the simple no-model benchmark (yesterday's smile, edge value repeated), over 1,173 test days; the difference is -0.202 [-0.227, -0.181]** [results/tables/forecast_scores.csv].
+**Read that headline with its caveat.** That benchmark is weak outside the strikes yesterday quoted (6.5% of quotes). A second no-model benchmark that continues the wings linearly scores 1.078, so the model's lead over it is only **-0.045 [-0.061, -0.032]**, ahead on 71% of days; and for the 93.5% of quotes inside yesterday's quoted range the benchmark is slightly *better* (+0.012 for the model) [results/benchmark_check/summary.csv, README.md]. The linear-wing benchmark was added after the independent check, only one version was tried, and stronger ones (an SVI continuation) are untested.
 
 The honest negatives you must also say (each is explained below): the diffusion-only Double Heston does *not* beat the benchmark; the "shared slow
 parameters" idea is *not* shown to help; the PINN is *not* more accurate than a plain network; the PINN-accelerated calibration is a bit worse on
@@ -568,7 +569,7 @@ with parameters that differ by more than 5% of their range, and the fitted surfa
 **Say:** "I checked it five ways, and the test years were never used to choose anything."
 
 (1) All settings were chosen on 2016-2021; 2022-2026 is the test [DECISIONS.md decision 1; README.md]. (2) The forecasts are walk-forward: fit on days up to t, score on t+1, never on the fitted data. (3) Hiding 20% of the quotes at random: the held-out error is within about 0.1 of the training-quote error for every model (jump model 0.705 held-out, 0.683 on the training quotes)
-[results/crosssection/README.md]. (4) Fifteen reruns with different windows, refit schedules, priors and bounds give 1.033 to 1.036 for the final forecast [results/tables/robustness_runs.csv]. (5) The jump model + misfit beats the time-scaled smile in 11 of 11 calendar years, and the paired tests are significant (Wilcoxon and Diebold-Mariano, Holm-adjusted) [results/tables/forecast_by_year.csv, results/stats/tests_test_period.md].
+[results/crosssection/README.md]. (4) The headline run plus fourteen reruns with different windows, refit schedules, priors and bounds give 1.033 to 1.036 for the final forecast [results/tables/robustness_runs.csv]; that only shows insensitivity to settings (with the misfit added the forecast hardly depends on the slow parameters at all), not absence of overfitting in time. (5) The jump model + misfit beats the time-scaled smile in all 5 test years (and in the 6 development years), and the paired tests are significant (Wilcoxon and Diebold-Mariano, Holm-adjusted) [results/tables/forecast_by_year.csv, results/stats/tests_test_period.md].
 **Admit:** some memory and jump settings landed at the edge of the grid searched [COMPARISON_1.0_vs_2.0.md section 5]; the expensive experiments use 118 days, and intervals that resample days may be slightly narrow because volatility regimes persist; test years are calmer than development years, so error levels are lower there.
 
 ### 4. Why not a 70/30 split?
@@ -602,7 +603,7 @@ Evidence: the rebuild matches 1.0's data universe exactly (same quote and expiry
 
 ### 8. Is the trading result an edge?
 
-**Say:** "No, it is not shown to be. About 41 to 45 of 100 trades profit, wins are bigger than losses, and the profit mostly disappears when you enter one day later. It is a backtest on closing prices, not advice."
+**Say:** "No, it is not shown to be. About 41 to 45 of 100 trades profit, which is below a coin flip (although always selling the same options wins 61 to 65, so the fair control is blind trades with the same buy/sell mix, which the model beats by 1.5 to 3 wins per 100). Wins are bigger than losses. Entered a day later on the same trades, the two hedged versions lose about 5 to 6 rupees per trade and turn negative at a 1% cost, but that drop is itself not statistically certain, the plain forecast version loses nothing, and none of the one-day-later averages is distinguishable from zero. It is a backtest on closing prices, not advice."
 
 Evidence: [results/tables/trading_summary.md]: wins per 100 between 41.1 and 45.0 against a blind-trade share of 38.5 to 44.9; at the signal day's close a profit of +4.34 rupees per trade [+0.19, +8.98] in the best hedged case at 1% cost per side; matched trades entered one day later: hedged versions drop from +6.54 to +1.55 and from +7.23 to +1.21 rupees per trade, and none of the one-day-later averages is distinguishable from zero
 [COMPARISON_1.0_vs_2.0.md section 2; metrics.json `trading.matched.*`]. Reasons for caution: closing prints are last trades, not quotes you could trade at; costs are modelled as a share of price; and "not shown to survive" is not the same as "shown not to".
@@ -658,6 +659,8 @@ Evidence: 5.85 s against 0.73 s per day, 8.0x [7.4, 8.7], with 11.6x fewer exact
 
 ### Three extra questions to be ready for
 
+**E0. Is your benchmark too weak?** Partly, and say so first. **Say:** "The benchmark I used for the headline repeats its edge value outside the strikes yesterday quoted, which is a weak rule for 6.5% of quotes. Against a second benchmark that continues the wings linearly, the lead falls from 0.202 to 0.045 vol points, still statistically clear and ahead on 71% of days. Inside the quoted strikes, 93.5% of quotes, the benchmark is slightly better than my model, by 0.012 vol points. So the model's value is in extrapolating to strikes that were not quoted yesterday. I added the linear-wing benchmark after an independent check, tried only one version, and have not tested stronger ones such as an SVI continuation." [results/benchmark_check/summary.csv, README.md, DECISIONS.md decision 12]
+
 **E1. Is the "shared slow parameters" design your main idea?** No. It was the original motivation of version 2 and the waterfall shows it does not help: the diffusion model gets slightly worse (+0.08 vol points next day, p = 0.003) and independent jump fits forecast better (1.142) than the walk-forward jump model (1.254). The gain comes from the IV-space objective, the global multi-start with the kappa ordering and jumps; yesterday's misfit adds -0.155. It is kept only because the finished results were produced with it [results/attribution/waterfall.csv; DECISIONS.md decision 11].
 (Refitting every 10 days instead of every 200 matters: 1.48 against 1.91 over the decade, but that is about refit frequency, not the split [COMPARISON_1.0_vs_2.0.md section 3].)
 
@@ -669,10 +672,6 @@ Evidence: 5.85 s against 0.73 s per day, 8.0x [7.4, 8.7], with 11.6x fewer exact
 
 # PART F. Where earlier text in the repository is out of date
 
-Read older documents with these corrections in mind (also listed in the report that accompanies this work):
-
-- `README.md` (before this refresh) described the structure/state split as a key design element, said "near the money ... 2.0 adds nothing" (the correct statement is that the time-scaled smile is slightly *better* near the money: 1.071 against 1.088), listed 12 tests (about 170 fast tests now) and did not mention the new work.
-- `dh2/struct.py` (module docstring) and `COMPARISON_1.0_vs_2.0.md` (header table, "What each version is") describe the shared-parameter split as the motivation and design of 2.0; decision 11 withdraws the claim that it helps.
-- `AUDIT.md` section 4 says no jumps are the "largest single cause" of DH1's poor calibration. In the waterfall the jump step is the largest (-1.66), but the IV-space objective (-1.05) and the global multi-start (-1.04) are each almost as large.
+Older text that the later findings overturned was corrected on 9 October 2026 in `README.md`, `dh2/struct.py` (docstring), `COMPARISON_1.0_vs_2.0.md` and `AUDIT.md`: the structure/state split is not shown to help, and jumps, the IV-space objective and the global multi-start each matter. If you meet an older copy of those files, read it with these corrections in mind. Still worth knowing:
 - `COMPARISON_1.0_vs_2.0.md` and `AUDIT.md` quote 99.1% of 1.0 surfaces with several equally good parameter sets next to 2.0 numbers; the 2.0 identifiability study finds fewer distinct sets (1.27 on average, 16% of days with two or more) because the definitions differ and the kappa ordering removes duplicates [results/identifiability/README.md].
 - `results/report.md` section 10 and `results/tables/trading_summary.*` list the "one day later" rows without their signal thresholds; the hedged ones use no threshold (4,525 trades) while the signal-day rows use 1.0 vol point. The matched table in `COMPARISON_1.0_vs_2.0.md` is the fair comparison.

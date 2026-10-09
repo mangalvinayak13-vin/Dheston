@@ -17,11 +17,12 @@ no-model forecasts. It also checks the pricing formula, builds a neural-network 
 
 **Headline numbers**
 
-1. Next-day forecast, test period (1,173 days): jump model + yesterday's misfit **1.034** vol points against **1.236** for the best no-model benchmark (the time-scaled smile); paired difference
-   **-0.202 [-0.227, -0.181]**; better in 11 of 11 calendar years [results/tables/forecast_scores.csv, results/tables/forecast_by_year.csv; metrics.json `forecast.dhj_main.carry_res.*`].
-2. From the 1.0 recipe to 2.0 (118 sampled test days): next-day error **5.03 to 1.10** vol points, same-day error 4.84 to 0.99 [results/attribution/waterfall.csv].
-3. The project pricer agrees with an independent COS pricer to at most **1.5e-6 vol points** on 18,071 real-chain points [results/pricer_validation/errors.csv; results/pricer_validation/README.md].
-4. PINN surrogate error against the exact pricer on real held-out chains: data-only network **0.049**, hybrid (data + physics) **0.077** vol points [results/pinn/tables/ablation_summary.csv].
+1. Next-day forecast, test period (1,173 days): jump model + yesterday's misfit **1.034** vol points against **1.236** for the better of the two model-free benchmarks tried (the time-scaled smile); paired difference
+   **-0.202 [-0.227, -0.181]**; better in all 5 test years (and all 6 development years, where the settings were chosen) [results/tables/forecast_scores.csv, results/tables/forecast_by_year.csv; metrics.json `forecast.dhj_main.carry_res.*`].
+   **Read this together with finding (j) below:** the time-scaled smile repeats its edge value at strikes yesterday did not quote; against a benchmark that continues the wings linearly the lead is **-0.045 [-0.061, -0.032]**, and inside the strike range yesterday quoted (93.5% of quotes) the benchmark is slightly better [results/benchmark_check/summary.csv].
+2. From the 1.0 recipe to 2.0 (118 sampled test days): next-day error **5.03 to 1.10** vol points, same-day error 4.84 to 0.99 [results/attribution/waterfall.csv]. This scores every quote of the clean surface; on 1.0's own metric (held-out third, expiries of 20 to 800 days) the rebuilt 1.0 recipe scores 2.27 on the same days (Section 5).
+3. The project pricer agrees with an independent COS pricer to at most **1.5e-6 vol points** on the 16,492 diffusion-model real-chain points priced at Rs 0.05 or more (18,071 points for the jump model); over all 18,071 diffusion points the implied-vol difference reaches 4.30 vol points because near-worthless options cannot be inverted (price difference at most Rs 4.1e-5) [results/pricer_validation/errors.csv, columns `n_tradeable`, `max_abs_iv_err_pts_any_price`; results/pricer_validation/README.md; results/VERIFICATION.md S7].
+4. PINN surrogate error against the exact pricer on real held-out chains (3-seed means; the shipped files are seed 2: 0.052 and 0.064): data-only network **0.049**, hybrid (data + physics) **0.077** vol points, for quotes whose exact price is at least about Rs 1 and tau at most 0.6 years [results/pinn/tables/ablation_summary.csv; results/pinn/tables/heldout_metrics_all_runs.csv].
 5. PINN-accelerated calibration: **8.0x** [7.4, 8.7] less wall time, same-day error 2.560 against 2.555 for the exact calibration [results/pinn_calib/headline.json, results/pinn_calib/accuracy_by_method.csv].
 6. Hidden-quote (cross-sectional) test, 118 days: jump model **0.71** versus diffusion Double Heston **2.49** vol points [results/crosssection/summary.csv].
 7. Link to India VIX: correlation of levels **0.989** over 2,430 days; of daily changes 0.879 (all years) and 0.948 (test years) for the jump model [results/vix/vix_vs_model_stats.csv].
@@ -37,12 +38,18 @@ no-model forecasts. It also checks the pricing formula, builds a neural-network 
   the surrogate is valid only inside its training box and covers the diffusion model only [results/pinn/README.md; DECISIONS.md decisions 8-9].
 - (d) **PINN-accelerated calibration** is about 8x faster with the same implied-vol error, but its objective cost is about 0.8% higher (worst day 10.9%); the surrogate alone is not enough and the exact polish is essential;
   it is weaker on days whose exact optimum lies outside the box [results/pinn_calib/README.md].
-- (e) **Near the money the time-scaled smile beats the jump model + misfit** (1.071 against 1.088, a significant difference); the model's advantage is in the wings and at short expiries [results/stats/tests_test_period.md].
+- (e) **Near the money the time-scaled smile beats the jump model + misfit** (1.071 against 1.088, a significant difference); the model's advantage is at strikes yesterday did not quote and at short expiries, see (j) [results/stats/tests_test_period.md].
 - (f) **The parameters are weakly identified:** interpret fitted surfaces, not individual parameters [results/identifiability/README.md].
-- (g) **Trading test:** 41 to 45 of 100 trades profit; wins are bigger than losses; the edge is **not shown to survive a one-day delay**. Not investment advice [results/tables/trading_summary.md].
-- (h) The project pricer is accurate (1.5e-6 vol points on real chains) with **one documented corner case** (1-year options, extreme parameters, up to 1.0e-4 vol points) [results/pricer_validation/README.md].
+- (g) **Trading test:** in the first table 41.1 to 45.0 of 100 trades profit (40.6 to 48.2 across the matched table); the relevant control is the blind same-mix column, not a coin flip, and always selling wins 61 to 65 of 100 [results/VERIFICATION.md L7]; wins are bigger than losses; the edge is **not shown to survive a one-day delay**. Not investment advice [results/tables/trading_summary.md].
+- (h) The project pricer is accurate (1.5e-6 vol points on real chains, for options worth at least Rs 0.05) with **one documented corner case** (1-year options, extreme parameters, up to 1.0e-4 vol points) [results/pricer_validation/README.md].
 - (i) **The diffusion Double Heston loses to the time-scaled smile as a forecast** (1.377 against 1.236, with misfit; 2.792 without), and, in the maturity-extrapolation test, to plain Heston (2.02 against 1.37). The jump model is the strong one
   [results/tables/forecast_scores.csv; results/crosssection/summary.csv].
+- (j) **The headline lead depends on the benchmark, and it concerns strikes yesterday did not quote.** The time-scaled smile repeats its edge value outside the strike range yesterday quoted. The jump model + misfit leads it by **-0.202**, but a benchmark that continues the wings linearly
+  (the line through yesterday's 3 outermost quotes) leads by only **-0.045 [-0.061, -0.032]** (the model is ahead on 71% of days): the linear wings close 78% of the gap. **Inside yesterday's quoted range (93.5% of quotes) the benchmark is slightly better than the model**
+  (+0.012 [+0.009, +0.016]; the model is ahead on 52% of days); **outside it (6.5%) the model wins** (1.100 against 1.511 for the linear-wing and 2.288 for the edge-value benchmark). Be plain about the limits of this check: **the linear-wing benchmark was added after the independent verification**,
+  it is **one variant only** (3 edge quotes, fixed in advance, not tuned), and **stronger benchmarks (an SVI continuation, a tuned wing) are untested**; the lead over them could be smaller still. The model was not tuned against either benchmark
+  [results/benchmark_check/README.md; results/benchmark_check/summary.csv; results/tables/benchmark_check.md; figure `34_benchmark_inside_outside`; DECISIONS.md decision 12].
+- (k) **The model's own dynamics add nothing to the forecast.** For the jump model, one-day mean reversion changes the error by -0.002 [-0.006, +0.001]; the leverage update makes it worse (+0.090), leverage plus misfit is worse than the misfit alone (+0.102) and yesterday's smile plus the model-implied change is worse than yesterday's smile (+0.084). The forecasting value of the model is its calibrated state plus yesterday's misfit (Section 6.1) [results/tables/forecast_variants.csv].
 
 Figure for this section: `results/figures/01_summary_panel.png`.
 
@@ -119,12 +126,14 @@ Everything (calibration, PINN training data) rests on `pricer/models.py`, a midp
 
 | Points | Comparison | n | Max IV error (vol points) |
 |---|---|---|---|
-| real chains (calibrated parameters of 62 sampled days), diffusion | project vs COS | 18,071 | 1.45e-06 |
-| real chains, jumps | project vs COS | 18,071 | 6.03e-07 |
+| real chains (calibrated parameters of 62 sampled days), diffusion | project vs COS | 18,071 (16,492 priced at Rs 0.05 or more) | 1.45e-06 (over the 16,492) |
+| real chains, jumps | project vs COS | 18,071 (all priced at Rs 0.05 or more) | 6.03e-07 |
 | synthetic grid, diffusion | project vs COS | 8,736 | 1.04e-04 |
 | synthetic grid, jumps | project vs COS | 8,736 | 1.01e-04 |
 | real chains / synthetic grid | Lewis vs COS | 18,071 / 8,736 | 7.57e-10 / 1.51e-09 (diffusion) |
 | Monte Carlo (10 parameter sets x 7 strikes, 400,000 paths each) | Monte Carlo vs COS | 70 | max abs z = 1.98, mean abs z = 0.60 standard errors |
+
+**Scope of the maxima, one rule.** Implied-vol differences are stated only for options worth at least one tick (Rs 0.05): below that, an implied vol cannot be inverted reliably (over all 18,071 diffusion points the maximum difference is 4.30 vol points, from a price difference of at most Rs 4.1e-5) [results/pricer_validation/errors.csv, columns `n_tradeable`, `max_abs_iv_err_pts_any_price`; results/VERIFICATION.md S7]. Other floors in this report serve other purposes and are not the same rule: the calibration weights quotes by max(vega, 0.05) and drops options under Rs 1 from the data (decision 10; Section 2), and the PINN accuracy headline excludes exact prices below about Rs 1 (Section 8).
 
 The characteristic function agrees with a 30-digit mpmath solution of the ODE at 540 points to at most 5e-14 in the log. COS and Lewis, two completely different inversions, agree to 1.3e-9 relative [results/pricer_validation/README.md].
 
@@ -149,7 +158,7 @@ Figures: `results/figures/17_pricer_validation.png`.
 - **Walk-forward:** structural parameters over a trailing 40-day window refitted every 10 days; today's two variance levels fitted each day (the "structure/state split"; see (a) above for what the evidence says about it).
 - **Forecast variants** [hybrids.py]: "carry" uses today's calibrated model on tomorrow's surface; "carry_res" ("+ misfit") adds yesterday's market-minus-model error, carried in log-moneyness.
 
-**What fixed DH1: the attribution waterfall.** DH1 is the 1.0 research project's calibration style (price-space objective, independent daily fits from a latent coordinate system, five fixed starts), rebuilt on the same clean data. Each step adds one change; all 118 sampled test days
+**What fixed DH1: the attribution waterfall.** DH1 is the 1.0 research project's calibration style (price-space objective, independent daily fits from a latent coordinate system, five fixed starts), rebuilt on 1.0's own data (step 0); the clean data of the later steps comes in at step 1. Each step adds one change; all 118 sampled test days
 (every 10th test trading day) are paired across steps; intervals are 95% bootstrap over days; p-values are paired Wilcoxon against the previous step [results/attribution/README.md; results/attribution/waterfall.csv].
 
 | Step | What changes | Same-day mean | Next-day mean [95%] | Next-day change (p) |
@@ -182,7 +191,7 @@ Figures: `results/figures/04_waterfall_dh1_to_dh2.png`. Tables: `results/tables/
 
 ### 6.1 Model comparison
 
-Mean next-day IV error over the 1,173 test days (vol points), 95% moving-block bootstrap intervals (blocks of 20 days, 2,000 resamples), difference against the best benchmark (time-scaled smile) [results/tables/forecast_scores.csv; results/report.md section 1]:
+Mean next-day IV error over the 1,173 test days (vol points), 95% moving-block bootstrap intervals (blocks of 20 days, 2,000 resamples), difference against the better of the two model-free benchmarks tried (the time-scaled smile; only two persistence rules were tried, and the second benchmark, with linear wings, is in Section 6.2b) [results/tables/forecast_scores.csv; results/report.md section 1]:
 
 | Forecast | Development | Test | 95% interval of the test mean | Difference vs time-scaled smile |
 |---|---|---|---|---|
@@ -195,16 +204,16 @@ Mean next-day IV error over the 1,173 test days (vol points), 95% moving-block b
 | jump model | 1.734 | 1.201 | [1.053, 1.372] | -0.035 [-0.095, +0.028] |
 | **jump model + misfit** | 1.317 | **1.034** | [0.915, 1.171] | **-0.202 [-0.227, -0.181]** |
 
-The jump model alone ties the benchmark (its interval includes zero); only the jump model plus misfit is clearly better. The diffusion models, with or without the misfit, are worse than the time-scaled smile. The jump model + misfit beats the time-scaled smile in 11 of
-11 calendar years (2016 and 2026 are partial years) [results/tables/forecast_by_year.csv]:
+The jump model alone ties the benchmark (its interval includes zero); only the jump model plus misfit is clearly better. The diffusion models, with or without the misfit, are worse than the time-scaled smile. The jump model + misfit beats the time-scaled smile in all 5 test years
+(2022-2026) and in all 6 development years (2016-2021, where the settings were chosen, so only the 5 test years are untouched evidence; 2016 and 2026 are partial years) [results/tables/forecast_by_year.csv; metrics.json `forecast_by_year.test_years_*`, `forecast_by_year.dev_years_*`]:
 
 | Year | 2016 | 2017 | 2018 | 2019 | 2020 | 2021 | 2022 | 2023 | 2024 | 2025 | 2026 |
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | time-scaled smile | 0.802 | 0.855 | 1.049 | 1.634 | 3.015 | 1.620 | 1.600 | 1.073 | 1.324 | 0.998 | 1.163 |
 | jump model + misfit | 0.707 | 0.609 | 0.850 | 1.198 | 2.695 | 1.266 | 1.372 | 0.808 | 1.125 | 0.815 | 1.050 |
 
-**Robustness.** Fifteen reruns of the jump model with different windows (20 to 120 days), refit schedules, prior strengths, a pattern-memory prior, wide bounds and a daily jump rate score between 1.033 and 1.036 for the final forecast on the test period, while the pure model forecast ranges from
-1.185 to 1.436 [results/tables/robustness_runs.csv; results/tables/robustness_memory.md]. Pattern memory as a forecast correction changes the final forecast by -0.004 [-0.012, +0.003] (not significant) and the time-scaled smile by -0.029 [-0.043, -0.018]; as a prior it changes nothing
+**Robustness.** Fifteen jump-model runs (the headline run itself plus 14 reruns, one of them the known-buggy frozen-refit run) with different windows (20 to 120 days), refit schedules, prior strengths, a pattern-memory prior, wide bounds and a daily jump rate score between 1.033 and 1.036 for the final forecast on the test period, while the pure model forecast ranges from
+1.185 to 1.436 [results/tables/robustness_runs.csv; results/tables/robustness_memory.md]. This shows that the final forecast is almost insensitive to the model's slow settings, in line with decision 11 (yesterday's misfit supplies most of the forecast); it is evidence of insensitivity to settings, not of robustness of the model's structure, and it is not an overfitting test. Pattern memory as a forecast correction changes the final forecast by -0.004 [-0.012, +0.003] (not significant) and the time-scaled smile by -0.029 [-0.043, -0.018]; as a prior it changes nothing
 [results/tables/robustness_memory.md; COMPARISON_1.0_vs_2.0.md]. Some memory and jump settings landed at the edge of the grid searched, so a wider search could move them [COMPARISON_1.0_vs_2.0.md section 5].
 
 ### 6.2 Paired tests (Wilcoxon and Diebold-Mariano)
@@ -221,7 +230,38 @@ Test period, 1,173 days, the daily next-day IV RMSE as the loss; Holm adjustment
 | Heston + misfit | time-scaled smile | +0.181 | 34% | +18.87 | B better |
 
 **Near the money (absolute ln(K/F) at most 0.04):** jump model + misfit 1.088 against the time-scaled smile 1.071, difference +0.017, model better on only 47% of days, Wilcoxon (Holm) p = 2.85e-07, Diebold-Mariano stat +9.41: **the benchmark is better**.
-The model's advantage is therefore in the wings and at short expiries, not at the money [results/stats/tests_test_period.md; COMPARISON_1.0_vs_2.0.md section 3].
+The model's advantage is therefore not at the money; the next subsection says where it is [results/stats/tests_test_period.md; COMPARISON_1.0_vs_2.0.md section 3].
+
+### 6.2b Where the lead comes from: strikes yesterday did not quote (added after the independent verification)
+
+The time-scaled smile reads yesterday's smile by interpolation and, for a strike outside the range yesterday quoted, repeats the edge value. The independent verification (results/VERIFICATION.md, L1) split the test quotes by whether the strike lies inside that range;
+`exp_wing_benchmark.py` repeats the split and adds a second model-free benchmark that continues the wings linearly (the line through yesterday's 3 outermost quotes, floored at 2 vol points). Test period, 1,173 days, 524,959 quotes; mean daily RMSE in vol points; 95% moving-block bootstrap
+[results/benchmark_check/summary.csv; results/tables/benchmark_check.md; figure `34_benchmark_inside_outside`]:
+
+| Quotes | Edge-value benchmark (time-scaled smile) | Linear-wing benchmark | Jump model + misfit | Model minus edge-value | Model minus linear-wing [95%] | Days model ahead of linear-wing |
+|---|---|---|---|---|---|---|
+| all | 1.236 | 1.078 | 1.034 | -0.202 | **-0.045** [-0.061, -0.032] | 71% |
+| inside yesterday's quoted range (93.5%) | 1.006 | 1.006 | 1.018 | +0.012 | **+0.012** [+0.009, +0.016] | 52% |
+| outside it (6.5%) | 2.288 | 1.511 | 1.100 | -1.189 | **-0.411** [-0.503, -0.338] | 81% |
+
+Reading it: the linear wings close 78% of the headline gap; the model's remaining lead is -0.045 vol points, still clear of zero. Inside the range, where the two benchmarks are identical by construction, the benchmark is slightly better than the model. The model's value is at strikes yesterday did not quote.
+Limits, stated plainly: the linear-wing benchmark was added after the verification and after the headline; only this one variant was tried (its 3-quote setting was fixed before any score was computed, nothing was tuned); stronger benchmarks (an SVI continuation, a tuned number of edge quotes) are untested and could shrink the lead further.
+The earlier sentence "the model's advantage is in the wings and at short expiries" is correct but the file it cited only split quotes at absolute k 0.04; the in-range split is the sharper statement [DECISIONS.md decision 12].
+
+### 6.2c Forecast variants that the main table did not show (null results)
+
+hybrids.py stores seven forecasts per model; the tables above show two. For the jump model on the test period [results/tables/forecast_variants.csv, .md; written by `exp_variants_table.py`; scored with dh2/evalpairs.py on the same days as `final_table.py`]:
+
+| Forecast (jump model) | Dev | Test | Compared with | Test minus that forecast [95%] |
+|---|---|---|---|---|
+| model, today's state (carry) | 1.734 | 1.201 | | |
+| + the model's own one-day mean reversion | 1.738 | 1.199 | carry | -0.002 [-0.006, +0.001] |
+| + mean reversion + leverage update | 1.803 | 1.291 | carry | +0.090 [+0.037, +0.145] (worse) |
+| carry + yesterday's misfit (headline) | 1.317 | 1.034 | carry | -0.167 [-0.226, -0.117] |
+| leverage update + yesterday's misfit | 1.382 | 1.136 | carry + misfit | +0.102 [+0.043, +0.158] (worse) |
+| yesterday's smile + model-implied change | 1.928 | 1.552 | yesterday's smile (1.468) | +0.084 [+0.032, +0.132] (worse) |
+
+In plain words: **the model's forecasting value is its calibrated state plus yesterday's misfit; its own dynamics (mean reversion, correlation with the index) add nothing or hurt.** This bears on any sentence that says the model "forecasts tomorrow's surface". For single Heston the same variants are slightly better (leverage plus misfit 1.382 against 1.416 for carry + misfit, difference -0.034, interval [-0.072, +0.003] includes zero; on the development years 1.774 against 1.776, so a selection rule using development years only would pick it); the documents use carry + misfit for all models, and no conclusion changes.
 
 ### 6.3 Where the models miss (per bucket)
 
@@ -255,12 +295,12 @@ Figures: `results/figures/03_model_comparison.png`, `results/figures/02_error_by
 | median effective rank | 9 | 11 |
 | share of parameters within 2% of a bound | 41.0% | 38.7% |
 | share of days with at least one parameter on a bound (within 0.3%) | 100% | 100% |
-| median standard error / bound width | 0.213 | 0.124 |
+| median over days of each day's median standard error / bound width | 0.213 | 0.124 (pooled median over parameters and days: 0.153) |
 | mean distinct near-optimal parameter sets (16 starts) | 1.27 | 1.50 |
 | days with 2 or more distinct near-optimal sets | 16.1% | 29.7% |
 
 **Plain reading.** Locally the problem is not singular (no day above a column-normalised condition number of 1,338 for the diffusion model and 6,681 with jumps). But the data pin most parameters only loosely: the standard error exceeds the entire allowed interval on at least a quarter of days for kappa1, theta1, rho1 and
-dk (diffusion). Today's variance levels (v0) are tight (standard error about 1.4% of the interval). The cost surface is not a many-minima problem here (on average 12.2 of 16 starts end within 1% of the best cost); what remains is ridges and bounds. This is far fewer than the 99.1% of surfaces with several equally good
+dk (diffusion). Today's variance levels (v0) are tight in the diffusion model (standard error about 1.4% of the interval; 2.8 to 3.0% in the jump model). (The pooled jump-model median 0.153, the 1.4% and the 2.8-3.0% are the verifier's recomputation from `results/_cache/ident_v1.pkl`, results/VERIFICATION.md M4 and I6; the CSV carries the median of daily medians.) The cost surface is not a many-minima problem here (on average 12.2 of 16 starts end within 1% of the best cost); what remains is ridges and bounds. This is far fewer than the 99.1% of surfaces with several equally good
 parameter sets that the 1.0 study reported; the definitions differ (1.0: a price-cost tolerance and no ordering constraint). **Fit quality and identification are separate questions: even the jump model, which fits closely, has loosely determined structural parameters. Interpret fitted surfaces, not individual parameters.**
 
 The PINN-accelerated calibration study shows the same thing from another side: on 51 of 118 days the accelerated and exact fits reach a cost within 1% of each other with parameters that differ by more than 5% of their range; the two fitted surfaces then differ by a median of 0.04 vol points (90th percentile 0.14)
@@ -279,19 +319,20 @@ A **physics-informed neural network** (PINN; Raissi, Perdikaris and Karniadakis 
 30,000 steps, batch 2,048; 1,000,000 exact labels (125,000 parameter/state/maturity combinations x 8 strikes) from the project pricer. Deliberate deviation from the brief: the gate is the Black vega plus a fat tail instead of sqrt(tau): 0.053 against 0.242 vol points on the monitoring set, same steps. The domain
 (a box: tau from 1 day to 0.6 years, absolute ln(F/K) at most 0.30, variance levels 0.0016 to 0.36, and restricted parameter ranges) was built from development-period fits only; the last 20% of development days (251 days) never enter training and serve as real held-out chains [results/pinn/README.md, section 3].
 
-**PDE verification.** The brief's PDE was verified before any training: seven-point finite differences of exact prices from the project pricer satisfy it to a relative residual that falls about 64 times per halving of the step (median 5.7e-5, 1e-6, below 1e-6 at step fractions 0.25, 0.125, 0.0625); with the cross term's sign flipped the same check is off by 0.199 (median), so a sign
+**PDE verification.** The brief's PDE was verified before any training: seven-point finite differences of exact prices from the project pricer satisfy it to a relative residual that falls by a factor of 58 and then 60 per halving of the step for the project pricer (43 and 31 in the check with the independent COS pricer; 64 would be the theoretical rate of a sixth-order stencil) (median 5.7e-5, 1e-6, 1.7e-8 at step fractions 0.25, 0.125, 0.0625) [results/pinn/tables/pde_verification_summary.csv]; with the cross term's sign flipped the same check is off by 0.199 (median), so a sign
 error would have been caught. No change to the equation was needed [results/pinn/README.md, section 2].
 
 **Validation and ablation** (implied-vol error against the exact pricer, vol points, held-out) [results/pinn/tables/ablation_summary.csv; results/tables/pinn_accuracy.md]:
 
 | Network | Real held-out mean | median | 95th pct | max | Box-set mean | PDE residual median (real) |
 |---|---|---|---|---|---|---|
-| data-only (shipped for calibration) | **0.049** | 0.039 | 0.130 | 0.444 | 0.082 | 0.733 |
-| hybrid data + PDE (shipped for Greeks) | 0.077 | 0.064 | 0.196 | 0.651 | 0.141 | 0.362 |
+| data-only (3-seed mean; the shipped `final.pt` is seed 2: 0.0519) | **0.049** | 0.039 | 0.130 | 0.444 | 0.082 | 0.733 |
+| hybrid data + PDE (3-seed mean; the shipped `final_greeks.pt` is seed 2: 0.0642) | 0.077 | 0.064 | 0.196 | 0.651 | 0.141 | 0.362 |
 | data-only, brief's gate sqrt(tau) | 0.172 | 0.129 | 0.478 | 2.163 | 0.324 | 1.801 |
 | physics-only (no labels) | 1.307 | 0.969 | 3.207 | 23.786 | 4.511 | 0.260 |
 
-(Real held-out chains: 65,465 quotes of the 251 held-out development days; box set: unseen parameter sets from the training box; three seeds averaged for the first two rows.)
+(Real held-out chains: 65,465 quotes of the 251 held-out development days; box set: unseen parameter sets from the training box; three seeds averaged for the first two rows, so these are not the numbers of the shipped files, which are seed 2 of each [results/pinn/tables/heldout_metrics_all_runs.csv, rows dat_s2 and hyb_s2, set `real`].)
+**What the accuracy headline leaves out.** Of 74,811 held-out quotes, 1,741 lie beyond 0.6 years (outside the box) and 7,605 have an exact price below the scoring floor of about Rs 1 (7,605 is about 10% of the held-out quotes; with the 1,741 about 12.5%) [results/pinn/tables/quote_counts.csv]. A fresh re-measurement of `final.pt` by the verifier on 8 real held-out days (results/VERIFICATION.md F3) gives, for exact price at least Rs 1, mean 0.0485; for Rs 0.01 to 1, mean 0.104; **below Rs 0.01 (3.7% of in-box quotes) mean 4.7 vol points**, which matters if an optimiser visits such parameters (the exact pricer's own implied vol is ill-conditioned there too, decision 10).
 
 - **The plain data-trained network beats the physics-informed network on price accuracy.** The PDE term did not improve data efficiency in this budget: with 1,000 exact prices both are about 0.38-0.40; at 1,000,000 data-only reaches 0.049 and the hybrid 0.077 [results/pinn/tables/data_efficiency.csv].
 - **The hybrid is better where the physics matters:** median gamma error 1.8-2.4% of the Black gamma against 2.5-6.0% for data-only; PDE residual median 0.36 against 0.73; butterfly-convexity violations at tolerance 1e-6 in 0.027% / 0.008% / 0.009% of triples (hybrid, three seeds) against 0.24% / 1.04% / 0.24% (data-only). The exact pricer has zero violations. The surrogate is therefore not arbitrage-free by construction
@@ -342,6 +383,8 @@ Paired RMSE difference, accelerated minus exact: +0.0054 [-0.0091, +0.0205] (Wil
 - **It is weaker on days whose exact optimum lies outside the surrogate's box:** 19 of 118 days (16%); on these days the accelerated cost is more than 1% above the exact one on 47% of days (12% when the optimum is inside the box). The worst RMSE day, 2023-03-17 (+0.52 vol points), is one of them.
 - The accelerated and exact solutions are the same parameter vector on only 37% of days (kappa1 and theta1 differ most), because the problem is weakly identified (Section 7); parameter agreement should not be read as accuracy.
 - Re-ranking and defect correction did not demonstrably help on the test days (the plain variant was as good), but the frozen design was kept as chosen.
+- **The 8x is against an expensive baseline.** The exact fit used as the reference is the four-start fit (5.85 s a day). The control, one exact start with the same polish, takes 0.40 s a day, 1.8 times faster than the accelerated fit (0.73 s), at 0.28 vol points worse RMSE [results/pinn_calib/timing_by_method.csv; results/pinn_calib/accuracy_paired.csv]. No cheaper exact configuration of equal accuracy was tested, so "the speed at the same error" is relative to the four-start fit only.
+- **The global stage does not see every quote.** Quotes beyond 0.6 years (a mean of 10.9 of 111 fit quotes, 9.6%, on 92% of the days) are left out of the surrogate's global search and enter only at the correction and polish stage [results/pinn_calib/README.md, section 7].
 - Limits: diffusion model only; 118 days, one seed; the exact baseline is itself a four-start local search (on 2 days the accelerated method found a lower cost); the 8x applies to this pricer (3.4 ms per surface evaluation), and a slower exact pricer would raise it [results/pinn_calib/README.md, section 7].
 
 Figures: `results/figures/28_pinn_calibration_rmse.png`, `29_pinn_calibration_cost_ratio.png`, `30_pinn_calibration_time.png`, `31_pinn_calibration_parameters.png`, `32_pinn_calibration_rmse_over_time.png`, `33_pinn_calibration_design.png`.
@@ -411,9 +454,9 @@ removes the index move with the option's delta on the forward. Thresholds were c
 | rich_cheap_edge / plain | 3,159 | 45.8 / 43.3 | +2.59 / +0.95 | +1.64 [-2.87, +6.07] |
 | rich_cheap_edge / hedged | 838 | 48.2 / 40.6 | +7.23 / +1.21 | +6.03 [-0.99, +13.45] |
 
-**Reading it (g).** 41 to 45 of 100 trades profit in every row of `results/tables/trading_summary.md` (a coin flip would give 50). The model mostly says buy, and a bought option loses a day of time value, so the typical trade loses; the average is positive because wins are larger than losses (the median trade is negative in
-every row). At the signal day's closing price three of the four versions have a positive average whose range stays above zero with no cost, and the index-hedged rich/cheap version stays above zero at a 1% cost. Entered one day later, the two hedged versions lose most of their profit and turn negative at 1% cost, but the size of
-that loss is itself not statistically certain (its range includes zero), and none of the one-day-later averages is distinguishable from zero. **The edge is not shown to survive a one-day delay.** Closing prints are last trades, not quotes you can deal at. An independent audit found no look-ahead [COMPARISON_1.0_vs_2.0.md].
+**Reading it (g).** In the rows of `results/tables/trading_summary.md` 41.1 to 45.0 of 100 trades profit; in the matched table above the signal-close wins are 45.8 to 48.2 and the one-day-later wins 40.6 to 44.6 (37.7 to 43.6 at a 1% cost). A coin flip (50) is not the right yardstick: the relevant control is the "blind trades, same mix" column (38.5 to 44.9), which the model beats by 1.5 to 3.0 wins per 100 in the signal-day rows; always selling the same options wins 61 to 65 of 100 trades (its average is negative or about zero, except +2.06 rupees for the plain rich/cheap rule), so the win count alone is a weak signal [results/VERIFICATION.md L7, recomputed from data/results/trades_dhj_main.pkl]. The model mostly says buy, and a bought option loses a day of time value, so the typical trade loses; the average is positive because wins are larger than losses (the median trade is negative in
+every row). At the signal day's closing price **all four** versions have a positive average whose range stays above zero with no cost (lower ends +1.35, +1.83, +0.22, +2.33 rupees), and only the index-hedged rich/cheap version stays above zero at a 1% cost (+0.19). Entered one day later, the two hedged versions lose most of their profit and turn negative at 1% cost, but the size of
+that loss is itself not statistically certain (its range includes zero), and none of the **matched** one-day-later averages is distinguishable from zero. This does not hold for the first table: its 4,525-trade hedged one-day-later rows at 1% cost are -2.04 [-3.31, -0.76] and -2.02 [-3.25, -0.70] rupees per trade, which exclude zero (negative). **The edge is not shown to survive a one-day delay.** The rich/cheap signal is the kind that a one-print bounce in closing prices can produce, so even "a possible edge" at the signal-day close is generous (the verifier's reading, not tested). Closing prints are last trades, not quotes you can deal at. An independent audit found no look-ahead [COMPARISON_1.0_vs_2.0.md].
 Note: the "one day later" rows of the first table (`trading_summary`) use different signal thresholds for some versions (the 4,525-trade hedged rows use no threshold), so the matched table above is the fair comparison. This is a backtest, **not investment advice**.
 
 ---
@@ -427,12 +470,14 @@ Note: the "one day later" rows of the first table (`trading_summary`) use differ
 - **Identifiability.** Individual parameters are not identified; do not interpret them one by one (Section 7).
 - **Structure/state design** is not shown to help (Section 5); the headline walk-forward numbers come from a configuration that independent jump fits beat on the 118 sampled days (1.142 against 1.254, no misfit in either).
 - **Near the money** the time-scaled smile is better than the model (Section 6.2). **The diffusion model** loses to the benchmark and, in one test, to plain Heston.
+- **The headline benchmark.** The -0.202 lead is against a benchmark that repeats its edge value at strikes yesterday did not quote; against a linear-wing benchmark it is -0.045, and inside yesterday's quoted range (93.5% of quotes) the benchmark is slightly better (Section 6.2b). Only two persistence rules and one wing variant were tried; an SVI continuation is untested.
+- **The model's dynamics** (mean reversion, leverage) add nothing to the forecast (Section 6.2c).
 - **PINN.** Valid only inside its box; diffusion only; 30,000-step budget stopped early; three seeds; the surrogate is not arbitrage-free by construction.
 - **PINN-accelerated calibration.** Higher objective cost (about 0.8%), non-converged polish on 115 of 118 days, weaker when the optimum is outside the box; 118 days and one seed; applies to the diffusion model only.
 - **Samples.** The expensive experiments use 118 days spaced 10 trading days apart; the intervals resample days and may be slightly narrow because volatility regimes persist [results/pinn_calib/README.md].
 - **Comparison with 1.0.** DH1 is a rebuild (Section 5). 1.0 and 2.0 differ in data, instrument and metric; rows marked "not identical" in `COMPARISON_1.0_vs_2.0.md` are not like-for-like.
 - **Trading.** Backtest on closing prints; the edge is not shown to survive a one-day delay; not advice.
-- **Pricer.** One documented corner case (Section 4); QuantLib was not available and was not used for a cross-check.
+- **Pricer.** Maxima are for options worth at least Rs 0.05; one documented corner case (Section 4); QuantLib was not available and was not used for a cross-check.
 
 ---
 
@@ -473,4 +518,5 @@ References are cited by author, year and title only.
 - The Section 12 "Rs per trade" and "wins" for matched trades come from `COMPARISON_1.0_vs_2.0.md` and `results/metrics.json` (source `data/trade_matched_dhj_main.json`), not from a file in `results/tables/`.
 - "The median trade is negative in every row" is read from the median column of the trading table in `COMPARISON_1.0_vs_2.0.md`.
 - The development-period test of the forecast (dev columns) is from `results/tables/forecast_scores.csv`.
-- No new number was computed for this report.
+- Sections 6.2b and 6.2c come from `results/benchmark_check/summary.csv` and `results/tables/forecast_variants.csv`, written by `exp_wing_benchmark.py` and `exp_variants_table.py` after the independent verification (both are pipeline stages and are in `results/metrics.json`).
+- Numbers quoted from `results/VERIFICATION.md` rather than from a results file (the verifier's own recomputation): the always-selling win rate (61 to 65 of 100), the pooled identifiability medians (0.153; 1.4%; 2.8-3.0%), the 4.30 vol point and Rs 4.1e-5 figures of the pricer scope, and the re-measurement of `final.pt` below Rs 1.

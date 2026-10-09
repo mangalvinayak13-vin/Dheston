@@ -1,10 +1,10 @@
 {
  "schema": 1,
- "generated": "2026-10-08T23:54:35",
+ "generated": "2026-10-09T12:44:44",
  "config": "configs/nifty.yaml",
- "n_metrics": 1159,
- "n_read": 1119,
- "n_derived": 40,
+ "n_metrics": 1479,
+ "n_read": 1427,
+ "n_derived": 52,
  "rule": "every value is read from its source file (column / key) or derived by the stated rule from such cells; a missing source stops the build",
  "metrics": {
   "data.total.files": {
@@ -2107,6 +2107,34 @@
    "key": "count of years with column 'dhj_main:carry_res' < column 'smile_scaled'",
    "kind": "derived"
   },
+  "forecast_by_year.test_years_total": {
+   "value": 5,
+   "unit": "years",
+   "source": "results/tables/forecast_by_year.csv",
+   "key": "number of rows with year >= the first test year (split.test.start in the config)",
+   "kind": "derived"
+  },
+  "forecast_by_year.test_years_jump_misfit_beats_time_scaled_smile": {
+   "value": 5,
+   "unit": "years",
+   "source": "results/tables/forecast_by_year.csv",
+   "key": "count of those years with column 'dhj_main:carry_res' < column 'smile_scaled'",
+   "kind": "derived"
+  },
+  "forecast_by_year.dev_years_total": {
+   "value": 6,
+   "unit": "years",
+   "source": "results/tables/forecast_by_year.csv",
+   "key": "number of rows with year < the first test year (split.test.start in the config)",
+   "kind": "derived"
+  },
+  "forecast_by_year.dev_years_jump_misfit_beats_time_scaled_smile": {
+   "value": 6,
+   "unit": "years",
+   "source": "results/tables/forecast_by_year.csv",
+   "key": "count of those years with column 'dhj_main:carry_res' < column 'smile_scaled'",
+   "kind": "derived"
+  },
   "robustness.final_forecast.n_runs": {
    "value": 15,
    "unit": "runs",
@@ -2245,6 +2273,2218 @@
    "unit": "vol points",
    "source": "data/results/memory_final.json",
    "key": "key smile_scaled > test > ci95 > 1",
+   "kind": "read"
+  },
+  "benchmark_check.all.model_vs_edge.days": {
+   "value": 1173,
+   "unit": "days",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "column 'days' where quotes == 'all', comparison == 'jump_plus_misfit minus edge_value_benchmark'",
+   "kind": "read"
+  },
+  "benchmark_check.all.model_vs_edge.mean_a": {
+   "value": 1.0335600493825905,
+   "unit": "vol points",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "column 'mean_a' where quotes == 'all', comparison == 'jump_plus_misfit minus edge_value_benchmark'",
+   "kind": "read"
+  },
+  "benchmark_check.all.model_vs_edge.mean_b": {
+   "value": 1.2356438780387056,
+   "unit": "vol points",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "column 'mean_b' where quotes == 'all', comparison == 'jump_plus_misfit minus edge_value_benchmark'",
+   "kind": "read"
+  },
+  "benchmark_check.all.model_vs_edge.mean_difference": {
+   "value": -0.2020838286561153,
+   "unit": "vol points",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "column 'mean_difference' where quotes == 'all', comparison == 'jump_plus_misfit minus edge_value_benchmark'",
+   "kind": "read"
+  },
+  "benchmark_check.all.model_vs_edge.ci95_lo": {
+   "value": -0.2269635051517078,
+   "unit": "vol points",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "column 'ci95_lo' where quotes == 'all', comparison == 'jump_plus_misfit minus edge_value_benchmark'",
+   "kind": "read"
+  },
+  "benchmark_check.all.model_vs_edge.ci95_hi": {
+   "value": -0.1813831228607042,
+   "unit": "vol points",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "column 'ci95_hi' where quotes == 'all', comparison == 'jump_plus_misfit minus edge_value_benchmark'",
+   "kind": "read"
+  },
+  "benchmark_check.all.model_vs_edge.model_ahead_on_share_of_days": {
+   "value": 0.8959931798806479,
+   "unit": "share",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "column 'model_ahead_on_share_of_days' where quotes == 'all', comparison == 'jump_plus_misfit minus edge_value_benchmark'",
+   "kind": "read"
+  },
+  "benchmark_check.all.model_vs_edge.wilcoxon_p": {
+   "value": 1.9311807231896876e-158,
+   "unit": "p-value",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "column 'wilcoxon_p' where quotes == 'all', comparison == 'jump_plus_misfit minus edge_value_benchmark'",
+   "kind": "read"
+  },
+  "benchmark_check.all.model_vs_linear.days": {
+   "value": 1173,
+   "unit": "days",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "column 'days' where quotes == 'all', comparison == 'jump_plus_misfit minus linear_wing_benchmark'",
+   "kind": "read"
+  },
+  "benchmark_check.all.model_vs_linear.mean_a": {
+   "value": 1.0335600493825905,
+   "unit": "vol points",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "column 'mean_a' where quotes == 'all', comparison == 'jump_plus_misfit minus linear_wing_benchmark'",
+   "kind": "read"
+  },
+  "benchmark_check.all.model_vs_linear.mean_b": {
+   "value": 1.0780623075036062,
+   "unit": "vol points",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "column 'mean_b' where quotes == 'all', comparison == 'jump_plus_misfit minus linear_wing_benchmark'",
+   "kind": "read"
+  },
+  "benchmark_check.all.model_vs_linear.mean_difference": {
+   "value": -0.0445022581210162,
+   "unit": "vol points",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "column 'mean_difference' where quotes == 'all', comparison == 'jump_plus_misfit minus linear_wing_benchmark'",
+   "kind": "read"
+  },
+  "benchmark_check.all.model_vs_linear.ci95_lo": {
+   "value": -0.0614208932490819,
+   "unit": "vol points",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "column 'ci95_lo' where quotes == 'all', comparison == 'jump_plus_misfit minus linear_wing_benchmark'",
+   "kind": "read"
+  },
+  "benchmark_check.all.model_vs_linear.ci95_hi": {
+   "value": -0.0324392353897946,
+   "unit": "vol points",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "column 'ci95_hi' where quotes == 'all', comparison == 'jump_plus_misfit minus linear_wing_benchmark'",
+   "kind": "read"
+  },
+  "benchmark_check.all.model_vs_linear.model_ahead_on_share_of_days": {
+   "value": 0.7101449275362319,
+   "unit": "share",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "column 'model_ahead_on_share_of_days' where quotes == 'all', comparison == 'jump_plus_misfit minus linear_wing_benchmark'",
+   "kind": "read"
+  },
+  "benchmark_check.all.model_vs_linear.wilcoxon_p": {
+   "value": 4.570468040295863e-43,
+   "unit": "p-value",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "column 'wilcoxon_p' where quotes == 'all', comparison == 'jump_plus_misfit minus linear_wing_benchmark'",
+   "kind": "read"
+  },
+  "benchmark_check.all.linear_vs_edge.days": {
+   "value": 1173,
+   "unit": "days",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "column 'days' where quotes == 'all', comparison == 'linear_wing_benchmark minus edge_value_benchmark'",
+   "kind": "read"
+  },
+  "benchmark_check.all.linear_vs_edge.mean_a": {
+   "value": 1.0780623075036062,
+   "unit": "vol points",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "column 'mean_a' where quotes == 'all', comparison == 'linear_wing_benchmark minus edge_value_benchmark'",
+   "kind": "read"
+  },
+  "benchmark_check.all.linear_vs_edge.mean_b": {
+   "value": 1.2356438780387056,
+   "unit": "vol points",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "column 'mean_b' where quotes == 'all', comparison == 'linear_wing_benchmark minus edge_value_benchmark'",
+   "kind": "read"
+  },
+  "benchmark_check.all.linear_vs_edge.mean_difference": {
+   "value": -0.157581570535099,
+   "unit": "vol points",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "column 'mean_difference' where quotes == 'all', comparison == 'linear_wing_benchmark minus edge_value_benchmark'",
+   "kind": "read"
+  },
+  "benchmark_check.all.linear_vs_edge.ci95_lo": {
+   "value": -0.1819867933565028,
+   "unit": "vol points",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "column 'ci95_lo' where quotes == 'all', comparison == 'linear_wing_benchmark minus edge_value_benchmark'",
+   "kind": "read"
+  },
+  "benchmark_check.all.linear_vs_edge.ci95_hi": {
+   "value": -0.1350328221126861,
+   "unit": "vol points",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "column 'ci95_hi' where quotes == 'all', comparison == 'linear_wing_benchmark minus edge_value_benchmark'",
+   "kind": "read"
+  },
+  "benchmark_check.all.linear_vs_edge.model_ahead_on_share_of_days": {
+   "value": 0.7485080988917306,
+   "unit": "share",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "column 'model_ahead_on_share_of_days' where quotes == 'all', comparison == 'linear_wing_benchmark minus edge_value_benchmark'",
+   "kind": "read"
+  },
+  "benchmark_check.all.linear_vs_edge.wilcoxon_p": {
+   "value": 7.94921804654533e-83,
+   "unit": "p-value",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "column 'wilcoxon_p' where quotes == 'all', comparison == 'linear_wing_benchmark minus edge_value_benchmark'",
+   "kind": "read"
+  },
+  "benchmark_check.inside.model_vs_edge.days": {
+   "value": 1173,
+   "unit": "days",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "column 'days' where quotes == 'inside', comparison == 'jump_plus_misfit minus edge_value_benchmark'",
+   "kind": "read"
+  },
+  "benchmark_check.inside.model_vs_edge.mean_a": {
+   "value": 1.018039138630323,
+   "unit": "vol points",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "column 'mean_a' where quotes == 'inside', comparison == 'jump_plus_misfit minus edge_value_benchmark'",
+   "kind": "read"
+  },
+  "benchmark_check.inside.model_vs_edge.mean_b": {
+   "value": 1.0058339992899703,
+   "unit": "vol points",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "column 'mean_b' where quotes == 'inside', comparison == 'jump_plus_misfit minus edge_value_benchmark'",
+   "kind": "read"
+  },
+  "benchmark_check.inside.model_vs_edge.mean_difference": {
+   "value": 0.0122051393403527,
+   "unit": "vol points",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "column 'mean_difference' where quotes == 'inside', comparison == 'jump_plus_misfit minus edge_value_benchmark'",
+   "kind": "read"
+  },
+  "benchmark_check.inside.model_vs_edge.ci95_lo": {
+   "value": 0.0087924337817984,
+   "unit": "vol points",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "column 'ci95_lo' where quotes == 'inside', comparison == 'jump_plus_misfit minus edge_value_benchmark'",
+   "kind": "read"
+  },
+  "benchmark_check.inside.model_vs_edge.ci95_hi": {
+   "value": 0.0155307731879668,
+   "unit": "vol points",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "column 'ci95_hi' where quotes == 'inside', comparison == 'jump_plus_misfit minus edge_value_benchmark'",
+   "kind": "read"
+  },
+  "benchmark_check.inside.model_vs_edge.model_ahead_on_share_of_days": {
+   "value": 0.5191815856777494,
+   "unit": "share",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "column 'model_ahead_on_share_of_days' where quotes == 'inside', comparison == 'jump_plus_misfit minus edge_value_benchmark'",
+   "kind": "read"
+  },
+  "benchmark_check.inside.model_vs_edge.wilcoxon_p": {
+   "value": 0.0481390701417586,
+   "unit": "p-value",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "column 'wilcoxon_p' where quotes == 'inside', comparison == 'jump_plus_misfit minus edge_value_benchmark'",
+   "kind": "read"
+  },
+  "benchmark_check.inside.model_vs_linear.days": {
+   "value": 1173,
+   "unit": "days",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "column 'days' where quotes == 'inside', comparison == 'jump_plus_misfit minus linear_wing_benchmark'",
+   "kind": "read"
+  },
+  "benchmark_check.inside.model_vs_linear.mean_a": {
+   "value": 1.018039138630323,
+   "unit": "vol points",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "column 'mean_a' where quotes == 'inside', comparison == 'jump_plus_misfit minus linear_wing_benchmark'",
+   "kind": "read"
+  },
+  "benchmark_check.inside.model_vs_linear.mean_b": {
+   "value": 1.0058339992899703,
+   "unit": "vol points",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "column 'mean_b' where quotes == 'inside', comparison == 'jump_plus_misfit minus linear_wing_benchmark'",
+   "kind": "read"
+  },
+  "benchmark_check.inside.model_vs_linear.mean_difference": {
+   "value": 0.0122051393403527,
+   "unit": "vol points",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "column 'mean_difference' where quotes == 'inside', comparison == 'jump_plus_misfit minus linear_wing_benchmark'",
+   "kind": "read"
+  },
+  "benchmark_check.inside.model_vs_linear.ci95_lo": {
+   "value": 0.0087924337817984,
+   "unit": "vol points",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "column 'ci95_lo' where quotes == 'inside', comparison == 'jump_plus_misfit minus linear_wing_benchmark'",
+   "kind": "read"
+  },
+  "benchmark_check.inside.model_vs_linear.ci95_hi": {
+   "value": 0.0155307731879668,
+   "unit": "vol points",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "column 'ci95_hi' where quotes == 'inside', comparison == 'jump_plus_misfit minus linear_wing_benchmark'",
+   "kind": "read"
+  },
+  "benchmark_check.inside.model_vs_linear.model_ahead_on_share_of_days": {
+   "value": 0.5191815856777494,
+   "unit": "share",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "column 'model_ahead_on_share_of_days' where quotes == 'inside', comparison == 'jump_plus_misfit minus linear_wing_benchmark'",
+   "kind": "read"
+  },
+  "benchmark_check.inside.model_vs_linear.wilcoxon_p": {
+   "value": 0.0481390701417586,
+   "unit": "p-value",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "column 'wilcoxon_p' where quotes == 'inside', comparison == 'jump_plus_misfit minus linear_wing_benchmark'",
+   "kind": "read"
+  },
+  "benchmark_check.inside.linear_vs_edge.days": {
+   "value": 1173,
+   "unit": "days",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "column 'days' where quotes == 'inside', comparison == 'linear_wing_benchmark minus edge_value_benchmark'",
+   "kind": "read"
+  },
+  "benchmark_check.inside.linear_vs_edge.mean_a": {
+   "value": 1.0058339992899703,
+   "unit": "vol points",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "column 'mean_a' where quotes == 'inside', comparison == 'linear_wing_benchmark minus edge_value_benchmark'",
+   "kind": "read"
+  },
+  "benchmark_check.inside.linear_vs_edge.mean_b": {
+   "value": 1.0058339992899703,
+   "unit": "vol points",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "column 'mean_b' where quotes == 'inside', comparison == 'linear_wing_benchmark minus edge_value_benchmark'",
+   "kind": "read"
+  },
+  "benchmark_check.inside.linear_vs_edge.mean_difference": {
+   "value": 0.0,
+   "unit": "vol points",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "column 'mean_difference' where quotes == 'inside', comparison == 'linear_wing_benchmark minus edge_value_benchmark'",
+   "kind": "read"
+  },
+  "benchmark_check.inside.linear_vs_edge.ci95_lo": {
+   "value": 0.0,
+   "unit": "vol points",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "column 'ci95_lo' where quotes == 'inside', comparison == 'linear_wing_benchmark minus edge_value_benchmark'",
+   "kind": "read"
+  },
+  "benchmark_check.inside.linear_vs_edge.ci95_hi": {
+   "value": 0.0,
+   "unit": "vol points",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "column 'ci95_hi' where quotes == 'inside', comparison == 'linear_wing_benchmark minus edge_value_benchmark'",
+   "kind": "read"
+  },
+  "benchmark_check.inside.linear_vs_edge.model_ahead_on_share_of_days": {
+   "value": 0.0,
+   "unit": "share",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "column 'model_ahead_on_share_of_days' where quotes == 'inside', comparison == 'linear_wing_benchmark minus edge_value_benchmark'",
+   "kind": "read"
+  },
+  "benchmark_check.outside.model_vs_edge.days": {
+   "value": 1173,
+   "unit": "days",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "column 'days' where quotes == 'outside', comparison == 'jump_plus_misfit minus edge_value_benchmark'",
+   "kind": "read"
+  },
+  "benchmark_check.outside.model_vs_edge.mean_a": {
+   "value": 1.0996085750318216,
+   "unit": "vol points",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "column 'mean_a' where quotes == 'outside', comparison == 'jump_plus_misfit minus edge_value_benchmark'",
+   "kind": "read"
+  },
+  "benchmark_check.outside.model_vs_edge.mean_b": {
+   "value": 2.2881943709222043,
+   "unit": "vol points",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "column 'mean_b' where quotes == 'outside', comparison == 'jump_plus_misfit minus edge_value_benchmark'",
+   "kind": "read"
+  },
+  "benchmark_check.outside.model_vs_edge.mean_difference": {
+   "value": -1.188585795890383,
+   "unit": "vol points",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "column 'mean_difference' where quotes == 'outside', comparison == 'jump_plus_misfit minus edge_value_benchmark'",
+   "kind": "read"
+  },
+  "benchmark_check.outside.model_vs_edge.ci95_lo": {
+   "value": -1.2820053532311475,
+   "unit": "vol points",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "column 'ci95_lo' where quotes == 'outside', comparison == 'jump_plus_misfit minus edge_value_benchmark'",
+   "kind": "read"
+  },
+  "benchmark_check.outside.model_vs_edge.ci95_hi": {
+   "value": -1.1063674091227784,
+   "unit": "vol points",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "column 'ci95_hi' where quotes == 'outside', comparison == 'jump_plus_misfit minus edge_value_benchmark'",
+   "kind": "read"
+  },
+  "benchmark_check.outside.model_vs_edge.model_ahead_on_share_of_days": {
+   "value": 0.8618925831202046,
+   "unit": "share",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "column 'model_ahead_on_share_of_days' where quotes == 'outside', comparison == 'jump_plus_misfit minus edge_value_benchmark'",
+   "kind": "read"
+  },
+  "benchmark_check.outside.model_vs_edge.wilcoxon_p": {
+   "value": 4.279408992478522e-154,
+   "unit": "p-value",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "column 'wilcoxon_p' where quotes == 'outside', comparison == 'jump_plus_misfit minus edge_value_benchmark'",
+   "kind": "read"
+  },
+  "benchmark_check.outside.model_vs_linear.days": {
+   "value": 1173,
+   "unit": "days",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "column 'days' where quotes == 'outside', comparison == 'jump_plus_misfit minus linear_wing_benchmark'",
+   "kind": "read"
+  },
+  "benchmark_check.outside.model_vs_linear.mean_a": {
+   "value": 1.0996085750318216,
+   "unit": "vol points",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "column 'mean_a' where quotes == 'outside', comparison == 'jump_plus_misfit minus linear_wing_benchmark'",
+   "kind": "read"
+  },
+  "benchmark_check.outside.model_vs_linear.mean_b": {
+   "value": 1.5106685223524403,
+   "unit": "vol points",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "column 'mean_b' where quotes == 'outside', comparison == 'jump_plus_misfit minus linear_wing_benchmark'",
+   "kind": "read"
+  },
+  "benchmark_check.outside.model_vs_linear.mean_difference": {
+   "value": -0.4110599473206187,
+   "unit": "vol points",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "column 'mean_difference' where quotes == 'outside', comparison == 'jump_plus_misfit minus linear_wing_benchmark'",
+   "kind": "read"
+  },
+  "benchmark_check.outside.model_vs_linear.ci95_lo": {
+   "value": -0.5031010764265755,
+   "unit": "vol points",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "column 'ci95_lo' where quotes == 'outside', comparison == 'jump_plus_misfit minus linear_wing_benchmark'",
+   "kind": "read"
+  },
+  "benchmark_check.outside.model_vs_linear.ci95_hi": {
+   "value": -0.3378092505435355,
+   "unit": "vol points",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "column 'ci95_hi' where quotes == 'outside', comparison == 'jump_plus_misfit minus linear_wing_benchmark'",
+   "kind": "read"
+  },
+  "benchmark_check.outside.model_vs_linear.model_ahead_on_share_of_days": {
+   "value": 0.8115942028985508,
+   "unit": "share",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "column 'model_ahead_on_share_of_days' where quotes == 'outside', comparison == 'jump_plus_misfit minus linear_wing_benchmark'",
+   "kind": "read"
+  },
+  "benchmark_check.outside.model_vs_linear.wilcoxon_p": {
+   "value": 1.1118892866672891e-113,
+   "unit": "p-value",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "column 'wilcoxon_p' where quotes == 'outside', comparison == 'jump_plus_misfit minus linear_wing_benchmark'",
+   "kind": "read"
+  },
+  "benchmark_check.outside.linear_vs_edge.days": {
+   "value": 1173,
+   "unit": "days",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "column 'days' where quotes == 'outside', comparison == 'linear_wing_benchmark minus edge_value_benchmark'",
+   "kind": "read"
+  },
+  "benchmark_check.outside.linear_vs_edge.mean_a": {
+   "value": 1.5106685223524403,
+   "unit": "vol points",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "column 'mean_a' where quotes == 'outside', comparison == 'linear_wing_benchmark minus edge_value_benchmark'",
+   "kind": "read"
+  },
+  "benchmark_check.outside.linear_vs_edge.mean_b": {
+   "value": 2.2881943709222043,
+   "unit": "vol points",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "column 'mean_b' where quotes == 'outside', comparison == 'linear_wing_benchmark minus edge_value_benchmark'",
+   "kind": "read"
+  },
+  "benchmark_check.outside.linear_vs_edge.mean_difference": {
+   "value": -0.7775258485697643,
+   "unit": "vol points",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "column 'mean_difference' where quotes == 'outside', comparison == 'linear_wing_benchmark minus edge_value_benchmark'",
+   "kind": "read"
+  },
+  "benchmark_check.outside.linear_vs_edge.ci95_lo": {
+   "value": -0.8739429679063522,
+   "unit": "vol points",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "column 'ci95_lo' where quotes == 'outside', comparison == 'linear_wing_benchmark minus edge_value_benchmark'",
+   "kind": "read"
+  },
+  "benchmark_check.outside.linear_vs_edge.ci95_hi": {
+   "value": -0.6767616656495061,
+   "unit": "vol points",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "column 'ci95_hi' where quotes == 'outside', comparison == 'linear_wing_benchmark minus edge_value_benchmark'",
+   "kind": "read"
+  },
+  "benchmark_check.outside.linear_vs_edge.model_ahead_on_share_of_days": {
+   "value": 0.7485080988917306,
+   "unit": "share",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "column 'model_ahead_on_share_of_days' where quotes == 'outside', comparison == 'linear_wing_benchmark minus edge_value_benchmark'",
+   "kind": "read"
+  },
+  "benchmark_check.outside.linear_vs_edge.wilcoxon_p": {
+   "value": 1.7900374644535764e-78,
+   "unit": "p-value",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "column 'wilcoxon_p' where quotes == 'outside', comparison == 'linear_wing_benchmark minus edge_value_benchmark'",
+   "kind": "read"
+  },
+  "benchmark_check.n_quotes_inside": {
+   "value": 490855,
+   "unit": "quotes",
+   "source": "results/benchmark_check/per_day.csv",
+   "key": "sum of column 'n_inside' over the test days",
+   "kind": "derived"
+  },
+  "benchmark_check.n_quotes_outside": {
+   "value": 34104,
+   "unit": "quotes",
+   "source": "results/benchmark_check/per_day.csv",
+   "key": "sum of column 'n_outside' over the test days",
+   "kind": "derived"
+  },
+  "benchmark_check.n_quotes_total": {
+   "value": 524959,
+   "unit": "quotes",
+   "source": "results/benchmark_check/per_day.csv",
+   "key": "sum of columns 'n_inside' and 'n_outside' over the test days",
+   "kind": "derived"
+  },
+  "benchmark_check.share_quotes_inside": {
+   "value": 0.9350349265371201,
+   "unit": "share",
+   "source": "results/benchmark_check/per_day.csv",
+   "key": "sum of 'n_inside' / (sum of 'n_inside' + sum of 'n_outside')",
+   "kind": "derived"
+  },
+  "benchmark_check.share_quotes_outside": {
+   "value": 0.06496507346287995,
+   "unit": "share",
+   "source": "results/benchmark_check/per_day.csv",
+   "key": "sum of 'n_outside' / (sum of 'n_inside' + sum of 'n_outside')",
+   "kind": "derived"
+  },
+  "benchmark_check.mean_quotes_per_day_inside": {
+   "value": 418.461210571185,
+   "unit": "quotes",
+   "source": "results/benchmark_check/per_day.csv",
+   "key": "mean over days of column 'n_inside'",
+   "kind": "derived"
+  },
+  "benchmark_check.mean_quotes_per_day_outside": {
+   "value": 29.074168797953963,
+   "unit": "quotes",
+   "source": "results/benchmark_check/per_day.csv",
+   "key": "mean over days of column 'n_outside'",
+   "kind": "derived"
+  },
+  "benchmark_check.share_of_edge_gap_closed_by_linear_wings": {
+   "value": 0.77978317999534,
+   "unit": "share",
+   "source": "results/benchmark_check/summary.csv",
+   "key": "mean_difference of (linear-wing minus edge-value benchmark) / mean_difference of (jump + misfit minus edge-value benchmark), all quotes",
+   "kind": "derived"
+  },
+  "variants.dhj_main.smile.dev_mean": {
+   "value": 1.8755299084887969,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'dev_mean' where run == 'dhj_main', variant == 'smile'",
+   "kind": "read"
+  },
+  "variants.dhj_main.smile.test_mean": {
+   "value": 1.4675386341433436,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'test_mean' where run == 'dhj_main', variant == 'smile'",
+   "kind": "read"
+  },
+  "variants.dhj_main.smile.test_mean_ci_lo": {
+   "value": 1.3345505912423232,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'test_mean_ci_lo' where run == 'dhj_main', variant == 'smile'",
+   "kind": "read"
+  },
+  "variants.dhj_main.smile.test_mean_ci_hi": {
+   "value": 1.6138583690603612,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'test_mean_ci_hi' where run == 'dhj_main', variant == 'smile'",
+   "kind": "read"
+  },
+  "variants.dhj_main.smile.diff_vs_time_scaled_smile": {
+   "value": 0.2318947561046382,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_vs_time_scaled_smile' where run == 'dhj_main', variant == 'smile'",
+   "kind": "read"
+  },
+  "variants.dhj_main.smile.diff_scaled_ci_lo": {
+   "value": 0.2102070633724521,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_scaled_ci_lo' where run == 'dhj_main', variant == 'smile'",
+   "kind": "read"
+  },
+  "variants.dhj_main.smile.diff_scaled_ci_hi": {
+   "value": 0.2549134089106665,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_scaled_ci_hi' where run == 'dhj_main', variant == 'smile'",
+   "kind": "read"
+  },
+  "variants.dhj_main.carry.dev_mean": {
+   "value": 1.7338063322135315,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'dev_mean' where run == 'dhj_main', variant == 'carry'",
+   "kind": "read"
+  },
+  "variants.dhj_main.carry.test_mean": {
+   "value": 1.200892373055679,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'test_mean' where run == 'dhj_main', variant == 'carry'",
+   "kind": "read"
+  },
+  "variants.dhj_main.carry.test_mean_ci_lo": {
+   "value": 1.0525269495894665,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'test_mean_ci_lo' where run == 'dhj_main', variant == 'carry'",
+   "kind": "read"
+  },
+  "variants.dhj_main.carry.test_mean_ci_hi": {
+   "value": 1.3723483894366788,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'test_mean_ci_hi' where run == 'dhj_main', variant == 'carry'",
+   "kind": "read"
+  },
+  "variants.dhj_main.carry.diff_vs_time_scaled_smile": {
+   "value": -0.0347515049830263,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_vs_time_scaled_smile' where run == 'dhj_main', variant == 'carry'",
+   "kind": "read"
+  },
+  "variants.dhj_main.carry.diff_scaled_ci_lo": {
+   "value": -0.0947838671576952,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_scaled_ci_lo' where run == 'dhj_main', variant == 'carry'",
+   "kind": "read"
+  },
+  "variants.dhj_main.carry.diff_scaled_ci_hi": {
+   "value": 0.0282713465485928,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_scaled_ci_hi' where run == 'dhj_main', variant == 'carry'",
+   "kind": "read"
+  },
+  "variants.dhj_main.revert.dev_mean": {
+   "value": 1.7379427658445468,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'dev_mean' where run == 'dhj_main', variant == 'revert'",
+   "kind": "read"
+  },
+  "variants.dhj_main.revert.test_mean": {
+   "value": 1.1986369712151277,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'test_mean' where run == 'dhj_main', variant == 'revert'",
+   "kind": "read"
+  },
+  "variants.dhj_main.revert.test_mean_ci_lo": {
+   "value": 1.048817594473493,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'test_mean_ci_lo' where run == 'dhj_main', variant == 'revert'",
+   "kind": "read"
+  },
+  "variants.dhj_main.revert.test_mean_ci_hi": {
+   "value": 1.3742243637385383,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'test_mean_ci_hi' where run == 'dhj_main', variant == 'revert'",
+   "kind": "read"
+  },
+  "variants.dhj_main.revert.diff_vs_time_scaled_smile": {
+   "value": -0.0370069068235779,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_vs_time_scaled_smile' where run == 'dhj_main', variant == 'revert'",
+   "kind": "read"
+  },
+  "variants.dhj_main.revert.diff_scaled_ci_lo": {
+   "value": -0.0980123102678477,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_scaled_ci_lo' where run == 'dhj_main', variant == 'revert'",
+   "kind": "read"
+  },
+  "variants.dhj_main.revert.diff_scaled_ci_hi": {
+   "value": 0.0274207436320048,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_scaled_ci_hi' where run == 'dhj_main', variant == 'revert'",
+   "kind": "read"
+  },
+  "variants.dhj_main.revert.baseline": {
+   "value": "carry",
+   "unit": "name",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'baseline' where run == 'dhj_main', variant == 'revert'",
+   "kind": "read"
+  },
+  "variants.dhj_main.revert.dev_diff_vs_baseline": {
+   "value": 0.0041364336310148,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'dev_diff_vs_baseline' where run == 'dhj_main', variant == 'revert'",
+   "kind": "read"
+  },
+  "variants.dhj_main.revert.diff_vs_baseline": {
+   "value": -0.0022554018405515,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_vs_baseline' where run == 'dhj_main', variant == 'revert'",
+   "kind": "read"
+  },
+  "variants.dhj_main.revert.diff_baseline_ci_lo": {
+   "value": -0.0056188318574397,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_baseline_ci_lo' where run == 'dhj_main', variant == 'revert'",
+   "kind": "read"
+  },
+  "variants.dhj_main.revert.diff_baseline_ci_hi": {
+   "value": 0.0013321543739683,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_baseline_ci_hi' where run == 'dhj_main', variant == 'revert'",
+   "kind": "read"
+  },
+  "variants.dhj_main.revert.share_test_days_better_than_baseline": {
+   "value": 0.514919011082694,
+   "unit": "share",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'share_test_days_better_than_baseline' where run == 'dhj_main', variant == 'revert'",
+   "kind": "read"
+  },
+  "variants.dhj_main.lev.dev_mean": {
+   "value": 1.8032717771696032,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'dev_mean' where run == 'dhj_main', variant == 'lev'",
+   "kind": "read"
+  },
+  "variants.dhj_main.lev.test_mean": {
+   "value": 1.2910314521485569,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'test_mean' where run == 'dhj_main', variant == 'lev'",
+   "kind": "read"
+  },
+  "variants.dhj_main.lev.test_mean_ci_lo": {
+   "value": 1.1541654471395777,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'test_mean_ci_lo' where run == 'dhj_main', variant == 'lev'",
+   "kind": "read"
+  },
+  "variants.dhj_main.lev.test_mean_ci_hi": {
+   "value": 1.444665907444134,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'test_mean_ci_hi' where run == 'dhj_main', variant == 'lev'",
+   "kind": "read"
+  },
+  "variants.dhj_main.lev.diff_vs_time_scaled_smile": {
+   "value": 0.0553875741098513,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_vs_time_scaled_smile' where run == 'dhj_main', variant == 'lev'",
+   "kind": "read"
+  },
+  "variants.dhj_main.lev.diff_scaled_ci_lo": {
+   "value": -0.0177290694179513,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_scaled_ci_lo' where run == 'dhj_main', variant == 'lev'",
+   "kind": "read"
+  },
+  "variants.dhj_main.lev.diff_scaled_ci_hi": {
+   "value": 0.1330268205145903,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_scaled_ci_hi' where run == 'dhj_main', variant == 'lev'",
+   "kind": "read"
+  },
+  "variants.dhj_main.lev.baseline": {
+   "value": "carry",
+   "unit": "name",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'baseline' where run == 'dhj_main', variant == 'lev'",
+   "kind": "read"
+  },
+  "variants.dhj_main.lev.dev_diff_vs_baseline": {
+   "value": 0.0694654449560714,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'dev_diff_vs_baseline' where run == 'dhj_main', variant == 'lev'",
+   "kind": "read"
+  },
+  "variants.dhj_main.lev.diff_vs_baseline": {
+   "value": 0.0901390790928776,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_vs_baseline' where run == 'dhj_main', variant == 'lev'",
+   "kind": "read"
+  },
+  "variants.dhj_main.lev.diff_baseline_ci_lo": {
+   "value": 0.0365195696236683,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_baseline_ci_lo' where run == 'dhj_main', variant == 'lev'",
+   "kind": "read"
+  },
+  "variants.dhj_main.lev.diff_baseline_ci_hi": {
+   "value": 0.1453762381291656,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_baseline_ci_hi' where run == 'dhj_main', variant == 'lev'",
+   "kind": "read"
+  },
+  "variants.dhj_main.lev.share_test_days_better_than_baseline": {
+   "value": 0.3972719522591645,
+   "unit": "share",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'share_test_days_better_than_baseline' where run == 'dhj_main', variant == 'lev'",
+   "kind": "read"
+  },
+  "variants.dhj_main.carry_res.dev_mean": {
+   "value": 1.316713129774958,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'dev_mean' where run == 'dhj_main', variant == 'carry_res'",
+   "kind": "read"
+  },
+  "variants.dhj_main.carry_res.test_mean": {
+   "value": 1.0335600493825905,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'test_mean' where run == 'dhj_main', variant == 'carry_res'",
+   "kind": "read"
+  },
+  "variants.dhj_main.carry_res.test_mean_ci_lo": {
+   "value": 0.91491138257982,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'test_mean_ci_lo' where run == 'dhj_main', variant == 'carry_res'",
+   "kind": "read"
+  },
+  "variants.dhj_main.carry_res.test_mean_ci_hi": {
+   "value": 1.170875124574153,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'test_mean_ci_hi' where run == 'dhj_main', variant == 'carry_res'",
+   "kind": "read"
+  },
+  "variants.dhj_main.carry_res.diff_vs_time_scaled_smile": {
+   "value": -0.2020838286561153,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_vs_time_scaled_smile' where run == 'dhj_main', variant == 'carry_res'",
+   "kind": "read"
+  },
+  "variants.dhj_main.carry_res.diff_scaled_ci_lo": {
+   "value": -0.2269635051517078,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_scaled_ci_lo' where run == 'dhj_main', variant == 'carry_res'",
+   "kind": "read"
+  },
+  "variants.dhj_main.carry_res.diff_scaled_ci_hi": {
+   "value": -0.1813831228607042,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_scaled_ci_hi' where run == 'dhj_main', variant == 'carry_res'",
+   "kind": "read"
+  },
+  "variants.dhj_main.carry_res.baseline": {
+   "value": "carry",
+   "unit": "name",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'baseline' where run == 'dhj_main', variant == 'carry_res'",
+   "kind": "read"
+  },
+  "variants.dhj_main.carry_res.dev_diff_vs_baseline": {
+   "value": -0.4170932024385738,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'dev_diff_vs_baseline' where run == 'dhj_main', variant == 'carry_res'",
+   "kind": "read"
+  },
+  "variants.dhj_main.carry_res.diff_vs_baseline": {
+   "value": -0.1673323236730889,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_vs_baseline' where run == 'dhj_main', variant == 'carry_res'",
+   "kind": "read"
+  },
+  "variants.dhj_main.carry_res.diff_baseline_ci_lo": {
+   "value": -0.2259073875873515,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_baseline_ci_lo' where run == 'dhj_main', variant == 'carry_res'",
+   "kind": "read"
+  },
+  "variants.dhj_main.carry_res.diff_baseline_ci_hi": {
+   "value": -0.1173397140092572,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_baseline_ci_hi' where run == 'dhj_main', variant == 'carry_res'",
+   "kind": "read"
+  },
+  "variants.dhj_main.carry_res.share_test_days_better_than_baseline": {
+   "value": 0.7271952259164536,
+   "unit": "share",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'share_test_days_better_than_baseline' where run == 'dhj_main', variant == 'carry_res'",
+   "kind": "read"
+  },
+  "variants.dhj_main.lev_res.dev_mean": {
+   "value": 1.381973920408259,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'dev_mean' where run == 'dhj_main', variant == 'lev_res'",
+   "kind": "read"
+  },
+  "variants.dhj_main.lev_res.test_mean": {
+   "value": 1.1355261960280731,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'test_mean' where run == 'dhj_main', variant == 'lev_res'",
+   "kind": "read"
+  },
+  "variants.dhj_main.lev_res.test_mean_ci_lo": {
+   "value": 1.0282368400826951,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'test_mean_ci_lo' where run == 'dhj_main', variant == 'lev_res'",
+   "kind": "read"
+  },
+  "variants.dhj_main.lev_res.test_mean_ci_hi": {
+   "value": 1.2479431467310556,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'test_mean_ci_hi' where run == 'dhj_main', variant == 'lev_res'",
+   "kind": "read"
+  },
+  "variants.dhj_main.lev_res.diff_vs_time_scaled_smile": {
+   "value": -0.1001176820106324,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_vs_time_scaled_smile' where run == 'dhj_main', variant == 'lev_res'",
+   "kind": "read"
+  },
+  "variants.dhj_main.lev_res.diff_scaled_ci_lo": {
+   "value": -0.1617027147240224,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_scaled_ci_lo' where run == 'dhj_main', variant == 'lev_res'",
+   "kind": "read"
+  },
+  "variants.dhj_main.lev_res.diff_scaled_ci_hi": {
+   "value": -0.0399902700491875,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_scaled_ci_hi' where run == 'dhj_main', variant == 'lev_res'",
+   "kind": "read"
+  },
+  "variants.dhj_main.lev_res.baseline": {
+   "value": "carry_res",
+   "unit": "name",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'baseline' where run == 'dhj_main', variant == 'lev_res'",
+   "kind": "read"
+  },
+  "variants.dhj_main.lev_res.dev_diff_vs_baseline": {
+   "value": 0.0652607906333013,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'dev_diff_vs_baseline' where run == 'dhj_main', variant == 'lev_res'",
+   "kind": "read"
+  },
+  "variants.dhj_main.lev_res.diff_vs_baseline": {
+   "value": 0.1019661466454829,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_vs_baseline' where run == 'dhj_main', variant == 'lev_res'",
+   "kind": "read"
+  },
+  "variants.dhj_main.lev_res.diff_baseline_ci_lo": {
+   "value": 0.0425782657456015,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_baseline_ci_lo' where run == 'dhj_main', variant == 'lev_res'",
+   "kind": "read"
+  },
+  "variants.dhj_main.lev_res.diff_baseline_ci_hi": {
+   "value": 0.1582306603374255,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_baseline_ci_hi' where run == 'dhj_main', variant == 'lev_res'",
+   "kind": "read"
+  },
+  "variants.dhj_main.lev_res.share_test_days_better_than_baseline": {
+   "value": 0.3904518329070758,
+   "unit": "share",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'share_test_days_better_than_baseline' where run == 'dhj_main', variant == 'lev_res'",
+   "kind": "read"
+  },
+  "variants.dhj_main.smile_lev.dev_mean": {
+   "value": 1.927744270665525,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'dev_mean' where run == 'dhj_main', variant == 'smile_lev'",
+   "kind": "read"
+  },
+  "variants.dhj_main.smile_lev.test_mean": {
+   "value": 1.551568426861634,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'test_mean' where run == 'dhj_main', variant == 'smile_lev'",
+   "kind": "read"
+  },
+  "variants.dhj_main.smile_lev.test_mean_ci_lo": {
+   "value": 1.4301090867421764,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'test_mean_ci_lo' where run == 'dhj_main', variant == 'smile_lev'",
+   "kind": "read"
+  },
+  "variants.dhj_main.smile_lev.test_mean_ci_hi": {
+   "value": 1.6793477044462215,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'test_mean_ci_hi' where run == 'dhj_main', variant == 'smile_lev'",
+   "kind": "read"
+  },
+  "variants.dhj_main.smile_lev.diff_vs_time_scaled_smile": {
+   "value": 0.3159245488229286,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_vs_time_scaled_smile' where run == 'dhj_main', variant == 'smile_lev'",
+   "kind": "read"
+  },
+  "variants.dhj_main.smile_lev.diff_scaled_ci_lo": {
+   "value": 0.2583255973673282,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_scaled_ci_lo' where run == 'dhj_main', variant == 'smile_lev'",
+   "kind": "read"
+  },
+  "variants.dhj_main.smile_lev.diff_scaled_ci_hi": {
+   "value": 0.3709813824680197,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_scaled_ci_hi' where run == 'dhj_main', variant == 'smile_lev'",
+   "kind": "read"
+  },
+  "variants.dhj_main.smile_lev.baseline": {
+   "value": "smile",
+   "unit": "name",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'baseline' where run == 'dhj_main', variant == 'smile_lev'",
+   "kind": "read"
+  },
+  "variants.dhj_main.smile_lev.dev_diff_vs_baseline": {
+   "value": 0.052214362176728,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'dev_diff_vs_baseline' where run == 'dhj_main', variant == 'smile_lev'",
+   "kind": "read"
+  },
+  "variants.dhj_main.smile_lev.diff_vs_baseline": {
+   "value": 0.0840297927182904,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_vs_baseline' where run == 'dhj_main', variant == 'smile_lev'",
+   "kind": "read"
+  },
+  "variants.dhj_main.smile_lev.diff_baseline_ci_lo": {
+   "value": 0.0318449518459264,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_baseline_ci_lo' where run == 'dhj_main', variant == 'smile_lev'",
+   "kind": "read"
+  },
+  "variants.dhj_main.smile_lev.diff_baseline_ci_hi": {
+   "value": 0.1319989707235742,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_baseline_ci_hi' where run == 'dhj_main', variant == 'smile_lev'",
+   "kind": "read"
+  },
+  "variants.dhj_main.smile_lev.share_test_days_better_than_baseline": {
+   "value": 0.3827791986359761,
+   "unit": "share",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'share_test_days_better_than_baseline' where run == 'dhj_main', variant == 'smile_lev'",
+   "kind": "read"
+  },
+  "variants.dh_main.smile.dev_mean": {
+   "value": 1.8755299084887969,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'dev_mean' where run == 'dh_main', variant == 'smile'",
+   "kind": "read"
+  },
+  "variants.dh_main.smile.test_mean": {
+   "value": 1.4675386341433436,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'test_mean' where run == 'dh_main', variant == 'smile'",
+   "kind": "read"
+  },
+  "variants.dh_main.smile.test_mean_ci_lo": {
+   "value": 1.3345505912423232,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'test_mean_ci_lo' where run == 'dh_main', variant == 'smile'",
+   "kind": "read"
+  },
+  "variants.dh_main.smile.test_mean_ci_hi": {
+   "value": 1.6138583690603612,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'test_mean_ci_hi' where run == 'dh_main', variant == 'smile'",
+   "kind": "read"
+  },
+  "variants.dh_main.smile.diff_vs_time_scaled_smile": {
+   "value": 0.2318947561046382,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_vs_time_scaled_smile' where run == 'dh_main', variant == 'smile'",
+   "kind": "read"
+  },
+  "variants.dh_main.smile.diff_scaled_ci_lo": {
+   "value": 0.2102070633724521,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_scaled_ci_lo' where run == 'dh_main', variant == 'smile'",
+   "kind": "read"
+  },
+  "variants.dh_main.smile.diff_scaled_ci_hi": {
+   "value": 0.2549134089106665,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_scaled_ci_hi' where run == 'dh_main', variant == 'smile'",
+   "kind": "read"
+  },
+  "variants.dh_main.carry.dev_mean": {
+   "value": 3.4086641873354098,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'dev_mean' where run == 'dh_main', variant == 'carry'",
+   "kind": "read"
+  },
+  "variants.dh_main.carry.test_mean": {
+   "value": 2.7924855238908073,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'test_mean' where run == 'dh_main', variant == 'carry'",
+   "kind": "read"
+  },
+  "variants.dh_main.carry.test_mean_ci_lo": {
+   "value": 2.573802894989074,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'test_mean_ci_lo' where run == 'dh_main', variant == 'carry'",
+   "kind": "read"
+  },
+  "variants.dh_main.carry.test_mean_ci_hi": {
+   "value": 3.017622771235046,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'test_mean_ci_hi' where run == 'dh_main', variant == 'carry'",
+   "kind": "read"
+  },
+  "variants.dh_main.carry.diff_vs_time_scaled_smile": {
+   "value": 1.5568416458521015,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_vs_time_scaled_smile' where run == 'dh_main', variant == 'carry'",
+   "kind": "read"
+  },
+  "variants.dh_main.carry.diff_scaled_ci_lo": {
+   "value": 1.4194209133487312,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_scaled_ci_lo' where run == 'dh_main', variant == 'carry'",
+   "kind": "read"
+  },
+  "variants.dh_main.carry.diff_scaled_ci_hi": {
+   "value": 1.693704274013897,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_scaled_ci_hi' where run == 'dh_main', variant == 'carry'",
+   "kind": "read"
+  },
+  "variants.dh_main.revert.dev_mean": {
+   "value": 3.4020662562761146,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'dev_mean' where run == 'dh_main', variant == 'revert'",
+   "kind": "read"
+  },
+  "variants.dh_main.revert.test_mean": {
+   "value": 2.786322262990452,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'test_mean' where run == 'dh_main', variant == 'revert'",
+   "kind": "read"
+  },
+  "variants.dh_main.revert.test_mean_ci_lo": {
+   "value": 2.565480924809094,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'test_mean_ci_lo' where run == 'dh_main', variant == 'revert'",
+   "kind": "read"
+  },
+  "variants.dh_main.revert.test_mean_ci_hi": {
+   "value": 3.015338709856544,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'test_mean_ci_hi' where run == 'dh_main', variant == 'revert'",
+   "kind": "read"
+  },
+  "variants.dh_main.revert.diff_vs_time_scaled_smile": {
+   "value": 1.5506783849517467,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_vs_time_scaled_smile' where run == 'dh_main', variant == 'revert'",
+   "kind": "read"
+  },
+  "variants.dh_main.revert.diff_scaled_ci_lo": {
+   "value": 1.4154863010840162,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_scaled_ci_lo' where run == 'dh_main', variant == 'revert'",
+   "kind": "read"
+  },
+  "variants.dh_main.revert.diff_scaled_ci_hi": {
+   "value": 1.6874033029487765,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_scaled_ci_hi' where run == 'dh_main', variant == 'revert'",
+   "kind": "read"
+  },
+  "variants.dh_main.revert.baseline": {
+   "value": "carry",
+   "unit": "name",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'baseline' where run == 'dh_main', variant == 'revert'",
+   "kind": "read"
+  },
+  "variants.dh_main.revert.dev_diff_vs_baseline": {
+   "value": -0.0065979310592949,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'dev_diff_vs_baseline' where run == 'dh_main', variant == 'revert'",
+   "kind": "read"
+  },
+  "variants.dh_main.revert.diff_vs_baseline": {
+   "value": -0.0061632609003549,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_vs_baseline' where run == 'dh_main', variant == 'revert'",
+   "kind": "read"
+  },
+  "variants.dh_main.revert.diff_baseline_ci_lo": {
+   "value": -0.0111018918723628,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_baseline_ci_lo' where run == 'dh_main', variant == 'revert'",
+   "kind": "read"
+  },
+  "variants.dh_main.revert.diff_baseline_ci_hi": {
+   "value": -0.0012607122849535,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_baseline_ci_hi' where run == 'dh_main', variant == 'revert'",
+   "kind": "read"
+  },
+  "variants.dh_main.revert.share_test_days_better_than_baseline": {
+   "value": 0.6197783461210571,
+   "unit": "share",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'share_test_days_better_than_baseline' where run == 'dh_main', variant == 'revert'",
+   "kind": "read"
+  },
+  "variants.dh_main.lev.dev_mean": {
+   "value": 3.6597001562766094,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'dev_mean' where run == 'dh_main', variant == 'lev'",
+   "kind": "read"
+  },
+  "variants.dh_main.lev.test_mean": {
+   "value": 2.9653249211461055,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'test_mean' where run == 'dh_main', variant == 'lev'",
+   "kind": "read"
+  },
+  "variants.dh_main.lev.test_mean_ci_lo": {
+   "value": 2.763390256824559,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'test_mean_ci_lo' where run == 'dh_main', variant == 'lev'",
+   "kind": "read"
+  },
+  "variants.dh_main.lev.test_mean_ci_hi": {
+   "value": 3.172595517710009,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'test_mean_ci_hi' where run == 'dh_main', variant == 'lev'",
+   "kind": "read"
+  },
+  "variants.dh_main.lev.diff_vs_time_scaled_smile": {
+   "value": 1.7296810431074,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_vs_time_scaled_smile' where run == 'dh_main', variant == 'lev'",
+   "kind": "read"
+  },
+  "variants.dh_main.lev.diff_scaled_ci_lo": {
+   "value": 1.588178834188444,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_scaled_ci_lo' where run == 'dh_main', variant == 'lev'",
+   "kind": "read"
+  },
+  "variants.dh_main.lev.diff_scaled_ci_hi": {
+   "value": 1.8802989716220184,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_scaled_ci_hi' where run == 'dh_main', variant == 'lev'",
+   "kind": "read"
+  },
+  "variants.dh_main.lev.baseline": {
+   "value": "carry",
+   "unit": "name",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'baseline' where run == 'dh_main', variant == 'lev'",
+   "kind": "read"
+  },
+  "variants.dh_main.lev.dev_diff_vs_baseline": {
+   "value": 0.2510359689411997,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'dev_diff_vs_baseline' where run == 'dh_main', variant == 'lev'",
+   "kind": "read"
+  },
+  "variants.dh_main.lev.diff_vs_baseline": {
+   "value": 0.1728393972552983,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_vs_baseline' where run == 'dh_main', variant == 'lev'",
+   "kind": "read"
+  },
+  "variants.dh_main.lev.diff_baseline_ci_lo": {
+   "value": 0.1144281191135174,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_baseline_ci_lo' where run == 'dh_main', variant == 'lev'",
+   "kind": "read"
+  },
+  "variants.dh_main.lev.diff_baseline_ci_hi": {
+   "value": 0.2338572155024063,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_baseline_ci_hi' where run == 'dh_main', variant == 'lev'",
+   "kind": "read"
+  },
+  "variants.dh_main.lev.share_test_days_better_than_baseline": {
+   "value": 0.392156862745098,
+   "unit": "share",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'share_test_days_better_than_baseline' where run == 'dh_main', variant == 'lev'",
+   "kind": "read"
+  },
+  "variants.dh_main.carry_res.dev_mean": {
+   "value": 1.7363327267304751,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'dev_mean' where run == 'dh_main', variant == 'carry_res'",
+   "kind": "read"
+  },
+  "variants.dh_main.carry_res.test_mean": {
+   "value": 1.376551166161104,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'test_mean' where run == 'dh_main', variant == 'carry_res'",
+   "kind": "read"
+  },
+  "variants.dh_main.carry_res.test_mean_ci_lo": {
+   "value": 1.244507455255429,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'test_mean_ci_lo' where run == 'dh_main', variant == 'carry_res'",
+   "kind": "read"
+  },
+  "variants.dh_main.carry_res.test_mean_ci_hi": {
+   "value": 1.524481051693274,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'test_mean_ci_hi' where run == 'dh_main', variant == 'carry_res'",
+   "kind": "read"
+  },
+  "variants.dh_main.carry_res.diff_vs_time_scaled_smile": {
+   "value": 0.1409072881223985,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_vs_time_scaled_smile' where run == 'dh_main', variant == 'carry_res'",
+   "kind": "read"
+  },
+  "variants.dh_main.carry_res.diff_scaled_ci_lo": {
+   "value": 0.1189847772520678,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_scaled_ci_lo' where run == 'dh_main', variant == 'carry_res'",
+   "kind": "read"
+  },
+  "variants.dh_main.carry_res.diff_scaled_ci_hi": {
+   "value": 0.1637489529579074,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_scaled_ci_hi' where run == 'dh_main', variant == 'carry_res'",
+   "kind": "read"
+  },
+  "variants.dh_main.carry_res.baseline": {
+   "value": "carry",
+   "unit": "name",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'baseline' where run == 'dh_main', variant == 'carry_res'",
+   "kind": "read"
+  },
+  "variants.dh_main.carry_res.dev_diff_vs_baseline": {
+   "value": -1.6723314606049342,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'dev_diff_vs_baseline' where run == 'dh_main', variant == 'carry_res'",
+   "kind": "read"
+  },
+  "variants.dh_main.carry_res.diff_vs_baseline": {
+   "value": -1.4159343577297032,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_vs_baseline' where run == 'dh_main', variant == 'carry_res'",
+   "kind": "read"
+  },
+  "variants.dh_main.carry_res.diff_baseline_ci_lo": {
+   "value": -1.5339951405402374,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_baseline_ci_lo' where run == 'dh_main', variant == 'carry_res'",
+   "kind": "read"
+  },
+  "variants.dh_main.carry_res.diff_baseline_ci_hi": {
+   "value": -1.2984186106182545,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_baseline_ci_hi' where run == 'dh_main', variant == 'carry_res'",
+   "kind": "read"
+  },
+  "variants.dh_main.carry_res.share_test_days_better_than_baseline": {
+   "value": 0.989769820971867,
+   "unit": "share",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'share_test_days_better_than_baseline' where run == 'dh_main', variant == 'carry_res'",
+   "kind": "read"
+  },
+  "variants.dh_main.lev_res.dev_mean": {
+   "value": 2.0863902714387415,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'dev_mean' where run == 'dh_main', variant == 'lev_res'",
+   "kind": "read"
+  },
+  "variants.dh_main.lev_res.test_mean": {
+   "value": 1.678547728169837,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'test_mean' where run == 'dh_main', variant == 'lev_res'",
+   "kind": "read"
+  },
+  "variants.dh_main.lev_res.test_mean_ci_lo": {
+   "value": 1.5712646845423075,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'test_mean_ci_lo' where run == 'dh_main', variant == 'lev_res'",
+   "kind": "read"
+  },
+  "variants.dh_main.lev_res.test_mean_ci_hi": {
+   "value": 1.792321962209198,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'test_mean_ci_hi' where run == 'dh_main', variant == 'lev_res'",
+   "kind": "read"
+  },
+  "variants.dh_main.lev_res.diff_vs_time_scaled_smile": {
+   "value": 0.4429038501311319,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_vs_time_scaled_smile' where run == 'dh_main', variant == 'lev_res'",
+   "kind": "read"
+  },
+  "variants.dh_main.lev_res.diff_scaled_ci_lo": {
+   "value": 0.3594490461855224,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_scaled_ci_lo' where run == 'dh_main', variant == 'lev_res'",
+   "kind": "read"
+  },
+  "variants.dh_main.lev_res.diff_scaled_ci_hi": {
+   "value": 0.52745420629529,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_scaled_ci_hi' where run == 'dh_main', variant == 'lev_res'",
+   "kind": "read"
+  },
+  "variants.dh_main.lev_res.baseline": {
+   "value": "carry_res",
+   "unit": "name",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'baseline' where run == 'dh_main', variant == 'lev_res'",
+   "kind": "read"
+  },
+  "variants.dh_main.lev_res.dev_diff_vs_baseline": {
+   "value": 0.3500575447082663,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'dev_diff_vs_baseline' where run == 'dh_main', variant == 'lev_res'",
+   "kind": "read"
+  },
+  "variants.dh_main.lev_res.diff_vs_baseline": {
+   "value": 0.3019965620087335,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_vs_baseline' where run == 'dh_main', variant == 'lev_res'",
+   "kind": "read"
+  },
+  "variants.dh_main.lev_res.diff_baseline_ci_lo": {
+   "value": 0.2242695845906498,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_baseline_ci_lo' where run == 'dh_main', variant == 'lev_res'",
+   "kind": "read"
+  },
+  "variants.dh_main.lev_res.diff_baseline_ci_hi": {
+   "value": 0.3803800598500214,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_baseline_ci_hi' where run == 'dh_main', variant == 'lev_res'",
+   "kind": "read"
+  },
+  "variants.dh_main.lev_res.share_test_days_better_than_baseline": {
+   "value": 0.2975277067348678,
+   "unit": "share",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'share_test_days_better_than_baseline' where run == 'dh_main', variant == 'lev_res'",
+   "kind": "read"
+  },
+  "variants.dh_main.smile_lev.dev_mean": {
+   "value": 2.216062749088883,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'dev_mean' where run == 'dh_main', variant == 'smile_lev'",
+   "kind": "read"
+  },
+  "variants.dh_main.smile_lev.test_mean": {
+   "value": 1.7579595921285924,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'test_mean' where run == 'dh_main', variant == 'smile_lev'",
+   "kind": "read"
+  },
+  "variants.dh_main.smile_lev.test_mean_ci_lo": {
+   "value": 1.6495176770778988,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'test_mean_ci_lo' where run == 'dh_main', variant == 'smile_lev'",
+   "kind": "read"
+  },
+  "variants.dh_main.smile_lev.test_mean_ci_hi": {
+   "value": 1.8745555829963505,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'test_mean_ci_hi' where run == 'dh_main', variant == 'smile_lev'",
+   "kind": "read"
+  },
+  "variants.dh_main.smile_lev.diff_vs_time_scaled_smile": {
+   "value": 0.5223157140898869,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_vs_time_scaled_smile' where run == 'dh_main', variant == 'smile_lev'",
+   "kind": "read"
+  },
+  "variants.dh_main.smile_lev.diff_scaled_ci_lo": {
+   "value": 0.4381754925877536,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_scaled_ci_lo' where run == 'dh_main', variant == 'smile_lev'",
+   "kind": "read"
+  },
+  "variants.dh_main.smile_lev.diff_scaled_ci_hi": {
+   "value": 0.6072221387558011,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_scaled_ci_hi' where run == 'dh_main', variant == 'smile_lev'",
+   "kind": "read"
+  },
+  "variants.dh_main.smile_lev.baseline": {
+   "value": "smile",
+   "unit": "name",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'baseline' where run == 'dh_main', variant == 'smile_lev'",
+   "kind": "read"
+  },
+  "variants.dh_main.smile_lev.dev_diff_vs_baseline": {
+   "value": 0.3405328406000859,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'dev_diff_vs_baseline' where run == 'dh_main', variant == 'smile_lev'",
+   "kind": "read"
+  },
+  "variants.dh_main.smile_lev.diff_vs_baseline": {
+   "value": 0.2904209579852487,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_vs_baseline' where run == 'dh_main', variant == 'smile_lev'",
+   "kind": "read"
+  },
+  "variants.dh_main.smile_lev.diff_baseline_ci_lo": {
+   "value": 0.21402805649904,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_baseline_ci_lo' where run == 'dh_main', variant == 'smile_lev'",
+   "kind": "read"
+  },
+  "variants.dh_main.smile_lev.diff_baseline_ci_hi": {
+   "value": 0.3680545573041179,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_baseline_ci_hi' where run == 'dh_main', variant == 'smile_lev'",
+   "kind": "read"
+  },
+  "variants.dh_main.smile_lev.share_test_days_better_than_baseline": {
+   "value": 0.3137254901960784,
+   "unit": "share",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'share_test_days_better_than_baseline' where run == 'dh_main', variant == 'smile_lev'",
+   "kind": "read"
+  },
+  "variants.heston_main.smile.dev_mean": {
+   "value": 1.8755299084887969,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'dev_mean' where run == 'heston_main', variant == 'smile'",
+   "kind": "read"
+  },
+  "variants.heston_main.smile.test_mean": {
+   "value": 1.4675386341433436,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'test_mean' where run == 'heston_main', variant == 'smile'",
+   "kind": "read"
+  },
+  "variants.heston_main.smile.test_mean_ci_lo": {
+   "value": 1.3345505912423232,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'test_mean_ci_lo' where run == 'heston_main', variant == 'smile'",
+   "kind": "read"
+  },
+  "variants.heston_main.smile.test_mean_ci_hi": {
+   "value": 1.6138583690603612,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'test_mean_ci_hi' where run == 'heston_main', variant == 'smile'",
+   "kind": "read"
+  },
+  "variants.heston_main.smile.diff_vs_time_scaled_smile": {
+   "value": 0.2318947561046382,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_vs_time_scaled_smile' where run == 'heston_main', variant == 'smile'",
+   "kind": "read"
+  },
+  "variants.heston_main.smile.diff_scaled_ci_lo": {
+   "value": 0.2102070633724521,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_scaled_ci_lo' where run == 'heston_main', variant == 'smile'",
+   "kind": "read"
+  },
+  "variants.heston_main.smile.diff_scaled_ci_hi": {
+   "value": 0.2549134089106665,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_scaled_ci_hi' where run == 'heston_main', variant == 'smile'",
+   "kind": "read"
+  },
+  "variants.heston_main.carry.dev_mean": {
+   "value": 4.028002892334536,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'dev_mean' where run == 'heston_main', variant == 'carry'",
+   "kind": "read"
+  },
+  "variants.heston_main.carry.test_mean": {
+   "value": 3.531548085974774,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'test_mean' where run == 'heston_main', variant == 'carry'",
+   "kind": "read"
+  },
+  "variants.heston_main.carry.test_mean_ci_lo": {
+   "value": 3.306298830149313,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'test_mean_ci_lo' where run == 'heston_main', variant == 'carry'",
+   "kind": "read"
+  },
+  "variants.heston_main.carry.test_mean_ci_hi": {
+   "value": 3.762245691996523,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'test_mean_ci_hi' where run == 'heston_main', variant == 'carry'",
+   "kind": "read"
+  },
+  "variants.heston_main.carry.diff_vs_time_scaled_smile": {
+   "value": 2.295904207936068,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_vs_time_scaled_smile' where run == 'heston_main', variant == 'carry'",
+   "kind": "read"
+  },
+  "variants.heston_main.carry.diff_scaled_ci_lo": {
+   "value": 2.126634673075922,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_scaled_ci_lo' where run == 'heston_main', variant == 'carry'",
+   "kind": "read"
+  },
+  "variants.heston_main.carry.diff_scaled_ci_hi": {
+   "value": 2.4800432877552168,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_scaled_ci_hi' where run == 'heston_main', variant == 'carry'",
+   "kind": "read"
+  },
+  "variants.heston_main.revert.dev_mean": {
+   "value": 4.0129781190854645,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'dev_mean' where run == 'heston_main', variant == 'revert'",
+   "kind": "read"
+  },
+  "variants.heston_main.revert.test_mean": {
+   "value": 3.5150883482917012,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'test_mean' where run == 'heston_main', variant == 'revert'",
+   "kind": "read"
+  },
+  "variants.heston_main.revert.test_mean_ci_lo": {
+   "value": 3.284786466497664,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'test_mean_ci_lo' where run == 'heston_main', variant == 'revert'",
+   "kind": "read"
+  },
+  "variants.heston_main.revert.test_mean_ci_hi": {
+   "value": 3.749608957461975,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'test_mean_ci_hi' where run == 'heston_main', variant == 'revert'",
+   "kind": "read"
+  },
+  "variants.heston_main.revert.diff_vs_time_scaled_smile": {
+   "value": 2.2794444702529955,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_vs_time_scaled_smile' where run == 'heston_main', variant == 'revert'",
+   "kind": "read"
+  },
+  "variants.heston_main.revert.diff_scaled_ci_lo": {
+   "value": 2.111155272618334,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_scaled_ci_lo' where run == 'heston_main', variant == 'revert'",
+   "kind": "read"
+  },
+  "variants.heston_main.revert.diff_scaled_ci_hi": {
+   "value": 2.4632587496757794,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_scaled_ci_hi' where run == 'heston_main', variant == 'revert'",
+   "kind": "read"
+  },
+  "variants.heston_main.revert.baseline": {
+   "value": "carry",
+   "unit": "name",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'baseline' where run == 'heston_main', variant == 'revert'",
+   "kind": "read"
+  },
+  "variants.heston_main.revert.dev_diff_vs_baseline": {
+   "value": -0.0150247732490715,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'dev_diff_vs_baseline' where run == 'heston_main', variant == 'revert'",
+   "kind": "read"
+  },
+  "variants.heston_main.revert.diff_vs_baseline": {
+   "value": -0.0164597376830727,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_vs_baseline' where run == 'heston_main', variant == 'revert'",
+   "kind": "read"
+  },
+  "variants.heston_main.revert.diff_baseline_ci_lo": {
+   "value": -0.0221088364654007,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_baseline_ci_lo' where run == 'heston_main', variant == 'revert'",
+   "kind": "read"
+  },
+  "variants.heston_main.revert.diff_baseline_ci_hi": {
+   "value": -0.0104328309704352,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_baseline_ci_hi' where run == 'heston_main', variant == 'revert'",
+   "kind": "read"
+  },
+  "variants.heston_main.revert.share_test_days_better_than_baseline": {
+   "value": 0.7723785166240409,
+   "unit": "share",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'share_test_days_better_than_baseline' where run == 'heston_main', variant == 'revert'",
+   "kind": "read"
+  },
+  "variants.heston_main.lev.dev_mean": {
+   "value": 4.024249041332153,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'dev_mean' where run == 'heston_main', variant == 'lev'",
+   "kind": "read"
+  },
+  "variants.heston_main.lev.test_mean": {
+   "value": 3.49314906308857,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'test_mean' where run == 'heston_main', variant == 'lev'",
+   "kind": "read"
+  },
+  "variants.heston_main.lev.test_mean_ci_lo": {
+   "value": 3.2725473905250833,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'test_mean_ci_lo' where run == 'heston_main', variant == 'lev'",
+   "kind": "read"
+  },
+  "variants.heston_main.lev.test_mean_ci_hi": {
+   "value": 3.7219366980424944,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'test_mean_ci_hi' where run == 'heston_main', variant == 'lev'",
+   "kind": "read"
+  },
+  "variants.heston_main.lev.diff_vs_time_scaled_smile": {
+   "value": 2.257505185049865,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_vs_time_scaled_smile' where run == 'heston_main', variant == 'lev'",
+   "kind": "read"
+  },
+  "variants.heston_main.lev.diff_scaled_ci_lo": {
+   "value": 2.082188970321024,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_scaled_ci_lo' where run == 'heston_main', variant == 'lev'",
+   "kind": "read"
+  },
+  "variants.heston_main.lev.diff_scaled_ci_hi": {
+   "value": 2.44727369175858,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_scaled_ci_hi' where run == 'heston_main', variant == 'lev'",
+   "kind": "read"
+  },
+  "variants.heston_main.lev.baseline": {
+   "value": "carry",
+   "unit": "name",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'baseline' where run == 'heston_main', variant == 'lev'",
+   "kind": "read"
+  },
+  "variants.heston_main.lev.dev_diff_vs_baseline": {
+   "value": -0.0037538510023828,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'dev_diff_vs_baseline' where run == 'heston_main', variant == 'lev'",
+   "kind": "read"
+  },
+  "variants.heston_main.lev.diff_vs_baseline": {
+   "value": -0.0383990228862032,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_vs_baseline' where run == 'heston_main', variant == 'lev'",
+   "kind": "read"
+  },
+  "variants.heston_main.lev.diff_baseline_ci_lo": {
+   "value": -0.0640919975254613,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_baseline_ci_lo' where run == 'heston_main', variant == 'lev'",
+   "kind": "read"
+  },
+  "variants.heston_main.lev.diff_baseline_ci_hi": {
+   "value": -0.0116987362163446,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_baseline_ci_hi' where run == 'heston_main', variant == 'lev'",
+   "kind": "read"
+  },
+  "variants.heston_main.lev.share_test_days_better_than_baseline": {
+   "value": 0.546462063086104,
+   "unit": "share",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'share_test_days_better_than_baseline' where run == 'heston_main', variant == 'lev'",
+   "kind": "read"
+  },
+  "variants.heston_main.carry_res.dev_mean": {
+   "value": 1.7756793079713888,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'dev_mean' where run == 'heston_main', variant == 'carry_res'",
+   "kind": "read"
+  },
+  "variants.heston_main.carry_res.test_mean": {
+   "value": 1.416312541465759,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'test_mean' where run == 'heston_main', variant == 'carry_res'",
+   "kind": "read"
+  },
+  "variants.heston_main.carry_res.test_mean_ci_lo": {
+   "value": 1.2862392846981512,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'test_mean_ci_lo' where run == 'heston_main', variant == 'carry_res'",
+   "kind": "read"
+  },
+  "variants.heston_main.carry_res.test_mean_ci_hi": {
+   "value": 1.5602955582657607,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'test_mean_ci_hi' where run == 'heston_main', variant == 'carry_res'",
+   "kind": "read"
+  },
+  "variants.heston_main.carry_res.diff_vs_time_scaled_smile": {
+   "value": 0.1806686634270535,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_vs_time_scaled_smile' where run == 'heston_main', variant == 'carry_res'",
+   "kind": "read"
+  },
+  "variants.heston_main.carry_res.diff_scaled_ci_lo": {
+   "value": 0.1597087638899131,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_scaled_ci_lo' where run == 'heston_main', variant == 'carry_res'",
+   "kind": "read"
+  },
+  "variants.heston_main.carry_res.diff_scaled_ci_hi": {
+   "value": 0.2026423918069617,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_scaled_ci_hi' where run == 'heston_main', variant == 'carry_res'",
+   "kind": "read"
+  },
+  "variants.heston_main.carry_res.baseline": {
+   "value": "carry",
+   "unit": "name",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'baseline' where run == 'heston_main', variant == 'carry_res'",
+   "kind": "read"
+  },
+  "variants.heston_main.carry_res.dev_diff_vs_baseline": {
+   "value": -2.252323584363147,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'dev_diff_vs_baseline' where run == 'heston_main', variant == 'carry_res'",
+   "kind": "read"
+  },
+  "variants.heston_main.carry_res.diff_vs_baseline": {
+   "value": -2.1152355445090145,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_vs_baseline' where run == 'heston_main', variant == 'carry_res'",
+   "kind": "read"
+  },
+  "variants.heston_main.carry_res.diff_baseline_ci_lo": {
+   "value": -2.284582653382234,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_baseline_ci_lo' where run == 'heston_main', variant == 'carry_res'",
+   "kind": "read"
+  },
+  "variants.heston_main.carry_res.diff_baseline_ci_hi": {
+   "value": -1.961508544488236,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_baseline_ci_hi' where run == 'heston_main', variant == 'carry_res'",
+   "kind": "read"
+  },
+  "variants.heston_main.carry_res.share_test_days_better_than_baseline": {
+   "value": 0.9931798806479112,
+   "unit": "share",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'share_test_days_better_than_baseline' where run == 'heston_main', variant == 'carry_res'",
+   "kind": "read"
+  },
+  "variants.heston_main.lev_res.dev_mean": {
+   "value": 1.773901779865255,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'dev_mean' where run == 'heston_main', variant == 'lev_res'",
+   "kind": "read"
+  },
+  "variants.heston_main.lev_res.test_mean": {
+   "value": 1.381857013298366,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'test_mean' where run == 'heston_main', variant == 'lev_res'",
+   "kind": "read"
+  },
+  "variants.heston_main.lev_res.test_mean_ci_lo": {
+   "value": 1.2720245738342153,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'test_mean_ci_lo' where run == 'heston_main', variant == 'lev_res'",
+   "kind": "read"
+  },
+  "variants.heston_main.lev_res.test_mean_ci_hi": {
+   "value": 1.504307672513711,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'test_mean_ci_hi' where run == 'heston_main', variant == 'lev_res'",
+   "kind": "read"
+  },
+  "variants.heston_main.lev_res.diff_vs_time_scaled_smile": {
+   "value": 0.1462131352596603,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_vs_time_scaled_smile' where run == 'heston_main', variant == 'lev_res'",
+   "kind": "read"
+  },
+  "variants.heston_main.lev_res.diff_scaled_ci_lo": {
+   "value": 0.1000874482825635,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_scaled_ci_lo' where run == 'heston_main', variant == 'lev_res'",
+   "kind": "read"
+  },
+  "variants.heston_main.lev_res.diff_scaled_ci_hi": {
+   "value": 0.1937886021419188,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_scaled_ci_hi' where run == 'heston_main', variant == 'lev_res'",
+   "kind": "read"
+  },
+  "variants.heston_main.lev_res.baseline": {
+   "value": "carry_res",
+   "unit": "name",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'baseline' where run == 'heston_main', variant == 'lev_res'",
+   "kind": "read"
+  },
+  "variants.heston_main.lev_res.dev_diff_vs_baseline": {
+   "value": -0.0017775281061342,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'dev_diff_vs_baseline' where run == 'heston_main', variant == 'lev_res'",
+   "kind": "read"
+  },
+  "variants.heston_main.lev_res.diff_vs_baseline": {
+   "value": -0.0344555281673931,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_vs_baseline' where run == 'heston_main', variant == 'lev_res'",
+   "kind": "read"
+  },
+  "variants.heston_main.lev_res.diff_baseline_ci_lo": {
+   "value": -0.0717445388846016,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_baseline_ci_lo' where run == 'heston_main', variant == 'lev_res'",
+   "kind": "read"
+  },
+  "variants.heston_main.lev_res.diff_baseline_ci_hi": {
+   "value": 0.0033330868374306,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_baseline_ci_hi' where run == 'heston_main', variant == 'lev_res'",
+   "kind": "read"
+  },
+  "variants.heston_main.lev_res.share_test_days_better_than_baseline": {
+   "value": 0.484228473998295,
+   "unit": "share",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'share_test_days_better_than_baseline' where run == 'heston_main', variant == 'lev_res'",
+   "kind": "read"
+  },
+  "variants.heston_main.smile_lev.dev_mean": {
+   "value": 1.876668113119737,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'dev_mean' where run == 'heston_main', variant == 'smile_lev'",
+   "kind": "read"
+  },
+  "variants.heston_main.smile_lev.test_mean": {
+   "value": 1.4352590679521635,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'test_mean' where run == 'heston_main', variant == 'smile_lev'",
+   "kind": "read"
+  },
+  "variants.heston_main.smile_lev.test_mean_ci_lo": {
+   "value": 1.3227232444532928,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'test_mean_ci_lo' where run == 'heston_main', variant == 'smile_lev'",
+   "kind": "read"
+  },
+  "variants.heston_main.smile_lev.test_mean_ci_hi": {
+   "value": 1.561190857916426,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'test_mean_ci_hi' where run == 'heston_main', variant == 'smile_lev'",
+   "kind": "read"
+  },
+  "variants.heston_main.smile_lev.diff_vs_time_scaled_smile": {
+   "value": 0.1996151899134578,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_vs_time_scaled_smile' where run == 'heston_main', variant == 'smile_lev'",
+   "kind": "read"
+  },
+  "variants.heston_main.smile_lev.diff_scaled_ci_lo": {
+   "value": 0.1542166470777635,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_scaled_ci_lo' where run == 'heston_main', variant == 'smile_lev'",
+   "kind": "read"
+  },
+  "variants.heston_main.smile_lev.diff_scaled_ci_hi": {
+   "value": 0.2464313184139009,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_scaled_ci_hi' where run == 'heston_main', variant == 'smile_lev'",
+   "kind": "read"
+  },
+  "variants.heston_main.smile_lev.baseline": {
+   "value": "smile",
+   "unit": "name",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'baseline' where run == 'heston_main', variant == 'smile_lev'",
+   "kind": "read"
+  },
+  "variants.heston_main.smile_lev.dev_diff_vs_baseline": {
+   "value": 0.0011382046309399,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'dev_diff_vs_baseline' where run == 'heston_main', variant == 'smile_lev'",
+   "kind": "read"
+  },
+  "variants.heston_main.smile_lev.diff_vs_baseline": {
+   "value": -0.0322795661911803,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_vs_baseline' where run == 'heston_main', variant == 'smile_lev'",
+   "kind": "read"
+  },
+  "variants.heston_main.smile_lev.diff_baseline_ci_lo": {
+   "value": -0.0679568460772297,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_baseline_ci_lo' where run == 'heston_main', variant == 'smile_lev'",
+   "kind": "read"
+  },
+  "variants.heston_main.smile_lev.diff_baseline_ci_hi": {
+   "value": 0.0047104848296477,
+   "unit": "vol points",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'diff_baseline_ci_hi' where run == 'heston_main', variant == 'smile_lev'",
+   "kind": "read"
+  },
+  "variants.heston_main.smile_lev.share_test_days_better_than_baseline": {
+   "value": 0.4910485933503836,
+   "unit": "share",
+   "source": "results/tables/forecast_variants.csv",
+   "key": "column 'share_test_days_better_than_baseline' where run == 'heston_main', variant == 'smile_lev'",
    "kind": "read"
   },
   "stats.all.jump_model_misfit__diffusion_dh_misfit.mean_diff_A_minus_B": {
@@ -8153,6 +10393,18 @@
   "data/results/memory_final.json": {
    "bytes": 2498,
    "sha256": "d55b9483a8d91b255c18e9cb7784fc322226439d8a5637755211dfe307d2e112"
+  },
+  "results/benchmark_check/summary.csv": {
+   "bytes": 1806,
+   "sha256": "8c04c71678a02cdf6ada10277d68d097d13f0dbf868014ba17bc8de5d021efdd"
+  },
+  "results/benchmark_check/per_day.csv": {
+   "bytes": 220481,
+   "sha256": "fed51aea6c66ca8bdbea542ae2c369ec2d88169b2679390142228af214677e93"
+  },
+  "results/tables/forecast_variants.csv": {
+   "bytes": 6427,
+   "sha256": "1d3034b6a9916bb041854606f389a817abba1988dbf3bac737134e58f4afc944"
   },
   "results/stats/tests_test_period.csv": {
    "bytes": 7702,

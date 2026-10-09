@@ -1,5 +1,7 @@
 # AUDIT (Phase 0): what exists, what the brief adds
 
+> **Superseded as a status report (2026-10-09).** This is a dated snapshot taken before the upgrade: where it lists the PINN, VIX, SVI, cross-section and attribution work as missing, and says "existing tests (12)", that was true on 2026-10-08 and is no longer. For the finished state read `README.md`, `RESULTS.md` and `results/VERIFICATION.md`.
+
 Written 2026-10-08 before any upgrade work. Every statement below was checked in code or in a saved result; where something was not
 checked it says so. The upgrade brief is integrated with the finished DH2.0 work: nothing finished is redone.
 

@@ -162,7 +162,7 @@ def main():
       "| Question | Can Double Heston's ten parameters be recovered from option prices, and does the model price better than flat volatility? | Can a recalibrated model price tomorrow's options better than simple persistence, with a memory of repeating patterns? |\n"
       "| Data | 210 NSE stocks, 60 days (Jul-Sep 2026), at most 20 quotes per surface, 12,480 surfaces | NIFTY 50, ten years (Oct 2016 to Oct 2026), 2,470 days, whole chain (about 90 to 550 quotes a day) |\n"
       "| Error measure | price error relative to the mean price | implied-volatility error in volatility points (and, for comparison, the same relative price error) |\n"
-      "| Calibration | each day independently (ANN, PINN, or multistart optimiser) | slow parameters shared over a 40-day window, only today's volatility levels fitted daily; jumps added |\n"
+      "| Calibration | each day independently (ANN, PINN, or multistart optimiser) | slow parameters shared over a 40-day window, only today's volatility levels fitted daily (this sharing is not shown to help: DECISIONS.md 11); implied-volatility objective, global multi-start and jumps added |\n"
       "| Pricer | the project's own `models.py` | the same file, unchanged; jumps added by passing a different characteristic function |\n")
     w("## 1. Old tests, side by side (where the question is the same)\n")
     w("| # | Test | Version 1.0 | Version 2.0 | Comparable? |\n|---|---|---|---|---|")

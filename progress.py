@@ -31,7 +31,8 @@ STAGES = [
     ("C1. Data quality, India VIX, SVI reference, statistical tests", 40, "paths", ["results/dq/README.md", "results/vix/README.md", "results/svi/README.md", "results/stats/tests_test_period.md"]),
     ("C2. DH1 to DH2.0 waterfall, cross-section, identifiability, buckets", 120, "paths", ["results/attribution/README.md", "results/crosssection/README.md", "results/buckets/README.md", "results/identifiability/README.md"]),
     ("D. PINN-accelerated calibration vs exact (phase 5)", 60, "paths", ["dh2/calib_pinn.py", "results/pinn_calib/README.md"]),
-    ("E. One-command pipeline, figures, report, explainer, UI adapter (phases 7-8)", 90, "paths", ["dh2/run_all.py", "results/metrics.json", "RESULTS.md", "docs/EXPLAINER.md", "PRESENTATION_NOTES.md", "today.json"]),
+    ("E. One-command pipeline, figures, report, explainer, UI adapter (phase 7)", 90, "paths", ["dh2/run_all.py", "results/metrics.json", "RESULTS.md", "docs/EXPLAINER.md", "PRESENTATION_NOTES.md", "today.json"]),
+    ("F. Clean-environment test and independent re-derivation of every headline number (phase 8)", 40, "paths", ["results/VERIFICATION.md"]),
 ]
 
 

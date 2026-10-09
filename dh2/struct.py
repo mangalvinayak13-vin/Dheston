@@ -8,6 +8,11 @@ behaves, not what it is today, so they should not change day to day. 2.0 therefo
 days (one set of structural parameters, one pair of volatility levels per day) and then, for each day, fits only the daily state.
 That is the "variable projection" split: a few parameters that need many days, a few that need one.
 
+Note added after the attribution study (DECISIONS.md decision 11): this was the motivation, but the 118-day waterfall did not show the
+split to help. It made the diffusion model slightly worse next day, and independent daily jump fits forecast slightly better than the
+walk-forward jump model. The gain of 2.0 comes from the implied-volatility objective, the global multi-start with the kappa ordering and
+the jumps. The split is kept because the finished walk-forward results were produced with it.
+
   model   structural (shared over the window)                         state (one per day)
   bs      -                                                           sigma
   heston  kappa, theta, xi, rho                                        v0
